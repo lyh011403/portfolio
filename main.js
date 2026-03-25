@@ -8,27 +8,27 @@
 /* [可修改] 精選作品清單：你可以在這裡更換圖片路徑 (src)、標題 (title) 與描述 (desc) */
 const FEATURED = [
     {
-        src: '/god/01.png',
+        src: './god/01.png',
         title: '遊戲場景製作 — 黃易群俠傳m',
         desc: '高精度遊戲場景，PBR 材質到場景燈光渲染的完整製作流程。',
     },
     {
-        src: '/god/02.png',
+        src: './god/02.png',
         title: '遊戲場景製作 — 天子傳奇S',
         desc: '依照以前專案高精度模型重建，PBR 材質到場景燈光渲染的完整製作流程。',
     },
     {
-        src: '/god/03.png',
+        src: './god/03.png',
         title: '遊戲場景製作 — 飄流幻境RE',
         desc: '依照以前專案高精度模型重建。',
     },
     {
-        src: '/god/04.png',
+        src: './god/04.png',
         title: '角色外觀設計 — AI 3D',
         desc: '角色造型的視覺設計，結合遊戲風格的材質與骨架結構規劃。',
     },
     {
-        src: '/god/05.jpg',
+        src: './god/05.jpg',
         title: 'AI 居家安全監控系統',
         desc: '運用 YOLOv8 + 遷移學習實現即時危險物品辨識，並整合 React 前端介面。',
     },
@@ -50,32 +50,32 @@ const CATEGORIES = {
 // 作品集資料載入邏輯 — 統一使用 category_index.ext 格式
 // 1. 黃易 — huangyi_1 ~ 12.png
 for (let i = 1; i <= 12; i++)
-    CATEGORIES.huangyi.items.push({ type: 'image', src: `/assets/huangyi_${i}.png`, title: `黃易群俠傳m ${i}` });
+    CATEGORIES.huangyi.items.push({ type: 'image', src: `./assets/huangyi_${i}.png`, title: `黃易群俠傳m ${i}` });
 
 // 2. 天子 — tianzi_1 ~ 29.png
 for (let i = 1; i <= 29; i++)
-    CATEGORIES.tianzi.items.push({ type: 'image', src: `/assets/tianzi_${i}.png`, title: `天子傳傳奇S ${i}` });
+    CATEGORIES.tianzi.items.push({ type: 'image', src: `./assets/tianzi_${i}.png`, title: `天子傳傳奇S ${i}` });
 
 // 3. 飄流 — wlwl_1 ~ 21.png
 for (let i = 1; i <= 21; i++)
-    CATEGORIES.wlwl.items.push({ type: 'image', src: `/assets/wlwl_${i}.png`, title: `飄流幻境RE ${i}` });
+    CATEGORIES.wlwl.items.push({ type: 'image', src: `./assets/wlwl_${i}.png`, title: `飄流幻境RE ${i}` });
 
 // 4. 嵌入式 AI 影像 — SSC簡報 / APP影片 / 成品展示
 CATEGORIES.embedded.items = [
     {
         type: 'iframe',
-        src: '/ssc.html',
-        thumb: '/assets/embedded_1.jpg',
+        src: './ssc.html',
+        thumb: './assets/embedded_1.jpg',
         title: 'Smart Safety Care'
     },
     {
         type: 'video',
-        src: '/assets/ssc_app.mp4',
+        src: './assets/ssc_app.mp4',
         title: 'APP 影片介紹'
     },
     {
         type: 'image',
-        src: '/assets/ssc_demo.png',
+        src: './assets/ssc_demo.png',
         title: '成品展示效果',
         link: 'https://lyh011403.github.io/Smart-Safety-Care_APK/'
     }
@@ -83,15 +83,15 @@ CATEGORIES.embedded.items = [
 
 // 5. AI 3D — ai3d_1 ~ 11.png
 for (let i = 1; i <= 11; i++)
-    CATEGORIES['ai-3d'].items.push({ type: 'image', src: `/assets/ai3d_${i}.png`, title: `AI 3D 作品 ${i}` }
+    CATEGORIES['ai-3d'].items.push({ type: 'image', src: `./assets/ai3d_${i}.png`, title: `AI 3D 作品 ${i}` }
     );
 
 
 
 // 6. AI 2D — ai2d_1 ~ 4.png
 CATEGORIES['ai-2d'].items.push(
-    { type: 'video', src: '/assets/embedded_1.mp4', title: 'AI 2D使用(角色，特效，動作)' },
-    { type: 'video', src: '/assets/embedded_2.mp4', title: 'AI 2D使用(角色，特效，動作)' }
+    { type: 'video', src: './assets/embedded_1.mp4', title: 'AI 2D使用(角色，特效，動作)' },
+    { type: 'video', src: './assets/embedded_2.mp4', title: 'AI 2D使用(角色，特效，動作)' }
 );
 
 // ============================================================
