@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAIN Game Artist & AI Developer | Portfolio</title>
+    <meta name="description"
+        content="3D Artist & AI Developer. Specializing in game environment design, embedded AI systems, and cross-domain technical creativity.">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <!-- Particle Ink Background Canvas -->
+    <canvas id="ink-canvas"></canvas>
+    <!-- Semi-transparent mask for readability -->
+    <div id="canvas-mask"></div>
+
+    <!-- NAV -->
+    <nav id="nav">
+        <div class="nav-logo">YH.</div>
+        <ul class="nav-links">
+            <li><a href="#featured">精選</a></li>
+            <li><a href="#portfolio">作品集</a></li>
+            <li><a href="#skills">能力</a></li>
+            <li><a href="#about">關於</a></li>
+            <li><a href="#contact" class="nav-cta">聯絡我</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- HERO -->
+        <section id="hero">
+            <div class="hero-inner">
+                <p class="hero-eyebrow"><!-- [可修改] 標頭小字 -->3D Artist & AI Developer</p>
+                <h1 class="hero-title">
+                    <span class="line"><!-- [可修改] 主標題第一行 -->CREATING</span>
+                    <span class="line accent-line"><!-- [可修改] 主標題第二行 -->BEYOND</span>
+                    <span class="line"><!-- [可修改] 主標題第三行 -->BOUNDARIES.</span>
+                </h1>
+                <p class="hero-sub"><!-- [可修改] 簡介文字 -->遊戲美術 × 嵌入式 AI × 硬體整合。<br>用技術驅動創意，用藝術表達工程。</p>
+                <a href="#featured" class="btn-primary" id="cta-btn">
+                    <span><!-- [可修改] 按鈕文字 -->查看我的專案</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8H13M13 8L8 3M13 8L8 13" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </a>
+            </div>
+        </section>
+
+        <!-- FEATURED PROJECTS -->
+        <section id="featured" class="section">
+            <div class="container">
+                <div class="section-label">01 — FEATURED PROJECTS</div>
+                <h2 class="section-title"><!-- [可修改] 區塊標題 -->精選作品</h2>
+                <p class="section-sub"><!-- [可修改] 區塊副標題 -->最能代表我核心實力的代表性專案。</p>
+            </div>
+            <div class="featured-list container" id="featured-container">
+                <!-- Injected by JS -->
+            </div>
+        </section>
+
+        <!-- FULL PORTFOLIO: Six categories -->
+        <section id="portfolio" class="section">
+            <div class="container">
+                <div class="section-label">02 — FULL PORTFOLIO</div>
+                <h2 class="section-title">完整作品集</h2>
+            </div>
+
+            <!-- Category Tabs -->
+            <div class="tabs-bar container">
+                <button class="tab-btn active" data-cat="huangyi">黃易群俠傳m</button>
+                <button class="tab-btn" data-cat="tianzi">天子傳奇S</button>
+                <button class="tab-btn" data-cat="wlwl">飄流幻境RE</button>
+                <button class="tab-btn" data-cat="embedded">嵌入式AI影像</button>
+                <button class="tab-btn" data-cat="ai-3d">AI 3D</button>
+                <button class="tab-btn" data-cat="ai-2d">AI 2D</button>
+            </div>
+
+            <div class="portfolio-grid container" id="portfolio-grid">
+                <!-- Injected by JS -->
+            </div>
+        </section>
+
+        <!-- PROFESSIONAL BREADTH (Skills) -->
+        <section id="skills" class="section">
+            <div class="container">
+                <div class="section-label">03 — PROFESSIONAL BREADTH</div>
+                <h2 class="section-title">跨領域實力</h2>
+                <div class="skills-grid">
+                    <div class="skill-card scroll-reveal">
+                        <div class="skill-top">
+                            <span class="skill-num">01</span>
+                            <h3>3D & Rendering</h3>
+                        </div>
+                        <p>高品質角色與場景建模，從 PBR 材質製作到即時渲染的完整流程。</p>
+                        <div class="skill-tags">
+                            <span>Blender</span><span>3ds Max</span><span>Unity</span><span>Unreal
+                                Engine</span><span>Maya</span>
+                        </div>
+                    </div>
+                    <div class="skill-card scroll-reveal">
+                        <div class="skill-top">
+                            <span class="skill-num">02</span>
+                            <h3>AI & Programming</h3>
+                        </div>
+                        <p>深度學習模型訓練與電腦視覺系統開發，精通主流 AI 框架與即時推論。</p>
+                        <div class="skill-tags">
+                            <span>Python</span><span>PyTorch</span><span>MediaPipe</span><span>OpenCV</span><span>YOLOv8</span>
+                        </div>
+                    </div>
+                    <div class="skill-card scroll-reveal">
+                        <div class="skill-top">
+                            <span class="skill-num">03</span>
+                            <h3>AI Image Recognition</h3>
+                        </div>
+                        <p>從資料標註到模型部署的完整 AI 影像辨識工作流：自建資料集、遷移學習提升初期準確率，知識蒸餾優化至邊緣端。</p>
+                        <div class="skill-tags">
+                            <span>遷移學習</span><span>知識蒸餾</span><span>LabelImg</span><span>Roboflow</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT ME -->
+        <section id="about" class="section">
+            <div class="container about-grid">
+                <div class="about-flex">
+                    <div class="about-left scroll-reveal">
+                        <div class="section-label">04 — ABOUT ME</div>
+                        <h2 class="section-title"><!-- [可修改] 關於我標題 -->關於我</h2>
+                        <p class="about-p"><!-- [可修改] 關於我主文 -->我是一位兼具<strong>遊戲美術設計背景</strong>與<strong>AI
+                                技術開發能力</strong>的跨領域創作者。</p>
+                        <p class="about-p-sub"><!-- [可修改] 關於我子文 1 -->從遊戲公司的 3D 場景建模，到獨立研發嵌入式 AI
+                            影像辨識系統，目標是讓视覺藝術感知與工程邏輯在同一個作品中共存。</p>
+                        <p class="about-p-sub"><!-- [可修改] 關於我子文 2 -->現正積極尋找能同時發揮視覺創意與技術深度的機會。</p>
+                    </div>
+                    <div class="about-right scroll-reveal">
+                        <div class="stat-block">
+                            <div class="stat">
+                                <span class="stat-num">3</span>
+                                <span class="stat-label">Game Titles</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-num">5+</span>
+                                <span class="stat-label">AI Projects</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-num">3D×AI</span>
+                                <span class="stat-label">跨領域整合</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="section">
+            <div class="container contact-center scroll-reveal">
+                <div class="section-label">05 — CONTACT</div>
+                <h2 class="contact-title"><!-- [可修改] 聯絡我標題 -->聯絡我</h2>
+                <p class="contact-sub"><!-- [可修改] 聯絡我副標題 -->歡迎任何合作邀約或職缺洽談。</p>
+                <a href="mailto:lyh0972717368@gmail.com" class="btn-primary large">
+                    <span><!-- [可修改] E-mail 地址 -->lyh0972717368@gmail.com</span>
+                    <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8H13M13 8L8 3M13 8L8 13" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer id="footer">
+        <div class="container footer-inner">
+            <span class="footer-logo">YH.</span>
+            <span class="footer-copy">© 2026 Game Artist & AI Developer. All Rights Reserved.</span>
+        </div>
+    </footer>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox" role="dialog" aria-modal="true" aria-label="作品預覽">
+        <div id="lightbox-backdrop"></div>
+        <div id="lightbox-inner">
+            <button id="lightbox-close" aria-label="關閉">✕</button>
+            <img id="lightbox-img" src="" alt="">
+            <video id="lightbox-video" controls playsinline></video>
+            <p id="lightbox-caption"></p>
+        </div>
+    </div>
+
+    <script type="module" src="/main.js"></script>
+</body>
+
+</html>
