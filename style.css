@@ -419,22 +419,23 @@ main {
 
 .portfolio-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
 }
 
 .portfolio-item {
     position: relative;
     aspect-ratio: 4/3;
     overflow: hidden;
-    border-radius: 6px;
+    border-radius: 8px;
     background: var(--bg-2);
-    /* Bento sizing for first items */
+    cursor: pointer;
 }
 
 .portfolio-item.big {
-    grid-column: span 2;
-    aspect-ratio: 16/9;
+    /* 移除 big class 影響，保留於放棄相容 */
+    grid-column: span 1;
+    aspect-ratio: 4/3;
 }
 
 .portfolio-item img,
@@ -775,31 +776,130 @@ main {
     .nav-links {
         display: none;
     }
+
+    /* 漢堡選單按鈕 */
+    .nav-hamburger {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding: 6px;
+        cursor: pointer;
+        background: none;
+        border: none;
+        z-index: calc(var(--z-nav) + 1);
+    }
+
+    .nav-hamburger span {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background: var(--text-1);
+        border-radius: 2px;
+        transition: transform 0.3s var(--ease), opacity 0.3s;
+    }
+
+    .nav-hamburger.open span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+
+    .nav-hamburger.open span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .nav-hamburger.open span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+    }
+
+    .mobile-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: var(--z-nav);
+        background: rgba(10, 10, 12, 0.97);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        padding: 6rem 2rem 3rem;
+        transform: translateY(-110%);
+        transition: transform 0.4s var(--ease);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .mobile-menu.open {
+        transform: translateY(0);
+    }
+
+    .mobile-link {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-2);
+        letter-spacing: 0.04em;
+        transition: color 0.2s;
+    }
+
+    .mobile-link:hover,
+    .mobile-link.cta {
+        color: var(--accent);
+    }
 }
 
+/* ============================================================
+   RESPONSIVE — 600px (手機)
+   ============================================================ */
 @media (max-width: 600px) {
     .portfolio-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 0.75rem;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.65rem;
+    }
+
+    .portfolio-item {
+        border-radius: 5px;
     }
 
     .featured-list {
-        gap: 5rem;
+        gap: 4rem;
+    }
+
+    .featured-info h3 {
+        font-size: 1.3rem;
+    }
+
+    .section {
+        padding-block: clamp(3rem, 10vw, 6rem);
+    }
+
+    .tabs-bar {
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .tab-btn {
+        padding: 0.45rem 0.9rem;
+        font-size: 0.75rem;
     }
 
     .footer-copy {
         display: none;
     }
 
-    /* Disable expensive background effects on low-end mobile */
-    @media (prefers-reduced-motion: reduce) {
-        #ink-canvas {
-            display: none;
-        }
+    #lightbox-img,
+    #lightbox-video {
+        max-width: 96vw;
+        max-height: 75vh;
+    }
+}
 
-        #canvas-mask {
-            display: none;
-        }
+/* Disable expensive background effects on low-end mobile */
+@media (max-width: 600px) and (prefers-reduced-motion: reduce) {
+
+    #ink-canvas,
+    #canvas-mask {
+        display: none;
     }
 }
 
@@ -876,4 +976,15 @@ main {
     border: none;
     border-radius: 8px;
     background: #fff;
+}
+
+/* 桌面版隱藏漢堡按鈕 */
+@media (min-width: 901px) {
+    .nav-hamburger {
+        display: none;
+    }
+
+    .mobile-menu {
+        display: none;
+    }
 }

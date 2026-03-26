@@ -45,6 +45,7 @@ const CATEGORIES = {
     embedded: { label: '嵌入式AI影像', items: [] },
     'ai-3d': { label: 'AI 3D', items: [] },
     'ai-2d': { label: 'AI 2D', items: [] },
+    'my-3d': { label: '自製3D', items: [] },
 };
 
 // 作品集資料載入邏輯 — 統一使用 category_index.ext 格式
@@ -83,15 +84,24 @@ CATEGORIES.embedded.items = [
 
 // 5. AI 3D — ai3d_1 ~ 11.png
 for (let i = 1; i <= 11; i++)
-    CATEGORIES['ai-3d'].items.push({ type: 'image', src: `./assets/ai3d_${i}.png`, title: `AI 3D 作品 ${i}` }
-    );
+    CATEGORIES['ai-3d'].items.push({ type: 'image', src: `./assets/ai3d_${i}.png`, title: `AI 3D 作品 ${i}` });
 
-
-
-// 6. AI 2D — ai2d_1 ~ 4.png
+// 6. AI 2D
 CATEGORIES['ai-2d'].items.push(
     { type: 'video', src: './assets/embedded_1.mp4', title: 'AI 2D使用(角色，特效，動作)' },
     { type: 'video', src: './assets/embedded_2.mp4', title: 'AI 2D使用(角色，特效，動作)' }
+);
+
+// 7. 自製3D — my3d_1~7 + 影片
+CATEGORIES['my-3d'].items.push(
+    { type: 'video', src: './assets/my3d_video.mp4', title: '自製3D — Unreal Engine 場景展示' },
+    { type: 'image', src: './assets/my3d_5.png', title: '自製3D 截圖 1' },
+    { type: 'image', src: './assets/my3d_6.png', title: '自製3D 截圖 2' },
+    { type: 'image', src: './assets/my3d_7.png', title: '自製3D 截圖 3' },
+    { type: 'image', src: './assets/my3d_1.jpg', title: '自製3D 渲染 1' },
+    { type: 'image', src: './assets/my3d_2.jpg', title: '自製3D 渲染 2' },
+    { type: 'image', src: './assets/my3d_3.jpg', title: '自製3D 渲染 3' },
+    { type: 'image', src: './assets/my3d_4.jpg', title: '自製3D 渲染 4' }
 );
 
 // ============================================================
@@ -131,7 +141,7 @@ function buildPortfolio(cat) {
 
     CATEGORIES[cat].items.forEach((item, i) => {
         const el = document.createElement('div');
-        el.className = `portfolio-item scroll-reveal${i < 2 ? ' big' : ''}`;
+        el.className = 'portfolio-item scroll-reveal';
 
         // 封面圖：video 用 video 標籤、iframe 用 thumb 圖片、其他用 img
         const media = item.type === 'video'
@@ -257,8 +267,27 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
             e.preventDefault();
             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+        // 如果行動版選單開著，點連結後收起
+        const mobileMenu = document.getElementById('mobile-menu');
+        const hamburger = document.getElementById('nav-hamburger');
+        if (mobileMenu && mobileMenu.classList.contains('open')) {
+            mobileMenu.classList.remove('open');
+            hamburger.classList.remove('open');
+        }
     });
 });
+
+// ============================================================
+// 漢堡選單開關
+// ============================================================
+const hamburger = document.getElementById('nav-hamburger');
+const mobileMenu = document.getElementById('mobile-menu');
+if (hamburger && mobileMenu) {
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('open');
+        mobileMenu.classList.toggle('open');
+    });
+}
 
 
 // ============================================================
