@@ -510,24 +510,18 @@ function initCursor() {
     const dot = document.getElementById('cursor-dot');
     if (!ring || !dot) return;
 
-    // 滑鼠即時座標（dot 用）
-    let mx = window.innerWidth / 2;
-    let my = window.innerHeight / 2;
-    // 圓圈延遲座標（ring 用 lerp 插值）
-    let rx = mx, ry = my;
-
-    // 提高跟隨速度 0.15
-    const LERP = 0.15;
-
     // 第一次偵測到滑鼠才顯示
     let started = false;
 
     document.addEventListener('mousemove', (e) => {
-        mx = e.clientX;
-        my = e.clientY;
-        // 即時移動 dot
+        const mx = e.clientX;
+        const my = e.clientY;
+
+        // 零延遲：直接更新中心點與外圈
         dot.style.left = mx + 'px';
         dot.style.top = my + 'px';
+        ring.style.left = mx + 'px';
+        ring.style.top = my + 'px';
 
         if (!started) {
             started = true;
@@ -548,17 +542,15 @@ function initCursor() {
         }
     });
 
-    // 按下 / 放開 → click 縮放回彈
+    // 放開/按下 (可自由變化, 目前取消點擊大小變化)
     document.addEventListener('mousedown', () => {
-        ring.classList.add('click');
-        dot.style.transform = 'translate(-50%,-50%) scale(0.6)';
+        dot.style.transform = 'translate(-50%,-50%) scale(0.8)';
     });
     document.addEventListener('mouseup', () => {
-        ring.classList.remove('click');
         dot.style.transform = '';
     });
 
-    // hover 偵測：凡是 a / button / [role=button] 的子孫元素都算
+    // hover 偵測：凡是可點擊元素
     const HOVER_SEL = 'a, button, [role="button"], .portfolio-item, .tab-btn, .featured-item';
 
     function setHover(on) {
@@ -572,16 +564,6 @@ function initCursor() {
     document.addEventListener('mouseout', (e) => {
         if (e.target.closest(HOVER_SEL)) setHover(false);
     });
-
-    // rAF 逐幀更新圓圈位置（lerp 插值 → 慣性延遲效果）
-    function tick() {
-        rx += (mx - rx) * LERP;
-        ry += (my - ry) * LERP;
-        ring.style.left = rx + 'px';
-        ring.style.top = ry + 'px';
-        requestAnimationFrame(tick);
-    }
-    tick();
 }
 
 initCursor();

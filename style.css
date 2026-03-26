@@ -222,30 +222,6 @@ main {
     color: var(--accent);
 }
 
-.nav-cta {
-    padding: 0.55rem 1.2rem;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text-1) !important;
-    transition: background var(--t-fast), border-color var(--t-fast),
-        box-shadow var(--t-fast), transform 0.15s var(--ease) !important;
-}
-
-.nav-cta::after {
-    display: none !important;
-}
-
-.nav-cta:hover {
-    background: var(--surface-hover) !important;
-    border-color: rgba(200, 169, 126, 0.5) !important;
-    box-shadow: 0 0 18px rgba(200, 169, 126, 0.2) !important;
-    transform: translateY(-2px) !important;
-}
-
-.nav-cta:active {
-    transform: scale(0.95) translateY(0) !important;
-    box-shadow: none !important;
-}
 
 /* ============================================================
    HERO
@@ -925,8 +901,7 @@ main {
         transition: color 0.2s;
     }
 
-    .mobile-link:hover,
-    .mobile-link.cta {
+    .mobile-link:hover {
         color: var(--accent);
     }
 }
@@ -1073,98 +1048,65 @@ main {
 }
 
 /* ============================================================
-   CUSTOM CURSOR — Dynamic Halftone Wave
+   CUSTOM CURSOR — Simple Ripple
    ============================================================ */
 #cursor-ring {
     position: fixed;
     top: 0;
     left: 0;
-    width: 65px;
-    height: 65px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     pointer-events: none;
     z-index: 100000;
     transform: translate(-50%, -50%);
+    transition: opacity 0.3s var(--ease);
     opacity: 0;
-    will-change: transform, opacity;
-    transition: opacity 0.4s var(--ease), width 0.45s var(--ease), height 0.45s var(--ease);
-
-    /* 更鮮明的網點 (Halftone) */
-    background-image: radial-gradient(var(--accent) 1.5px, transparent 1.5px);
-    background-size: 8px 8px;
-
-    /* 修正 mask：確保支援所有瀏覽器 */
-    -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0) 75%);
-    mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0) 75%);
-}
-
-/* 內部的波動動畫 (Ripple) */
-#cursor-ring::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    border: 1px solid var(--accent);
-    opacity: 0;
-    animation: cursor-wave 2.5s infinite var(--ease);
-}
-
-@keyframes cursor-wave {
-    0% {
-        transform: scale(0.5);
-        opacity: 0;
-    }
-
-    20% {
-        opacity: 0.4;
-    }
-
-    100% {
-        transform: scale(1.6);
-        opacity: 0;
-    }
 }
 
 #cursor-ring.visible {
-    opacity: 0.65;
-}
-
-/* 懸停動效：網點變密集且放大 */
-#cursor-ring.hover {
-    width: 120px;
-    height: 120px;
-    opacity: 0.9;
-    background-size: 5px 5px;
-    mask-image: radial-gradient(circle, black 30%, transparent 75%);
-    -webkit-mask-image: radial-gradient(circle, black 30%, transparent 75%);
-}
-
-#cursor-ring.hover::after {
-    animation-duration: 1.5s;
-    /* 波動變快 */
-}
-
-/* 按下動效 */
-#cursor-ring.click {
-    width: 60px;
-    height: 60px;
     opacity: 1;
-    transition: width 0.1s, height 0.1s;
 }
 
-/* 中心點保持清晰 */
+/* 懸停動效：碰觸到東西時發出無限擴散的水波紋 */
+#cursor-ring.hover::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 32px;
+    height: 32px;
+    margin: -16px 0 0 -16px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: simple-ripple 1.5s infinite ease-out;
+}
+
+@keyframes simple-ripple {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(3.5);
+        opacity: 0;
+    }
+}
+
+/* 中心小點：永遠是單純一個點，碰到東西變金黃色發光 */
 #cursor-dot {
     position: fixed;
     top: 0;
     left: 0;
-    width: 4px;
-    height: 4px;
+    width: 5px;
+    height: 5px;
     background: #ffffff;
     border-radius: 50%;
     pointer-events: none;
-    z-index: 9999;
+    z-index: 100000;
     transform: translate(-50%, -50%);
-    transition: opacity 0.3s, transform 0.12s var(--ease);
+    transition: opacity 0.3s;
     opacity: 0;
 }
 
@@ -1173,8 +1115,8 @@ main {
 }
 
 #cursor-dot.hover {
-    transform: translate(-50%, -50%) scale(1.5);
     background: var(--accent);
+    box-shadow: 0 0 10px var(--accent-glow), 0 0 5px var(--accent);
 }
 
 /* 手機 / touch 裝置：還原系統游標 */
