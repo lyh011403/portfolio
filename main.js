@@ -496,6 +496,8 @@ buildFeatured();
 buildPortfolio('huangyi');
 observeReveal();
 initInk();
+// Initializations moved to DOMContentLoaded listener
+
 
 // ============================================================
 // 10. TECH CIRCLE CURSOR
@@ -548,7 +550,6 @@ function initCursor() {
     });
 }
 
-initCursor();
 
 // ============================================================
 // 11. BACKGROUND MUSIC (BGM) TOGGLE
@@ -605,3 +606,53 @@ function initBGM() {
     setTimeout(playAttempt, 500);
 }
 initBGM();
+
+// 12. TEXT EFFECTS (Split & Magnetic)
+function initTextEffects() {
+    const heroTitle = document.querySelector('.hero-title');
+    if (!heroTitle) return;
+
+    // 1. Split Text into spans for individual character animation
+    const lines = heroTitle.querySelectorAll('.line');
+    lines.forEach(line => {
+        const text = line.innerText;
+        line.innerHTML = '';
+        [...text].forEach(char => {
+            const span = document.createElement('span');
+            span.className = 'char';
+            span.innerText = char === ' ' ? '\u00A0' : char;
+            line.appendChild(span);
+        });
+    });
+
+    // 2. Magnetic Effect on interactive elements
+    document.addEventListener('mousemove', (e) => {
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+
+        // 選取要套用磁性的人員
+        const magneticElements = document.querySelectorAll('.hero-title .char, .btn-primary, .nav-logo');
+        magneticElements.forEach(el => {
+            const rect = el.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            const distanceX = mouseX - centerX;
+            const distanceY = mouseY - centerY;
+            const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+            // 感應距離 80px (比游標小一點點，更有磁吸感)
+            if (distance < 80) {
+                const strength = 0.3; // 吸力強度
+                const moveX = distanceX * strength;
+                const moveY = distanceY * strength;
+                el.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                el.style.transition = 'transform 0.1s linear';
+            } else {
+                el.style.transform = '';
+                el.style.transition = 'transform 0.5s var(--ease)';
+            }
+        });
+    });
+}
+initTextEffects();
