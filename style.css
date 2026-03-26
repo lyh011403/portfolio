@@ -67,6 +67,25 @@ body {
     cursor: none;
 }
 
+/* 自定義捲軸 */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+    transition: background 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+}
+
 a {
     color: inherit;
     text-decoration: none;
@@ -146,10 +165,11 @@ main {
 }
 
 #nav.scrolled {
-    background: rgba(10, 10, 12, 0.75);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(10, 10, 12, 0.7);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
     border-bottom: 1px solid var(--border);
+    padding: 0.9rem clamp(1.5rem, 5vw, 4rem);
 }
 
 .nav-logo {
@@ -341,9 +361,13 @@ main {
 .section-title {
     font-size: var(--fs-h2);
     font-weight: 800;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
     line-height: 1.1;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(180deg, #fff 0%, #aaa 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .section-sub {
@@ -464,14 +488,33 @@ main {
 .portfolio-item {
     position: relative;
     aspect-ratio: 4/3;
-    overflow: hidden;
+    background: #111;
     border-radius: 8px;
-    background: var(--bg-2);
-    cursor: pointer;
+    overflow: hidden;
+    cursor: none;
+    border: 1px solid transparent;
+    transition: transform var(--t-med), border-color var(--t-med), box-shadow var(--t-med);
+}
+
+.portfolio-item:hover {
+    border-color: rgba(200, 169, 126, 0.4);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 15px rgba(200, 169, 126, 0.1);
+}
+
+/* Staggered Reveal Logic */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+    transition-delay: var(--delay, 0ms);
+}
+
+.scroll-reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .portfolio-item.big {
-    /* 移除 big class 影響，保留於放棄相容 */
     grid-column: span 1;
     aspect-ratio: 4/3;
 }
@@ -481,14 +524,16 @@ main {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.8;
-    transition: opacity var(--t-med), transform var(--t-slow) var(--ease);
+    opacity: 0.75;
+    filter: sepia(0.2) brightness(0.9);
+    transition: opacity var(--t-med), transform var(--t-slow) var(--ease), filter var(--t-med);
 }
 
 .portfolio-item:hover img,
 .portfolio-item:hover video {
     opacity: 1;
-    transform: scale(1.06);
+    filter: sepia(0) brightness(1.1);
+    transform: scale(1.08);
 }
 
 .portfolio-item-overlay {

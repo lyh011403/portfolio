@@ -157,6 +157,8 @@ function buildPortfolio(cat) {
     CATEGORIES[cat].items.forEach((item, i) => {
         const el = document.createElement('div');
         el.className = 'portfolio-item scroll-reveal';
+        // 增加 staggered 動畫延遲
+        el.style.setProperty('--delay', `${i * 100}ms`);
 
         // 封面圖：video 用 video 標籤、iframe 用 thumb 圖片、其他用 img
         const media = item.type === 'video'
