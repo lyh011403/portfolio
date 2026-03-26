@@ -502,8 +502,9 @@ initInk();
 // 10. TECH CIRCLE CURSOR
 // ============================================================
 function initCursor() {
-    // 只在真正有滑鼠的裝置啟動（排除觸控手機）
-    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    // 桌面端裝置檢測
+    const isDesktop = window.matchMedia('(hover: hover)').matches;
+    if (!isDesktop) return;
 
     const ring = document.getElementById('cursor-ring');
     const dot = document.getElementById('cursor-dot');
@@ -515,8 +516,8 @@ function initCursor() {
     // 圓圈延遲座標（ring 用 lerp 插值）
     let rx = mx, ry = my;
 
-    // 慣性係數：越小越慢（0.08 ~ 0.15 之間感覺最好）
-    const LERP = 0.10;
+    // 提高跟隨速度 0.15
+    const LERP = 0.15;
 
     // 第一次偵測到滑鼠才顯示
     let started = false;
@@ -530,7 +531,6 @@ function initCursor() {
 
         if (!started) {
             started = true;
-            rx = mx; ry = my;
             ring.classList.add('visible');
             dot.classList.add('visible');
         }

@@ -1073,64 +1073,98 @@ main {
 }
 
 /* ============================================================
-   CUSTOM CURSOR — Tech Circle
+   CUSTOM CURSOR — Dynamic Halftone Wave
    ============================================================ */
 #cursor-ring {
     position: fixed;
     top: 0;
     left: 0;
-    width: 36px;
-    height: 36px;
-    border: 1.5px solid rgba(191, 161, 127, 0.75);
+    width: 65px;
+    height: 65px;
     border-radius: 50%;
     pointer-events: none;
-    z-index: 9999;
+    z-index: 100000;
     transform: translate(-50%, -50%);
-    transition:
-        width 0.35s var(--ease),
-        height 0.35s var(--ease),
-        background 0.3s var(--ease),
-        border-color 0.3s var(--ease),
-        opacity 0.3s;
-    will-change: transform;
-    /* 初始隱藏，等 JS 偵測到滑鼠才顯示 */
     opacity: 0;
+    will-change: transform, opacity;
+    transition: opacity 0.4s var(--ease), width 0.45s var(--ease), height 0.45s var(--ease);
+
+    /* 更鮮明的網點 (Halftone) */
+    background-image: radial-gradient(var(--accent) 1.5px, transparent 1.5px);
+    background-size: 8px 8px;
+
+    /* 修正 mask：確保支援所有瀏覽器 */
+    -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0) 75%);
+    mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0) 75%);
+}
+
+/* 內部的波動動畫 (Ripple) */
+#cursor-ring::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid var(--accent);
+    opacity: 0;
+    animation: cursor-wave 2.5s infinite var(--ease);
+}
+
+@keyframes cursor-wave {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 0.4;
+    }
+
+    100% {
+        transform: scale(1.6);
+        opacity: 0;
+    }
 }
 
 #cursor-ring.visible {
-    opacity: 1;
+    opacity: 0.65;
 }
 
-/* 懸停在可點擊元素 → 放大 + 反轉填色 */
+/* 懸停動效：網點變密集且放大 */
 #cursor-ring.hover {
+    width: 120px;
+    height: 120px;
+    opacity: 0.9;
+    background-size: 5px 5px;
+    mask-image: radial-gradient(circle, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(circle, black 30%, transparent 75%);
+}
+
+#cursor-ring.hover::after {
+    animation-duration: 1.5s;
+    /* 波動變快 */
+}
+
+/* 按下動效 */
+#cursor-ring.click {
     width: 60px;
     height: 60px;
-    background: rgba(191, 161, 127, 0.14);
-    border-color: rgba(191, 161, 127, 1);
-    box-shadow: 0 0 20px rgba(191, 161, 127, 0.25);
+    opacity: 1;
+    transition: width 0.1s, height 0.1s;
 }
 
-/* 按下 → 縮小回彈 */
-#cursor-ring.click {
-    width: 28px;
-    height: 28px;
-    background: rgba(191, 161, 127, 0.35);
-}
-
-/* 中心小點 */
+/* 中心點保持清晰 */
 #cursor-dot {
     position: fixed;
     top: 0;
     left: 0;
-    width: 5px;
-    height: 5px;
+    width: 4px;
+    height: 4px;
     background: #ffffff;
     border-radius: 50%;
     pointer-events: none;
     z-index: 9999;
     transform: translate(-50%, -50%);
-    transition: opacity 0.3s, transform 0.1s var(--ease), background 0.2s;
-    will-change: transform;
+    transition: opacity 0.3s, transform 0.12s var(--ease);
     opacity: 0;
 }
 
@@ -1139,7 +1173,7 @@ main {
 }
 
 #cursor-dot.hover {
-    transform: translate(-50%, -50%) scale(1.8);
+    transform: translate(-50%, -50%) scale(1.5);
     background: var(--accent);
 }
 
