@@ -558,8 +558,8 @@ function initCursor() {
     document.addEventListener('mouseleave', () => dot.classList.remove('visible'));
     document.addEventListener('mouseenter', () => { if (started) dot.classList.add('visible'); });
 
-    // hover 偵測：凡是可點擊元素
-    const HOVER_SEL = 'a, button, [role="button"], .portfolio-item, .tab-btn, .featured-item';
+    // hover 偵測：僅對實際的圖片、按鈕、ICON 有效，排除卡片的空白 padding 區
+    const HOVER_SEL = 'a, button, [role="button"], .portfolio-item img, .portfolio-item video, .featured-media, .tab-btn';
 
     document.addEventListener('mouseover', (e) => {
         if (e.target.closest(HOVER_SEL)) {
