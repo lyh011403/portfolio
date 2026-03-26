@@ -594,28 +594,32 @@ function initBGM() {
         }
     });
 
-    // 嘗試一進網站自動播放
-    const playAttempt = setInterval(() => {
-        bgm.play().then(() => {
+    // 嘗試一進網站自動播放 -> 交給 HTML autoplay 處理
+    // 如果瀏覽器嚴格限制(如 Chrome)，我們在第一下 click 時幫忙播起
+    const playAttempt = async () => {
+        try {
+            await bgm.play();
             isPlaying = true;
             musicBtn.classList.add('playing');
-            clearInterval(playAttempt); // 成功播放就停止嘗試
-        }).catch(() => {
-            // 瀏覽器擋掉自動播放，等待使用者點擊任何地方後再播
-        });
-    }, 1000);
+        } catch (error) {
+            console.log("瀏覽器擋掉背景音樂自動播放 (Auto-play policy)。需等使用者點選任何物件才會發出聲音。");
 
-    // 當使用者在頁面任意處點擊時觸發一次播放 (應對 Auto-play policy)
-    const playOnInteraction = () => {
-        if (!isPlaying) {
-            bgm.play().then(() => {
-                isPlaying = true;
-                musicBtn.classList.add('playing');
-                clearInterval(playAttempt);
-            }).catch(() => { });
+            // 綁定一次性的任意點擊，觸發音樂播放 (不干涉本身其他 click 行為)
+            const playOnce = async () => {
+                if (!isPlaying) {
+                    try {
+                        await bgm.play();
+                        isPlaying = true;
+                        musicBtn.classList.add('playing');
+                    } catch (e) { }
+                }
+                document.removeEventListener('click', playOnce);
+            };
+            document.addEventListener('click', playOnce);
         }
-        document.removeEventListener('click', playOnInteraction);
     };
-    document.addEventListener('click', playOnInteraction);
+
+    // 給設定緩衝時間進行 Play
+    setTimeout(playAttempt, 500);
 }
 initBGM();
