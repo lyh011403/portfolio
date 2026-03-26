@@ -112,7 +112,6 @@ CATEGORIES['my-3d'].items.push(
     { type: 'image', src: './assets/my3d_7.png', title: '自製3D 截圖 3' },
     { type: 'image', src: './assets/my3d_1.jpg', title: '自製3D 渲染 1' },
     { type: 'image', src: './assets/my3d_2.jpg', title: '自製3D 渲染 2' },
-    { type: 'image', src: './assets/my3d_3.jpg', title: '自製3D 渲染 3' },
     { type: 'image', src: './assets/my3d_4.jpg', title: '自製3D 渲染 4' },
     { type: 'image', src: './assets/my3d_8.jpg', title: '自製3D 建築渲染 1' },
     { type: 'image', src: './assets/my3d_9.jpg', title: '自製3D 建築渲染 2' },
@@ -502,68 +501,42 @@ initInk();
 // 10. TECH CIRCLE CURSOR
 // ============================================================
 function initCursor() {
-    // 桌面端裝置檢測
-    const isDesktop = window.matchMedia('(hover: hover)').matches;
-    if (!isDesktop) return;
+    // 只在有 hover 支援的裝置運作
+    if (!window.matchMedia('(hover: hover)').matches) return;
 
-    const ring = document.getElementById('cursor-ring');
-    const dot = document.getElementById('cursor-dot');
-    if (!ring || !dot) return;
+    let lastX = -9999;
+    let lastY = -9999;
 
-    // 第一次偵測到滑鼠才顯示
-    let started = false;
+    // 生成頻率門檻 (移動幾 px 生成一個波紋副本)
+    const SPAWN_DISTANCE = 40;
 
     document.addEventListener('mousemove', (e) => {
         const mx = e.clientX;
         const my = e.clientY;
 
-        // 零延遲：直接更新中心點與外圈
-        dot.style.left = mx + 'px';
-        dot.style.top = my + 'px';
-        ring.style.left = mx + 'px';
-        ring.style.top = my + 'px';
+        // 計算這一步距離上一次生成的坐標距離
+        const dx = mx - lastX;
+        const dy = my - lastY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
 
-        if (!started) {
-            started = true;
-            ring.classList.add('visible');
-            dot.classList.add('visible');
+        // 每移動超過門檻，就在原位生成一個波紋 (Wave Pattern)
+        if (dist > SPAWN_DISTANCE) {
+            lastX = mx;
+            lastY = my;
+
+            const ripple = document.createElement('div');
+            ripple.className = 'cursor-trail-wave';
+            ripple.style.left = mx + 'px';
+            ripple.style.top = my + 'px';
+
+            document.body.appendChild(ripple);
+
+            // 動畫時長約 0.7s, 給予 0.8s 餘裕後銷毀 DOM
+            setTimeout(() => {
+                ripple.remove();
+            }, 800);
         }
     }, { passive: true });
-
-    // 離開視窗時隱藏
-    document.addEventListener('mouseleave', () => {
-        ring.classList.remove('visible');
-        dot.classList.remove('visible');
-    });
-    document.addEventListener('mouseenter', () => {
-        if (started) {
-            ring.classList.add('visible');
-            dot.classList.add('visible');
-        }
-    });
-
-    // 放開/按下 (可自由變化, 目前取消點擊大小變化)
-    document.addEventListener('mousedown', () => {
-        dot.style.transform = 'translate(-50%,-50%) scale(0.8)';
-    });
-    document.addEventListener('mouseup', () => {
-        dot.style.transform = '';
-    });
-
-    // hover 偵測：凡是可點擊元素
-    const HOVER_SEL = 'a, button, [role="button"], .portfolio-item, .tab-btn, .featured-item';
-
-    function setHover(on) {
-        ring.classList.toggle('hover', on);
-        dot.classList.toggle('hover', on);
-    }
-
-    document.addEventListener('mouseover', (e) => {
-        if (e.target.closest(HOVER_SEL)) setHover(true);
-    });
-    document.addEventListener('mouseout', (e) => {
-        if (e.target.closest(HOVER_SEL)) setHover(false);
-    });
 }
 
 initCursor();

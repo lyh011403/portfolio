@@ -1048,82 +1048,34 @@ main {
 }
 
 /* ============================================================
-   CUSTOM CURSOR — Halftone + Ripple 
+   CUSTOM CURSOR — Motion Core: Wave Trail 
    ============================================================ */
-#cursor-ring {
+.cursor-trail-wave {
     position: fixed;
     top: 0;
     left: 0;
-    width: 65px;
-    height: 65px;
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
+    border: 1px solid var(--accent);
+    /* 如果想要中間有一點點東西也可以加 background, 但使用者想要純波紋 */
+    background: transparent;
     pointer-events: none;
     z-index: 100000;
     transform: translate(-50%, -50%);
-    opacity: 0.8;
-
-    /* 恢復圖片中的 Halftone (點陣) 設計 */
-    background-image: radial-gradient(var(--accent) 1px, transparent 1px);
-    background-size: 6px 6px;
-    -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0) 70%);
-    mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0) 70%);
+    animation: wave-trail-anim 0.7s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
 
-#cursor-ring.visible {
-    opacity: 1;
-    /* 取消延遲，常駐顯示網點 */
-}
-
-/* 懸停動效：碰觸到東西時發出中心向外的水波紋擴散（不改變原本的網點） */
-#cursor-ring.hover::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    margin: -10px 0 0 -10px;
-    border-radius: 50%;
-    background: var(--accent);
-    /* 從中心點向外擴散的水波紋效果 */
-    animation: simple-ripple 1.5s infinite ease-out;
-}
-
-@keyframes simple-ripple {
+@keyframes wave-trail-anim {
     0% {
-        transform: scale(0.8);
+        transform: translate(-50%, -50%) scale(0.5);
         opacity: 0.8;
     }
 
     100% {
-        transform: scale(3.5);
+        transform: translate(-50%, -50%) scale(3);
         opacity: 0;
     }
-}
-
-/* 中心小點：永遠是單純一個點，碰到東西變金黃色發光 */
-#cursor-dot {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 5px;
-    height: 5px;
-    background: #ffffff;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 100000;
-    transform: translate(-50%, -50%);
-    transition: opacity 0.3s;
-    opacity: 0;
-}
-
-#cursor-dot.visible {
-    opacity: 1;
-}
-
-#cursor-dot.hover {
-    background: var(--accent);
-    box-shadow: 0 0 10px var(--accent-glow), 0 0 5px var(--accent);
 }
 
 /* 手機 / touch 裝置：還原系統游標 */
@@ -1134,11 +1086,6 @@ main {
     button,
     [role="button"] {
         cursor: auto;
-    }
-
-    #cursor-ring,
-    #cursor-dot {
-        display: none;
     }
 }
 
