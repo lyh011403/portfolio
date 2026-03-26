@@ -169,11 +169,36 @@ main {
     font-weight: 500;
     letter-spacing: 0.04em;
     color: var(--text-2);
-    transition: color var(--t-fast);
+    position: relative;
+    padding-bottom: 2px;
+    transition: color var(--t-fast) var(--ease), transform 0.15s var(--ease);
+}
+
+/* 底線滑入動畫 */
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1.5px;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.3s var(--ease);
 }
 
 .nav-links a:hover {
     color: var(--text-1);
+    transform: translateY(-1px);
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.nav-links a:active {
+    transform: scale(0.94) translateY(0);
+    color: var(--accent);
 }
 
 .nav-cta {
@@ -181,12 +206,24 @@ main {
     border: 1px solid var(--border);
     border-radius: 6px;
     color: var(--text-1) !important;
-    transition: background var(--t-fast), border-color var(--t-fast) !important;
+    transition: background var(--t-fast), border-color var(--t-fast),
+        box-shadow var(--t-fast), transform 0.15s var(--ease) !important;
+}
+
+.nav-cta::after {
+    display: none !important;
 }
 
 .nav-cta:hover {
     background: var(--surface-hover) !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(200, 169, 126, 0.5) !important;
+    box-shadow: 0 0 18px rgba(200, 169, 126, 0.2) !important;
+    transform: translateY(-2px) !important;
+}
+
+.nav-cta:active {
+    transform: scale(0.95) translateY(0) !important;
+    box-shadow: none !important;
 }
 
 /* ============================================================

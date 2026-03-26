@@ -34,8 +34,8 @@ const FEATURED = [
     },
     {
         src: './god/06.jpg',
-        title: '自製3D — 建築個人渲染',
-        desc: '個人自主學習 Blender 建模與渲染，建築風格場景與光線氛圍表現。',
+        title: '自製3D — 個人渲染',
+        desc: '個人自主學習 Blender 建模與渲染，帶入到遊戲引擎(unreal)，並加入動作效果。',
     },
 ];
 
