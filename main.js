@@ -504,15 +504,28 @@ function initCursor() {
     // 只在有 hover 支援的裝置運作
     if (!window.matchMedia('(hover: hover)').matches) return;
 
+    const dot = document.getElementById('cursor-dot');
+    if (!dot) return;
+
     let lastX = -9999;
     let lastY = -9999;
 
     // 生成頻率門檻 (移動幾 px 生成一個波紋副本)
     const SPAWN_DISTANCE = 40;
+    let started = false;
 
     document.addEventListener('mousemove', (e) => {
         const mx = e.clientX;
         const my = e.clientY;
+
+        // 即時追蹤金色圓點
+        dot.style.left = mx + 'px';
+        dot.style.top = my + 'px';
+
+        if (!started) {
+            started = true;
+            dot.classList.add('visible');
+        }
 
         // 計算這一步距離上一次生成的坐標距離
         const dx = mx - lastX;
@@ -537,6 +550,20 @@ function initCursor() {
             }, 800);
         }
     }, { passive: true });
+
+    // 離開視窗時隱藏
+    document.addEventListener('mouseleave', () => dot.classList.remove('visible'));
+    document.addEventListener('mouseenter', () => { if (started) dot.classList.add('visible'); });
+
+    // hover 偵測：凡是可點擊元素
+    const HOVER_SEL = 'a, button, [role="button"], .portfolio-item, .tab-btn, .featured-item';
+
+    document.addEventListener('mouseover', (e) => {
+        if (e.target.closest(HOVER_SEL)) dot.classList.add('hover');
+    });
+    document.addEventListener('mouseout', (e) => {
+        if (e.target.closest(HOVER_SEL)) dot.classList.remove('hover');
+    });
 }
 
 initCursor();
@@ -563,10 +590,32 @@ function initBGM() {
             bgm.play().then(() => {
                 isPlaying = true;
                 musicBtn.classList.add('playing');
-            }).catch(err => {
-                console.warn('BGM 自動播放被擋掉:', err);
-            });
+            }).catch(err => console.warn('BGM:', err));
         }
     });
+
+    // 嘗試一進網站自動播放
+    const playAttempt = setInterval(() => {
+        bgm.play().then(() => {
+            isPlaying = true;
+            musicBtn.classList.add('playing');
+            clearInterval(playAttempt); // 成功播放就停止嘗試
+        }).catch(() => {
+            // 瀏覽器擋掉自動播放，等待使用者點擊任何地方後再播
+        });
+    }, 1000);
+
+    // 當使用者在頁面任意處點擊時觸發一次播放 (應對 Auto-play policy)
+    const playOnInteraction = () => {
+        if (!isPlaying) {
+            bgm.play().then(() => {
+                isPlaying = true;
+                musicBtn.classList.add('playing');
+                clearInterval(playAttempt);
+            }).catch(() => { });
+        }
+        document.removeEventListener('click', playOnInteraction);
+    };
+    document.addEventListener('click', playOnInteraction);
 }
 initBGM();

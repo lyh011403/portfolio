@@ -1048,7 +1048,7 @@ main {
 }
 
 /* ============================================================
-   CUSTOM CURSOR — Motion Core: Wave Trail 
+   CUSTOM CURSOR — Breathing Dot & Halftone Hover
    ============================================================ */
 .cursor-trail-wave {
     position: fixed;
@@ -1058,7 +1058,6 @@ main {
     height: 25px;
     border-radius: 50%;
     border: 1px solid var(--accent);
-    /* 如果想要中間有一點點東西也可以加 background, 但使用者想要純波紋 */
     background: transparent;
     pointer-events: none;
     z-index: 100000;
@@ -1076,6 +1075,62 @@ main {
         transform: translate(-50%, -50%) scale(3);
         opacity: 0;
     }
+}
+
+/* 主滑鼠核心 (金色呼吸原點) */
+#cursor-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent-glow), 0 0 20px var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 100001;
+    transform: translate(-50%, -50%);
+    transition: width 0.35s var(--ease), height 0.35s var(--ease), background 0.35s, border-radius 0.35s;
+    opacity: 0;
+    /* 呼吸脈衝動畫 */
+    animation: breathing-dot 2s infinite alternate ease-in-out;
+}
+
+@keyframes breathing-dot {
+    0% {
+        transform: translate(-50%, -50%) scale(0.85);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1.15);
+        opacity: 1;
+    }
+}
+
+#cursor-dot.visible {
+    opacity: 1;
+}
+
+/* 懸停動效：變成「半調圓形放射狀向量圖類型 (Radial Halftone)」 */
+#cursor-dot.hover {
+    width: 80px;
+    height: 80px;
+    background-color: transparent;
+    box-shadow: none;
+    animation: none;
+    /* 停止呼吸縮放，避免與 Hover 衝突 */
+
+    /* 半調圓形點陣設計：使用放射狀透明遮罩+點陣背景 */
+    background-image: radial-gradient(var(--accent) 1.5px, transparent 1.5px);
+    background-size: 6px 6px;
+
+    /* 遮罩讓中心點密、外緣淡出，形成放射擴散感 */
+    -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 0.8) 40%, rgba(0, 0, 0, 0) 70%);
+    mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 0.8) 40%, rgba(0, 0, 0, 0) 70%);
+
+    /* 加一點微微的放大感 */
+    transform: translate(-50%, -50%) scale(1.1);
 }
 
 /* 手機 / touch 裝置：還原系統游標 */
@@ -1108,7 +1163,8 @@ main {
 .music-toggle {
     position: fixed;
     bottom: 30px;
-    left: 30px;
+    right: 30px;
+    /* 從 left 改成 right */
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -1187,7 +1243,7 @@ main {
 @media (max-width: 600px) {
     .music-toggle {
         bottom: 20px;
-        left: 20px;
+        right: 20px;
         width: 38px;
         height: 38px;
     }
