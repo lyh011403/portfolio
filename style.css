@@ -1048,37 +1048,44 @@ main {
 }
 
 /* ============================================================
-   CUSTOM CURSOR — Simple Ripple
+   CUSTOM CURSOR — Halftone + Ripple 
    ============================================================ */
 #cursor-ring {
     position: fixed;
     top: 0;
     left: 0;
-    width: 32px;
-    height: 32px;
+    width: 65px;
+    height: 65px;
     border-radius: 50%;
     pointer-events: none;
     z-index: 100000;
     transform: translate(-50%, -50%);
-    transition: opacity 0.3s var(--ease);
-    opacity: 0;
+    opacity: 0.8;
+
+    /* 恢復圖片中的 Halftone (點陣) 設計 */
+    background-image: radial-gradient(var(--accent) 1px, transparent 1px);
+    background-size: 6px 6px;
+    -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0) 70%);
+    mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0) 70%);
 }
 
 #cursor-ring.visible {
     opacity: 1;
+    /* 取消延遲，常駐顯示網點 */
 }
 
-/* 懸停動效：碰觸到東西時發出無限擴散的水波紋 */
+/* 懸停動效：碰觸到東西時發出中心向外的水波紋擴散（不改變原本的網點） */
 #cursor-ring.hover::before {
     content: '';
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 32px;
-    height: 32px;
-    margin: -16px 0 0 -16px;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
     border-radius: 50%;
     background: var(--accent);
+    /* 從中心點向外擴散的水波紋效果 */
     animation: simple-ripple 1.5s infinite ease-out;
 }
 
@@ -1145,5 +1152,96 @@ main {
     label,
     select {
         cursor: none;
+    }
+}
+
+/* ============================================================
+   MUSIC TOGGLE
+   ============================================================ */
+.music-toggle {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(10, 10, 12, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: var(--z-nav);
+    transition: background 0.3s, border-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.music-toggle:hover {
+    background: rgba(200, 169, 126, 0.15);
+    border-color: rgba(200, 169, 126, 0.5);
+    transform: scale(1.05);
+    /* Hover simple micro-interaction */
+}
+
+/* 四個小柱子的波動動畫 (靜止狀態為一直線短柱) */
+.music-bars {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 3px;
+    height: 14px;
+}
+
+.music-bars span {
+    display: block;
+    width: 3px;
+    height: 3px;
+    /* 初始停用：小點 */
+    background: var(--text-2);
+    border-radius: 3px;
+    transition: height 0.3s steps(1), background 0.3s;
+}
+
+/* 啟動狀態：音波起伏跳動 */
+.music-toggle.playing .music-bars span {
+    background: var(--accent);
+    animation: jump-wave 1.2s infinite ease-in-out alternate;
+}
+
+.music-toggle.playing .music-bars span:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.music-toggle.playing .music-bars span:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.music-toggle.playing .music-bars span:nth-child(3) {
+    animation-delay: 0.0s;
+}
+
+.music-toggle.playing .music-bars span:nth-child(4) {
+    animation-delay: 0.2s;
+}
+
+@keyframes jump-wave {
+    0% {
+        height: 3px;
+    }
+
+    100% {
+        height: 14px;
+    }
+}
+
+/* 手機版稍微移一移以免被瀏覽器 UI 遮擋 */
+@media (max-width: 600px) {
+    .music-toggle {
+        bottom: 20px;
+        left: 20px;
+        width: 38px;
+        height: 38px;
     }
 }

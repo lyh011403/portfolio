@@ -567,3 +567,33 @@ function initCursor() {
 }
 
 initCursor();
+
+// ============================================================
+// 11. BACKGROUND MUSIC (BGM) TOGGLE
+// ============================================================
+function initBGM() {
+    const musicBtn = document.getElementById('music-toggle');
+    const bgm = document.getElementById('bgm');
+    if (!musicBtn || !bgm) return;
+
+    let isPlaying = false;
+
+    // 調整適當音量
+    bgm.volume = 0.4;
+
+    musicBtn.addEventListener('click', () => {
+        if (isPlaying) {
+            bgm.pause();
+            isPlaying = false;
+            musicBtn.classList.remove('playing');
+        } else {
+            bgm.play().then(() => {
+                isPlaying = true;
+                musicBtn.classList.add('playing');
+            }).catch(err => {
+                console.warn('BGM 自動播放被擋掉:', err);
+            });
+        }
+    });
+}
+initBGM();
