@@ -505,72 +505,45 @@ function initCursor() {
     if (!window.matchMedia('(hover: hover)').matches) return;
 
     const dot = document.getElementById('cursor-dot');
-    if (!dot) return;
+    const ring = document.getElementById('cursor-ring');
+    if (!dot || !ring) return;
 
-    let lastX = -9999;
-    let lastY = -9999;
-
-    // 生成頻率門檻 (越小越密，因為只有 Hover 才發動)
-    const SPAWN_DISTANCE = 15;
     let started = false;
-    let isHovering = false; // 追蹤是否正在觸碰可點選物件
 
     document.addEventListener('mousemove', (e) => {
         const mx = e.clientX;
         const my = e.clientY;
 
-        // 即時追蹤金色圓點 (一直存在)
+        // 即時無延遲追蹤
         dot.style.left = mx + 'px';
         dot.style.top = my + 'px';
+        ring.style.left = mx + 'px';
+        ring.style.top = my + 'px';
 
         if (!started) {
             started = true;
             dot.classList.add('visible');
-        }
-
-        // 僅當「滑鼠碰到可點擊物件(isHovering)」時，才生成 SVG 陣列波紋
-        if (isHovering) {
-            const dx = mx - lastX;
-            const dy = my - lastY;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-
-            if (dist > SPAWN_DISTANCE) {
-                lastX = mx;
-                lastY = my;
-
-                const ripple = document.createElement('div');
-                ripple.className = 'cursor-trail-wave';
-                ripple.style.left = mx + 'px';
-                ripple.style.top = my + 'px';
-
-                document.body.appendChild(ripple);
-
-                // 動畫時長約 0.8s 後銷毀 DOM
-                setTimeout(() => ripple.remove(), 850);
-            }
-        } else {
-            // 如果沒有 Hover，為了確保一進到 Hover 能馬上觸發第一下，我們不斷重置座標
-            lastX = mx;
-            lastY = my;
+            // 注意： ring 預設隱藏，只有 hover 才會顯示
         }
     }, { passive: true });
 
+    // 離開視窗時隱藏
     document.addEventListener('mouseleave', () => dot.classList.remove('visible'));
     document.addEventListener('mouseenter', () => { if (started) dot.classList.add('visible'); });
 
-    // hover 偵測：僅對實際的圖片、按鈕、ICON 有效，排除卡片的空白 padding 區
+    // hover 偵測：觸碰實際可點擊元素時顯示科技環 HUD
     const HOVER_SEL = 'a, button, [role="button"], .portfolio-item img, .portfolio-item video, .featured-media, .tab-btn';
 
     document.addEventListener('mouseover', (e) => {
         if (e.target.closest(HOVER_SEL)) {
             dot.classList.add('hover');
-            isHovering = true;
+            ring.classList.add('hover');
         }
     });
     document.addEventListener('mouseout', (e) => {
         if (e.target.closest(HOVER_SEL)) {
             dot.classList.remove('hover');
-            isHovering = false;
+            ring.classList.remove('hover');
         }
     });
 }

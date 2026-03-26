@@ -1048,67 +1048,95 @@ main {
 }
 
 /* ============================================================
-   CUSTOM CURSOR — Breathing Dot & Halftone Hover
+   CUSTOM CURSOR — Breathing Dot & HUD Hover Ring
    ============================================================ */
-.cursor-trail-wave {
+/* HUD 科技感外環 (遇到可點選物觸發) */
+#cursor-ring {
     position: fixed;
     top: 0;
     left: 0;
-    width: 50px;
-    height: 50px;
-    /* 利用 CSS Masking 將 SVG 改色為全金色 (-webkit-mask-image + background) */
-    background-color: var(--accent);
-    -webkit-mask-image: url('/assets/MUS.svg');
-    -webkit-mask-size: contain;
-    -webkit-mask-position: center;
-    -webkit-mask-repeat: no-repeat;
-    mask-image: url('/assets/MUS.svg');
-    mask-size: contain;
-    mask-position: center;
-    mask-repeat: no-repeat;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
     pointer-events: none;
     z-index: 100000;
-    transform: translate(-50%, -50%);
-    animation: wave-trail-anim 0.8s ease-out forwards;
+    transform: translate(-50%, -50%) scale(0.3);
+    /* 初始縮小隱藏 */
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-@keyframes wave-trail-anim {
-    0% {
-        transform: translate(-50%, -50%) scale(1.0);
-        opacity: 0.9;
-        filter: blur(0px);
-    }
+#cursor-ring.hover {
+    opacity: 1;
+    /* 懸停時顯現 */
+    transform: translate(-50%, -50%) scale(1);
+    /* 懸停時放大展開 */
+}
 
+/* 虛線外軌道 */
+.ring-track {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 1px dashed var(--accent);
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: ring-spin-reverse 15s linear infinite;
+}
+
+/* 實線粗內軌道 (弧線) */
+.ring-arc {
+    position: absolute;
+    width: 65%;
+    height: 65%;
+    border: 3px solid transparent;
+    border-top-color: var(--accent);
+    border-bottom-color: var(--accent);
+    border-radius: 50%;
+    animation: ring-spin 4s ease-in-out infinite;
+}
+
+/* HUD 掃描橫線 */
+.ring-line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 45px;
+    height: 1px;
+    background: var(--accent);
+    transform-origin: left center;
+    opacity: 0.8;
+}
+
+@keyframes ring-spin {
     100% {
-        transform: translate(-50%, -50%) scale(3.5);
-        opacity: 0;
-        filter: blur(1.5px);
+        transform: rotate(360deg);
     }
 }
 
-/* 主滑鼠核心 (常態：金色呼吸點陣) */
+@keyframes ring-spin-reverse {
+    100% {
+        transform: rotate(-360deg);
+    }
+}
+
+/* 主滑鼠核心 (原本單純的金色呼吸燈) */
 #cursor-dot {
     position: fixed;
     top: 0;
     left: 0;
-    width: 26px;
-    /* 變大一點以顯示點陣圖的細節 */
-    height: 26px;
-    background-color: var(--accent);
-    -webkit-mask-image: url('/assets/MUS.svg');
-    -webkit-mask-size: contain;
-    -webkit-mask-position: center;
-    -webkit-mask-repeat: no-repeat;
-    mask-image: url('/assets/MUS.svg');
-    mask-size: contain;
-    mask-position: center;
-    mask-repeat: no-repeat;
-    /* 點陣的發光使用 drop-shadow 而不是 box-shadow */
-    filter: drop-shadow(0 0 5px var(--accent));
+    width: 10px;
+    height: 10px;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent-glow), 0 0 20px var(--accent);
+    border-radius: 50%;
     pointer-events: none;
     z-index: 100001;
     transform: translate(-50%, -50%);
-    transition: width 0.3s var(--ease), height 0.3s var(--ease), filter 0.3s;
+    transition: width 0.3s ease, height 0.3s ease;
     opacity: 0;
     /* 呼吸脈衝動畫 */
     animation: breathing-dot 1.5s infinite alternate ease-in-out;
@@ -1117,14 +1145,12 @@ main {
 @keyframes breathing-dot {
     0% {
         transform: translate(-50%, -50%) scale(0.85);
-        opacity: 0.85;
-        filter: drop-shadow(0 0 2px var(--accent));
+        opacity: 0.7;
     }
 
     100% {
         transform: translate(-50%, -50%) scale(1.15);
         opacity: 1;
-        filter: drop-shadow(0 0 8px var(--accent));
     }
 }
 
@@ -1132,14 +1158,10 @@ main {
     opacity: 1;
 }
 
-/* 懸停動效：核心圖案變得更大更亮，並且會觸發連續波紋 */
 #cursor-dot.hover {
-    width: 38px;
-    height: 38px;
-    animation: none;
-    /* 碰觸物件時停止縮放 */
-    transform: translate(-50%, -50%) scale(1);
-    filter: drop-shadow(0 0 10px var(--accent));
+    width: 6px;
+    height: 6px;
+    /* 啟動 HUD 時中間金點微縮讓出焦點 */
 }
 
 /* 手機 / touch 裝置：還原系統游標 */
