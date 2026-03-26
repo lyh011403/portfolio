@@ -495,3 +495,91 @@ buildFeatured();
 buildPortfolio('huangyi');
 observeReveal();
 initInk();
+
+// ============================================================
+// 10. TECH CIRCLE CURSOR
+// ============================================================
+function initCursor() {
+    // 只在真正有滑鼠的裝置啟動（排除觸控手機）
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+    const ring = document.getElementById('cursor-ring');
+    const dot = document.getElementById('cursor-dot');
+    if (!ring || !dot) return;
+
+    // 滑鼠即時座標（dot 用）
+    let mx = window.innerWidth / 2;
+    let my = window.innerHeight / 2;
+    // 圓圈延遲座標（ring 用 lerp 插值）
+    let rx = mx, ry = my;
+
+    // 慣性係數：越小越慢（0.08 ~ 0.15 之間感覺最好）
+    const LERP = 0.10;
+
+    // 第一次偵測到滑鼠才顯示
+    let started = false;
+
+    document.addEventListener('mousemove', (e) => {
+        mx = e.clientX;
+        my = e.clientY;
+        // 即時移動 dot
+        dot.style.left = mx + 'px';
+        dot.style.top = my + 'px';
+
+        if (!started) {
+            started = true;
+            rx = mx; ry = my;
+            ring.classList.add('visible');
+            dot.classList.add('visible');
+        }
+    }, { passive: true });
+
+    // 離開視窗時隱藏
+    document.addEventListener('mouseleave', () => {
+        ring.classList.remove('visible');
+        dot.classList.remove('visible');
+    });
+    document.addEventListener('mouseenter', () => {
+        if (started) {
+            ring.classList.add('visible');
+            dot.classList.add('visible');
+        }
+    });
+
+    // 按下 / 放開 → click 縮放回彈
+    document.addEventListener('mousedown', () => {
+        ring.classList.add('click');
+        dot.style.transform = 'translate(-50%,-50%) scale(0.6)';
+    });
+    document.addEventListener('mouseup', () => {
+        ring.classList.remove('click');
+        dot.style.transform = '';
+    });
+
+    // hover 偵測：凡是 a / button / [role=button] 的子孫元素都算
+    const HOVER_SEL = 'a, button, [role="button"], .portfolio-item, .tab-btn, .featured-item';
+
+    function setHover(on) {
+        ring.classList.toggle('hover', on);
+        dot.classList.toggle('hover', on);
+    }
+
+    document.addEventListener('mouseover', (e) => {
+        if (e.target.closest(HOVER_SEL)) setHover(true);
+    });
+    document.addEventListener('mouseout', (e) => {
+        if (e.target.closest(HOVER_SEL)) setHover(false);
+    });
+
+    // rAF 逐幀更新圓圈位置（lerp 插值 → 慣性延遲效果）
+    function tick() {
+        rx += (mx - rx) * LERP;
+        ry += (my - ry) * LERP;
+        ring.style.left = rx + 'px';
+        ring.style.top = ry + 'px';
+        requestAnimationFrame(tick);
+    }
+    tick();
+}
+
+initCursor();

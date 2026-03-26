@@ -64,6 +64,7 @@ body {
     line-height: 1.6;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
+    cursor: none;
 }
 
 a {
@@ -1023,5 +1024,105 @@ main {
 
     .mobile-menu {
         display: none;
+    }
+}
+
+/* ============================================================
+   CUSTOM CURSOR — Tech Circle
+   ============================================================ */
+#cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid rgba(191, 161, 127, 0.75);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition:
+        width 0.35s var(--ease),
+        height 0.35s var(--ease),
+        background 0.3s var(--ease),
+        border-color 0.3s var(--ease),
+        opacity 0.3s;
+    will-change: transform;
+    /* 初始隱藏，等 JS 偵測到滑鼠才顯示 */
+    opacity: 0;
+}
+
+#cursor-ring.visible {
+    opacity: 1;
+}
+
+/* 懸停在可點擊元素 → 放大 + 反轉填色 */
+#cursor-ring.hover {
+    width: 60px;
+    height: 60px;
+    background: rgba(191, 161, 127, 0.14);
+    border-color: rgba(191, 161, 127, 1);
+    box-shadow: 0 0 20px rgba(191, 161, 127, 0.25);
+}
+
+/* 按下 → 縮小回彈 */
+#cursor-ring.click {
+    width: 28px;
+    height: 28px;
+    background: rgba(191, 161, 127, 0.35);
+}
+
+/* 中心小點 */
+#cursor-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 5px;
+    background: #ffffff;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s, transform 0.1s var(--ease), background 0.2s;
+    will-change: transform;
+    opacity: 0;
+}
+
+#cursor-dot.visible {
+    opacity: 1;
+}
+
+#cursor-dot.hover {
+    transform: translate(-50%, -50%) scale(1.8);
+    background: var(--accent);
+}
+
+/* 手機 / touch 裝置：還原系統游標 */
+@media (hover: none) and (pointer: coarse) {
+
+    body,
+    a,
+    button,
+    [role="button"] {
+        cursor: auto;
+    }
+
+    #cursor-ring,
+    #cursor-dot {
+        display: none;
+    }
+}
+
+/* 桌面：確保互動元素 cursor 也是 none */
+@media (hover: hover) and (pointer: fine) {
+
+    a,
+    button,
+    [role="button"],
+    input,
+    label,
+    select {
+        cursor: none;
     }
 }
