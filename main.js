@@ -496,7 +496,7 @@ buildFeatured();
 buildPortfolio('huangyi');
 observeReveal();
 initInk();
-// Initializations moved to DOMContentLoaded listener
+initCursor();
 
 
 // ============================================================
