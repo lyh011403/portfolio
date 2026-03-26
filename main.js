@@ -32,6 +32,11 @@ const FEATURED = [
         title: 'AI 居家安全監控系統',
         desc: '運用 YOLOv8 + 遷移學習實現即時危險物品辨識，並整合 React 前端介面。',
     },
+    {
+        src: './god/06.jpg',
+        title: '自製3D — 建築個人渲染',
+        desc: '個人自主學習 Blender 建模與渲染，建築風格場景與光線氛圍表現。',
+    },
 ];
 
 // ============================================================
@@ -75,6 +80,11 @@ CATEGORIES.embedded.items = [
         title: 'APP 影片介紹'
     },
     {
+        type: 'video',
+        src: './assets/ssc_yolov8.mp4',
+        title: 'YOLOv8 實機辨識影片'
+    },
+    {
         type: 'image',
         src: './assets/ssc_demo.png',
         title: '成品展示效果',
@@ -82,9 +92,11 @@ CATEGORIES.embedded.items = [
     }
 ];
 
-// 5. AI 3D — ai3d_1 ~ 11.png
-for (let i = 1; i <= 11; i++)
+// 5. AI 3D — ai3d_1~4, 6~11.png（第5張已移除）
+for (let i = 1; i <= 11; i++) {
+    if (i === 5) continue;
     CATEGORIES['ai-3d'].items.push({ type: 'image', src: `./assets/ai3d_${i}.png`, title: `AI 3D 作品 ${i}` });
+}
 
 // 6. AI 2D
 CATEGORIES['ai-2d'].items.push(
@@ -101,7 +113,10 @@ CATEGORIES['my-3d'].items.push(
     { type: 'image', src: './assets/my3d_1.jpg', title: '自製3D 渲染 1' },
     { type: 'image', src: './assets/my3d_2.jpg', title: '自製3D 渲染 2' },
     { type: 'image', src: './assets/my3d_3.jpg', title: '自製3D 渲染 3' },
-    { type: 'image', src: './assets/my3d_4.jpg', title: '自製3D 渲染 4' }
+    { type: 'image', src: './assets/my3d_4.jpg', title: '自製3D 渲染 4' },
+    { type: 'image', src: './assets/my3d_8.jpg', title: '自製3D 建築渲染 1' },
+    { type: 'image', src: './assets/my3d_9.jpg', title: '自製3D 建築渲染 2' },
+    { type: 'image', src: './assets/my3d_10.jpg', title: '自製3D 建築渲染 3' }
 );
 
 // ============================================================
