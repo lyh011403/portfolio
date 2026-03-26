@@ -510,15 +510,16 @@ function initCursor() {
     let lastX = -9999;
     let lastY = -9999;
 
-    // 生成頻率門檻 (移動幾 px 生成一個波紋副本)
-    const SPAWN_DISTANCE = 40;
+    // 生成頻率門檻 (越小越密，因為只有 Hover 才發動)
+    const SPAWN_DISTANCE = 15;
     let started = false;
+    let isHovering = false; // 追蹤是否正在觸碰可點選物件
 
     document.addEventListener('mousemove', (e) => {
         const mx = e.clientX;
         const my = e.clientY;
 
-        // 即時追蹤金色圓點
+        // 即時追蹤金色圓點 (一直存在)
         dot.style.left = mx + 'px';
         dot.style.top = my + 'px';
 
@@ -527,31 +528,33 @@ function initCursor() {
             dot.classList.add('visible');
         }
 
-        // 計算這一步距離上一次生成的坐標距離
-        const dx = mx - lastX;
-        const dy = my - lastY;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+        // 僅當「滑鼠碰到可點擊物件(isHovering)」時，才生成 SVG 陣列波紋
+        if (isHovering) {
+            const dx = mx - lastX;
+            const dy = my - lastY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
 
-        // 每移動超過門檻，就在原位生成一個波紋 (Wave Pattern)
-        if (dist > SPAWN_DISTANCE) {
+            if (dist > SPAWN_DISTANCE) {
+                lastX = mx;
+                lastY = my;
+
+                const ripple = document.createElement('div');
+                ripple.className = 'cursor-trail-wave';
+                ripple.style.left = mx + 'px';
+                ripple.style.top = my + 'px';
+
+                document.body.appendChild(ripple);
+
+                // 動畫時長約 0.8s 後銷毀 DOM
+                setTimeout(() => ripple.remove(), 850);
+            }
+        } else {
+            // 如果沒有 Hover，為了確保一進到 Hover 能馬上觸發第一下，我們不斷重置座標
             lastX = mx;
             lastY = my;
-
-            const ripple = document.createElement('div');
-            ripple.className = 'cursor-trail-wave';
-            ripple.style.left = mx + 'px';
-            ripple.style.top = my + 'px';
-
-            document.body.appendChild(ripple);
-
-            // 動畫時長約 0.7s, 給予 0.8s 餘裕後銷毀 DOM
-            setTimeout(() => {
-                ripple.remove();
-            }, 800);
         }
     }, { passive: true });
 
-    // 離開視窗時隱藏
     document.addEventListener('mouseleave', () => dot.classList.remove('visible'));
     document.addEventListener('mouseenter', () => { if (started) dot.classList.add('visible'); });
 
@@ -559,10 +562,16 @@ function initCursor() {
     const HOVER_SEL = 'a, button, [role="button"], .portfolio-item, .tab-btn, .featured-item';
 
     document.addEventListener('mouseover', (e) => {
-        if (e.target.closest(HOVER_SEL)) dot.classList.add('hover');
+        if (e.target.closest(HOVER_SEL)) {
+            dot.classList.add('hover');
+            isHovering = true;
+        }
     });
     document.addEventListener('mouseout', (e) => {
-        if (e.target.closest(HOVER_SEL)) dot.classList.remove('hover');
+        if (e.target.closest(HOVER_SEL)) {
+            dot.classList.remove('hover');
+            isHovering = false;
+        }
     });
 }
 

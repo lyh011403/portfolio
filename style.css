@@ -1054,26 +1054,36 @@ main {
     position: fixed;
     top: 0;
     left: 0;
-    width: 25px;
-    height: 25px;
+    width: 60px;
+    height: 60px;
+    /* 利用 CSS Masking 將 SVG 改色為全金色 (-webkit-mask-image + background) */
+    background-color: var(--accent);
+    -webkit-mask-image: url('./assets/MUS.svg');
+    -webkit-mask-size: contain;
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    mask-image: url('./assets/MUS.svg');
+    mask-size: contain;
+    mask-position: center;
+    mask-repeat: no-repeat;
     border-radius: 50%;
-    border: 1px solid var(--accent);
-    background: transparent;
     pointer-events: none;
     z-index: 100000;
     transform: translate(-50%, -50%);
-    animation: wave-trail-anim 0.7s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+    animation: wave-trail-anim 0.8s ease-out forwards;
 }
 
 @keyframes wave-trail-anim {
     0% {
-        transform: translate(-50%, -50%) scale(0.5);
-        opacity: 0.8;
+        transform: translate(-50%, -50%) scale(0.6);
+        opacity: 0.9;
+        filter: blur(0px);
     }
 
     100% {
-        transform: translate(-50%, -50%) scale(3);
+        transform: translate(-50%, -50%) scale(3.5);
         opacity: 0;
+        filter: blur(1.5px);
     }
 }
 
@@ -1090,10 +1100,10 @@ main {
     pointer-events: none;
     z-index: 100001;
     transform: translate(-50%, -50%);
-    transition: width 0.35s var(--ease), height 0.35s var(--ease), background 0.35s, border-radius 0.35s;
+    transition: width 0.3s var(--ease), height 0.3s var(--ease), transform 0.15s;
     opacity: 0;
     /* 呼吸脈衝動畫 */
-    animation: breathing-dot 2s infinite alternate ease-in-out;
+    animation: breathing-dot 1.5s infinite alternate ease-in-out;
 }
 
 @keyframes breathing-dot {
@@ -1112,25 +1122,12 @@ main {
     opacity: 1;
 }
 
-/* 懸停動效：變成「半調圓形放射狀向量圖類型 (Radial Halftone)」 */
+/* 懸停動效：僅保持點的狀態，擴散動畫交給 JS 自動生成 */
 #cursor-dot.hover {
-    width: 80px;
-    height: 80px;
-    background-color: transparent;
-    box-shadow: none;
     animation: none;
-    /* 停止呼吸縮放，避免與 Hover 衝突 */
-
-    /* 半調圓形點陣設計：使用放射狀透明遮罩+點陣背景 */
-    background-image: radial-gradient(var(--accent) 1.5px, transparent 1.5px);
-    background-size: 6px 6px;
-
-    /* 遮罩讓中心點密、外緣淡出，形成放射擴散感 */
-    -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 0.8) 40%, rgba(0, 0, 0, 0) 70%);
-    mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 0.8) 40%, rgba(0, 0, 0, 0) 70%);
-
-    /* 加一點微微的放大感 */
-    transform: translate(-50%, -50%) scale(1.1);
+    /* 碰觸物件時停止縮放，維持固定略大尺寸 */
+    transform: translate(-50%, -50%) scale(1.3);
+    box-shadow: 0 0 15px var(--accent-glow), 0 0 25px var(--accent);
 }
 
 /* 手機 / touch 裝置：還原系統游標 */
