@@ -118,6 +118,10 @@ CATEGORIES['my-3d'].items.push(
     { type: 'image', src: './assets/my3d_10.jpg', title: '自製3D 建築渲染 3' }
 );
 
+// [修正] 為影片項目增加封面邏輯
+CATEGORIES.embedded.items[1].thumb = './assets/embedded_1.jpg'; // 為 APP 影片介紹設定封面
+CATEGORIES.embedded.items[2].thumb = './assets/ssc_demo.png'; // 為辨識影片設定封面
+
 // ============================================================
 // 3. RENDER FEATURED
 // ============================================================
@@ -159,9 +163,9 @@ function buildPortfolio(cat) {
         // 增加 staggered 動畫延遲
         el.style.setProperty('--delay', `${i * 100}ms`);
 
-        // 封面圖：video 用 video 標籤、iframe 用 thumb 圖片、其他用 img
+        // 封面圖：video 加入 poster 支援
         const media = item.type === 'video'
-            ? `<video src="${item.src}" muted loop playsinline></video>`
+            ? `<video src="${item.src}" ${item.thumb ? `poster="${item.thumb}"` : ''} muted loop playsinline></video>`
             : item.type === 'iframe'
                 ? `<img src="${item.thumb || item.src}" alt="${item.title}" loading="lazy">`
                 : `<img src="${item.src}" alt="${item.title}" loading="lazy">`;
