@@ -625,34 +625,34 @@ function initTextEffects() {
         });
     });
 
-    // 2. Magnetic Effect on interactive elements
-    document.addEventListener('mousemove', (e) => {
-        const mouseX = e.clientX;
-        const mouseY = e.clientY;
+    // 2. Magnetic Effect (Only on desktop devices with hover support)
+    if (window.matchMedia('(hover: hover)').matches) {
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
 
-        // 選取要套用磁性的人員
-        const magneticElements = document.querySelectorAll('.hero-title .char, .btn-primary, .nav-logo');
-        magneticElements.forEach(el => {
-            const rect = el.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
+            const magneticElements = document.querySelectorAll('.hero-title .char, .btn-primary, .nav-logo');
+            magneticElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
 
-            const distanceX = mouseX - centerX;
-            const distanceY = mouseY - centerY;
-            const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+                const distanceX = mouseX - centerX;
+                const distanceY = mouseY - centerY;
+                const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
 
-            // 感應距離 80px (比游標小一點點，更有磁吸感)
-            if (distance < 80) {
-                const strength = 0.3; // 吸力強度
-                const moveX = distanceX * strength;
-                const moveY = distanceY * strength;
-                el.style.transform = `translate(${moveX}px, ${moveY}px)`;
-                el.style.transition = 'transform 0.1s linear';
-            } else {
-                el.style.transform = '';
-                el.style.transition = 'transform 0.5s var(--ease)';
-            }
+                if (distance < 80) {
+                    const strength = 0.3;
+                    const moveX = distanceX * strength;
+                    const moveY = distanceY * strength;
+                    el.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                    el.style.transition = 'transform 0.1s linear';
+                } else {
+                    el.style.transform = '';
+                    el.style.transition = 'transform 0.5s var(--ease)';
+                }
+            });
         });
-    });
+    }
 }
 initTextEffects();

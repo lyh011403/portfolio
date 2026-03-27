@@ -64,7 +64,13 @@ body {
     line-height: 1.6;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
-    cursor: none;
+}
+
+/* 僅在桌面版（具備指標裝置）隱藏系統游標 */
+@media (hover: hover) and (pointer: fine) {
+    body {
+        cursor: none;
+    }
 }
 
 /* 自定義捲軸 */
@@ -1189,14 +1195,28 @@ main {
     /* 啟動 HUD 時中間金點微縮讓出焦點 */
 }
 
-/* 手機 / touch 裝置：還原系統游標 */
-@media (hover: none) and (pointer: coarse) {
+/* 手機 / touch 裝置：完全隱藏自定義游標組件與恢復滑動文字 */
+@media (hover: none),
+(pointer: coarse) {
 
-    body,
+    #cursor-dot,
+    #cursor-ring {
+        display: none !important;
+    }
+
+    .hero-title .char {
+        transform: none !important;
+        /* 防止磁性效果在觸控時造成文字偏移 */
+    }
+
+    body {
+        cursor: auto !important;
+    }
+
     a,
     button,
     [role="button"] {
-        cursor: auto;
+        cursor: pointer !important;
     }
 }
 
