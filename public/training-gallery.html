@@ -17,6 +17,7 @@
             --border: #e9ecef;
             --accent-blue: #007aff;
             --accent-grey: #8e8e93;
+            --accent-purple: #5856d6;
             --text-main: #1d1d1f;
             --text-sub: #86868b;
             --ease: cubic-bezier(0.19, 1, 0.22, 1);
@@ -30,36 +31,34 @@
 
         body {
             background: #f5f5f7;
-            /* High-end light grey */
             color: var(--text-main);
             font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Noto Sans TC', sans-serif;
             min-height: 100vh;
             padding-bottom: 5rem;
             cursor: none;
-            /* Hide default cursor */
         }
 
         .container {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 3rem 1.5rem;
+            padding: 2.5rem 1.5rem;
         }
 
         header {
-            margin-bottom: 3.5rem;
+            margin-bottom: 3rem;
             text-align: left;
-            border-left: 5px solid var(--accent-blue);
+            border-left: 6px solid var(--accent-blue);
             padding-left: 1.5rem;
         }
 
         h1 {
-            font-size: 2.8rem;
+            font-size: 2.6rem;
             font-weight: 900;
-            letter-spacing: -0.01em;
+            letter-spacing: -0.02em;
             color: #000;
         }
 
-        /* Custom Cursor in Iframe */
+        /* Custom Cursor */
         #cursor-dot {
             width: 8px;
             height: 8px;
@@ -88,7 +87,7 @@
         .tabs {
             display: flex;
             gap: 2rem;
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
             border-bottom: 1px solid #dee2e6;
         }
 
@@ -96,7 +95,7 @@
             background: transparent;
             color: var(--text-sub);
             border: none;
-            padding: 0.75rem 0;
+            padding: 0.8rem 0;
             font-weight: 700;
             font-size: 1rem;
             cursor: pointer;
@@ -114,25 +113,25 @@
             bottom: -1px;
             left: 0;
             width: 100%;
-            height: 3px;
+            height: 3.5px;
             background: var(--accent-blue);
+            border-radius: 10px;
         }
 
         /* Sections */
         .content-section {
             display: none;
-            margin-top: 2rem;
         }
 
         .content-section.active {
             display: block;
-            animation: fadeInUp 0.6s var(--ease) forwards;
+            animation: fadeInUp 0.5s var(--ease) forwards;
         }
 
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(25px);
             }
 
             to {
@@ -141,21 +140,23 @@
             }
         }
 
-        /* Report Box */
+        /* Boxes */
         .report-box {
             background: #fff;
-            border-radius: 28px;
-            padding: 3rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
-            margin-bottom: 2rem;
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
+            margin-bottom: 2.5rem;
             border: 1px solid #eee;
+            overflow: hidden;
         }
 
         .section-title {
             font-size: 1.8rem;
             font-weight: 800;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
             color: #000;
+            letter-spacing: -0.01em;
         }
 
         /* Animated Bar Chart */
@@ -174,21 +175,13 @@
 
         .cat-name {
             font-weight: 700;
-            font-size: 1rem;
             color: #333;
-        }
-
-        .bar-pair {
-            display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
         }
 
         .bar-bg {
             background: #f2f2f7;
             height: 32px;
             border-radius: 10px;
-            position: relative;
             overflow: hidden;
         }
 
@@ -218,12 +211,12 @@
         .radar-box {
             display: flex;
             justify-content: center;
-            padding: 2rem 0;
+            padding: 1.5rem 0;
         }
 
         .radar-svg {
             width: 100%;
-            max-width: 550px;
+            max-width: 500px;
             height: auto;
         }
 
@@ -235,14 +228,14 @@
         }
 
         .radar-label {
-            font-size: 3px;
-            fill: #8e8e93;
+            font-size: 3.2px;
+            fill: #86868b;
             font-weight: 700;
         }
 
         .radar-poly {
-            fill-opacity: 0.3;
-            stroke-width: 1.2;
+            fill-opacity: 0.25;
+            stroke-width: 1.1;
             transition: all 1s ease;
         }
 
@@ -251,7 +244,7 @@
             fill: var(--accent-grey);
             stroke-dasharray: 600;
             stroke-dashoffset: 600;
-            animation: draw 2s forwards;
+            animation: draw 1.8s forwards;
         }
 
         .radar-poly.v2 {
@@ -259,10 +252,18 @@
             fill: var(--accent-blue);
             stroke-dasharray: 600;
             stroke-dashoffset: 600;
-            animation: draw 2s 0.6s forwards;
+            animation: draw 1.8s 0.6s forwards;
         }
 
-        /* Photo Grid (2x2) */
+        .radar-poly.distill {
+            stroke: var(--accent-purple);
+            fill: var(--accent-purple);
+            stroke-dasharray: 600;
+            stroke-dashoffset: 600;
+            animation: draw 1.8s 0.6s forwards;
+        }
+
+        /* Photo Grid */
         .photo-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -270,8 +271,7 @@
         }
 
         .photo-item {
-            position: relative;
-            border-radius: 18px;
+            border-radius: 16px;
             overflow: hidden;
             background: #fff;
             border: 1px solid #eee;
@@ -290,7 +290,7 @@
             display: block;
         }
 
-        /* Lightbox logic within iframe */
+        /* Lightbox */
         #lightbox {
             position: fixed;
             inset: 0;
@@ -331,7 +331,11 @@
             }
 
             h1 {
-                font-size: 2.2rem;
+                font-size: 2rem;
+            }
+
+            .bar-row {
+                grid-template-columns: 100px 1fr;
             }
         }
     </style>
@@ -353,7 +357,7 @@
             <button class="tab-btn" data-tab="distill">知識蒸餾</button>
         </div>
 
-        <!-- 優化成效 -->
+        <!-- 1. 優化成效 -->
         <div id="compare" class="content-section active">
             <div class="report-box">
                 <h2 class="section-title">精度指標對比 (mAP@0.5)</h2>
@@ -395,7 +399,7 @@
             </div>
 
             <div class="report-box">
-                <h2 class="section-title">前後訓練性能比較 (雷達數據化)</h2>
+                <h2 class="section-title">前後訓練性能比較 (v1 vs v2)</h2>
                 <div class="radar-box">
                     <svg class="radar-svg" viewBox="0 0 120 120">
                         <g class="radar-grid">
@@ -414,8 +418,6 @@
                         <text x="60" y="117" text-anchor="middle" class="radar-label">人 AP@0.5</text>
                         <text x="10" y="88" text-anchor="middle" class="radar-label">刀 AP@0.5</text>
                         <text x="10" y="33" text-anchor="middle" class="radar-label">剪刀 AP@0.5</text>
-
-                        <!-- Plotting based on user provided radar image labels -->
                         <polygon class="radar-poly v1" points="60,38.2 85.1,45.5 88.6,76.5 60,84.6 33.4,75.4 44.4,51" />
                         <polygon class="radar-poly v2" points="60,16.1 87.7,44 90.3,77.5 60,101.1 33.4,75.4 28.5,42" />
                     </svg>
@@ -423,7 +425,7 @@
             </div>
         </div>
 
-        <!-- v1.0 數據 -->
+        <!-- 2. v1.0 數據 -->
         <div id="v1" class="content-section">
             <div class="photo-grid">
                 <div class="photo-item"><img src="./assets/training_v1_1.png" alt="v1_1"></div>
@@ -431,7 +433,7 @@
             </div>
         </div>
 
-        <!-- v2.0 數據 -->
+        <!-- 3. v2.0 數據 -->
         <div id="v2" class="content-section">
             <div class="photo-grid">
                 <div class="photo-item"><img src="./assets/training_v2_1.png" alt="v2_1"></div>
@@ -439,43 +441,65 @@
             </div>
         </div>
 
-        <!-- 知識蒸餾 -->
+        <!-- 4. 知識蒸餾 -->
         <div id="distill" class="content-section">
+            <div class="report-box">
+                <h2 class="section-title">知識蒸餾效能分析</h2>
+                <div class="radar-box">
+                    <svg class="radar-svg" viewBox="0 0 120 120">
+                        <g class="radar-grid">
+                            <circle cx="60" cy="60" r="10" />
+                            <circle cx="60" cy="60" r="20" />
+                            <circle cx="60" cy="60" r="30" />
+                            <circle cx="60" cy="60" r="40" />
+                            <circle cx="60" cy="60" r="50" />
+                            <line x1="60" y1="10" x2="60" y2="110" />
+                            <line x1="16.7" y1="35" x2="103.3" y2="85" />
+                            <line x1="16.7" y1="85" x2="103.3" y2="35" />
+                        </g>
+                        <!-- Based on Gemini_Generated_Image-Data_2 -->
+                        <text x="60" y="7" text-anchor="middle" class="radar-label">人 AP@0.5 (PR)</text>
+                        <text x="110" y="33" text-anchor="middle" class="radar-label">人 True Positive (CM)</text>
+                        <text x="110" y="88" text-anchor="middle" class="radar-label">刀 True Positive (CM)</text>
+                        <text x="60" y="117" text-anchor="middle" class="radar-label">剪刀 True Positive (CM)</text>
+                        <text x="10" y="88" text-anchor="middle" class="radar-label">剪刀 AP@0.5 (PR)</text>
+                        <text x="10" y="33" text-anchor="middle" class="radar-label">刀 AP@0.5 (PR)</text>
+
+                        <!-- Before (Light Blue) -->
+                        <polygon class="radar-poly v1" points="60,38.2 87.7,45.5 88.6,76.5 60,84.1 33.4,75.4 44.4,51" />
+                        <!-- After Distillation (Purple) -->
+                        <polygon class="radar-poly distill"
+                            points="60,18.8 88.6,44.5 90.3,77.5 60,101.1 33.4,75.4 28.5,42" />
+                    </svg>
+                </div>
+            </div>
             <div class="photo-grid">
                 <div class="photo-item"><img src="./assets/training_distill_1.png" alt="distill_1"></div>
                 <div class="photo-item"><img src="./assets/training_distill_2.png" alt="distill_2"></div>
-                <div class="photo-item"><img src="./assets/training_distill_3.png" alt="distill_3"></div>
             </div>
         </div>
     </div>
 
-    <!-- Lightbox Overlay -->
+    <!-- Lightbox -->
     <div id="lightbox"><img src="" alt=""></div>
 
     <script>
-        // Custom Cursor Logic
         const dot = document.getElementById('cursor-dot');
         const ring = document.getElementById('cursor-ring');
         document.addEventListener('mousemove', (e) => {
-            dot.style.left = e.clientX + 'px';
-            dot.style.top = e.clientY + 'px';
-            ring.style.left = e.clientX + 'px';
-            ring.style.top = e.clientY + 'px';
+            dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
+            ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px';
         });
 
-        const hoverElems = 'button, .photo-item';
-        document.querySelectorAll(hoverElems).forEach(el => {
-            el.addEventListener('mouseenter', () => ring.style.transform = 'translate(-50%, -50%) scale(1.5)');
-            el.addEventListener('mouseleave', () => ring.style.transform = 'translate(-50%, -50%) scale(1)');
+        document.querySelectorAll('button, .photo-item').forEach(el => {
+            el.addEventListener('mouseenter', () => ring.style.transform = 'translate(-50%,-50%) scale(1.5)');
+            el.addEventListener('mouseleave', () => ring.style.transform = 'translate(-50%,-50%) scale(1)');
         });
 
-        // Tabs Logic
         function animateBars() {
-            document.querySelectorAll('.bar-fill').forEach(bar => {
-                const val = bar.getAttribute('data-val');
-                bar.style.width = val + '%';
-            });
+            document.querySelectorAll('.bar-fill').forEach(bar => { bar.style.width = bar.getAttribute('data-val') + '%'; });
         }
+
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -489,16 +513,11 @@
             });
         });
 
-        // Lightbox Logic
-        const lightbox = document.getElementById('lightbox');
-        const lbImg = lightbox.querySelector('img');
-        document.querySelectorAll('.photo-item img').forEach(img => {
-            img.addEventListener('click', () => {
-                lbImg.src = img.src;
-                lightbox.classList.add('open');
-            });
+        const lb = document.getElementById('lightbox'), lbI = lb.querySelector('img');
+        document.querySelectorAll('.photo-item img').forEach(i => {
+            i.addEventListener('click', () => { lbI.src = i.src; lb.classList.add('open'); });
         });
-        lightbox.addEventListener('click', () => lightbox.classList.remove('open'));
+        lb.addEventListener('click', () => lb.classList.remove('open'));
 
         setTimeout(animateBars, 500);
     </script>
