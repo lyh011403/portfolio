@@ -77,8 +77,8 @@ CATEGORIES.embedded.items = [
     {
         type: 'iframe',
         src: './training-gallery.html',
-        thumb: './assets/training_v2_3.png',
-        title: '訓練資料集：版本成長歷程'
+        thumb: './assets/training_report_cover.png',
+        title: '訓練數據詳細報告：版本演進歷程'
     },
     {
         type: 'video',
