@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Noto+Sans+TC:wght@400;700;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Noto+Sans+TC:wght@400;700;900&display=swap"
         rel="stylesheet">
     <style>
         :root {
@@ -20,7 +20,7 @@
             --accent-purple: #5856d6;
             --text-main: #1d1d1f;
             --text-sub: #86868b;
-            --ease: cubic-bezier(0.19, 1, 0.22, 1);
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * {
@@ -36,12 +36,13 @@
             min-height: 100vh;
             padding-bottom: 5rem;
             cursor: none;
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 2.5rem 1.5rem;
+            padding: 3rem 1.5rem;
         }
 
         header {
@@ -52,7 +53,7 @@
         }
 
         h1 {
-            font-size: 2.6rem;
+            font-size: 2.8rem;
             font-weight: 900;
             letter-spacing: -0.02em;
             color: #000;
@@ -68,25 +69,25 @@
             pointer-events: none;
             z-index: 10000;
             transform: translate(-50%, -50%);
-            transition: transform 0.1s ease;
+            transition: transform 0.1s linear;
         }
 
         #cursor-ring {
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             border: 1.5px solid rgba(200, 169, 126, 0.4);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
             z-index: 9999;
             transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s, border-color 0.3s;
+            transition: width 0.3s, height 0.3s, transform 0.3s var(--ease);
         }
 
         /* Tabs */
         .tabs {
             display: flex;
-            gap: 2rem;
+            gap: 2.5rem;
             margin-bottom: 2.5rem;
             border-bottom: 1px solid #dee2e6;
         }
@@ -95,9 +96,9 @@
             background: transparent;
             color: var(--text-sub);
             border: none;
-            padding: 0.8rem 0;
+            padding: 1rem 0;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 1.05rem;
             cursor: pointer;
             position: relative;
             transition: color 0.3s;
@@ -113,7 +114,7 @@
             bottom: -1px;
             left: 0;
             width: 100%;
-            height: 3.5px;
+            height: 4px;
             background: var(--accent-blue);
             border-radius: 10px;
         }
@@ -125,13 +126,13 @@
 
         .content-section.active {
             display: block;
-            animation: fadeInUp 0.5s var(--ease) forwards;
+            animation: fadeInUp 0.7s var(--ease) forwards;
         }
 
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(25px);
+                transform: translateY(30px);
             }
 
             to {
@@ -140,147 +141,193 @@
             }
         }
 
-        /* Boxes */
+        /* Report Box */
         .report-box {
             background: #fff;
-            border-radius: 24px;
-            padding: 2.5rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
+            border-radius: 32px;
+            padding: 3rem;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.04);
             margin-bottom: 2.5rem;
             border: 1px solid #eee;
-            overflow: hidden;
+            position: relative;
         }
 
         .section-title {
             font-size: 1.8rem;
             font-weight: 800;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
             color: #000;
-            letter-spacing: -0.01em;
         }
 
-        /* Animated Bar Chart */
+        /* Bar Chart */
         .bar-chart {
             display: flex;
             flex-direction: column;
-            gap: 1.8rem;
+            gap: 2rem;
         }
 
         .bar-row {
             display: grid;
             grid-template-columns: 140px 1fr;
             align-items: center;
-            gap: 2rem;
+            gap: 2.5rem;
         }
 
         .cat-name {
             font-weight: 700;
             color: #333;
+            font-size: 1.1rem;
+        }
+
+        .bar-pair {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
         }
 
         .bar-bg {
             background: #f2f2f7;
-            height: 32px;
-            border-radius: 10px;
+            height: 36px;
+            border-radius: 12px;
             overflow: hidden;
         }
 
         .bar-fill {
             height: 100%;
-            border-radius: 10px;
+            border-radius: 12px;
             width: 0%;
-            transition: width 1.8s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: width 2s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            padding-right: 1rem;
+            padding-right: 1.2rem;
             color: #fff;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 800;
         }
 
         .bar-fill.v1 {
-            background: var(--accent-grey);
+            background: linear-gradient(90deg, #999, #777);
         }
 
         .bar-fill.v2 {
-            background: var(--accent-blue);
+            background: linear-gradient(90deg, #42a5f5, var(--accent-blue));
         }
 
-        /* Animated Radar SVG */
+        /* Radar Chart Premium */
         .radar-box {
             display: flex;
             justify-content: center;
-            padding: 1.5rem 0;
+            padding: 2rem 0;
+            position: relative;
         }
 
         .radar-svg {
             width: 100%;
-            max-width: 500px;
+            max-width: 600px;
             height: auto;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.05));
         }
 
-        .radar-grid circle,
-        .radar-grid line {
-            stroke: #e5e5ea;
+        .radar-grid circle {
+            stroke: #e0e0e0;
             fill: none;
-            stroke-width: 0.4;
+            stroke-width: 0.5;
+        }
+
+        .radar-grid line {
+            stroke: #efefef;
+            stroke-width: 0.8;
         }
 
         .radar-label {
-            font-size: 3.2px;
-            fill: #86868b;
-            font-weight: 700;
+            font-size: 3.5px;
+            fill: #555;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+        }
+
+        .radar-value-tag {
+            font-size: 3px;
+            fill: #fff;
+            font-weight: 900;
         }
 
         .radar-poly {
-            fill-opacity: 0.25;
-            stroke-width: 1.1;
+            fill-opacity: 0.2;
+            stroke-width: 1.5;
             transition: all 1s ease;
+            cursor: crosshair;
         }
 
         .radar-poly.v1 {
-            stroke: var(--accent-grey);
-            fill: var(--accent-grey);
-            stroke-dasharray: 600;
-            stroke-dashoffset: 600;
-            animation: draw 1.8s forwards;
+            stroke: #999;
+            fill: #999;
+            filter: drop-shadow(0 0 5px rgba(150, 150, 150, 0.2));
         }
 
         .radar-poly.v2 {
             stroke: var(--accent-blue);
             fill: var(--accent-blue);
-            stroke-dasharray: 600;
-            stroke-dashoffset: 600;
-            animation: draw 1.8s 0.6s forwards;
+            filter: drop-shadow(0 0 8px rgba(0, 122, 255, 0.3));
         }
 
         .radar-poly.distill {
             stroke: var(--accent-purple);
             fill: var(--accent-purple);
-            stroke-dasharray: 600;
-            stroke-dashoffset: 600;
-            animation: draw 1.8s 0.6s forwards;
+            filter: drop-shadow(0 0 8px rgba(88, 86, 214, 0.3));
+        }
+
+        .data-point {
+            r: 1.2;
+            stroke-width: 0.8;
+            stroke: #fff;
+            transition: r 0.3s;
+        }
+
+        .data-point.v1 {
+            fill: #999;
+        }
+
+        .data-point.v2 {
+            fill: var(--accent-blue);
+        }
+
+        .data-point.distill {
+            fill: var(--accent-purple);
+        }
+
+        .data-point:hover {
+            r: 2;
+        }
+
+        .active-poly {
+            opacity: 1 !important;
+            stroke-width: 2.5 !important;
+            fill-opacity: 0.4 !important;
         }
 
         /* Photo Grid */
         .photo-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
+            gap: 2rem;
+            margin-top: 2rem;
         }
 
         .photo-item {
-            border-radius: 16px;
+            border-radius: 20px;
             overflow: hidden;
             background: #fff;
             border: 1px solid #eee;
             cursor: zoom-in;
-            transition: transform 0.4s var(--ease);
+            transition: all 0.5s var(--ease);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
         }
 
         .photo-item:hover {
-            transform: scale(1.02);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
         }
 
         .photo-item img {
@@ -301,14 +348,15 @@
             z-index: 20000;
             padding: 2rem;
             cursor: zoom-out;
+            backdrop-filter: blur(10px);
         }
 
         #lightbox img {
-            max-width: 100%;
-            max-height: 100%;
-            border-radius: 8px;
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 12px;
             transform: scale(0.9);
-            transition: transform 0.4s var(--ease);
+            transition: transform 0.5s var(--ease);
         }
 
         #lightbox.open {
@@ -320,22 +368,35 @@
         }
 
         @keyframes draw {
+            from {
+                stroke-dashoffset: 600;
+            }
+
             to {
                 stroke-dashoffset: 0;
             }
         }
 
         @media (max-width: 700px) {
-            .photo-grid {
-                grid-template-columns: 1fr;
+            .container {
+                padding: 2rem 1rem;
             }
 
             h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
+            }
+
+            .report-box {
+                padding: 2rem 1.5rem;
             }
 
             .bar-row {
-                grid-template-columns: 100px 1fr;
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .photo-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -399,27 +460,68 @@
             </div>
 
             <div class="report-box">
-                <h2 class="section-title">前後訓練性能比較 (v1 vs v2)</h2>
+                <h2 class="section-title">前後訓練性能詳細對比 (含數值標註)</h2>
                 <div class="radar-box">
-                    <svg class="radar-svg" viewBox="0 0 120 120">
-                        <g class="radar-grid">
-                            <circle cx="60" cy="60" r="10" />
-                            <circle cx="60" cy="60" r="20" />
-                            <circle cx="60" cy="60" r="30" />
-                            <circle cx="60" cy="60" r="40" />
-                            <circle cx="60" cy="60" r="50" />
-                            <line x1="60" y1="10" x2="60" y2="110" />
-                            <line x1="16.7" y1="35" x2="103.3" y2="85" />
-                            <line x1="16.7" y1="85" x2="103.3" y2="35" />
+                    <svg class="radar-svg" viewBox="0 0 140 140">
+                        <defs>
+                            <linearGradient id="grad-v2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#007aff; stop-opacity:0.6" />
+                                <stop offset="100%" style="stop-color:#007aff; stop-opacity:0.2" />
+                            </linearGradient>
+                        </defs>
+                        <g transform="translate(70, 70)">
+                            <!-- Grid -->
+                            <g class="radar-grid">
+                                <circle r="10" />
+                                <circle r="20" />
+                                <circle r="30" />
+                                <circle r="40" />
+                                <circle r="50" />
+                                <line x1="0" y1="-50" x2="0" y2="50" />
+                                <line x1="-43.3" y1="-25" x2="43.3" y2="25" />
+                                <line x1="-43.3" y1="25" x2="43.3" y2="-25" />
+                            </g>
+
+                            <!-- Labels -->
+                            <text y="-56" text-anchor="middle" class="radar-label">人 True Positive</text>
+                            <text x="50" y="-30" text-anchor="start" class="radar-label">刀 True Positive</text>
+                            <text x="50" y="34" text-anchor="start" class="radar-label">剪刀 True Positive</text>
+                            <text y="58" text-anchor="middle" class="radar-label">人 AP@0.5</text>
+                            <text x="-50" y="34" text-anchor="end" class="radar-label">刀 AP@0.5</text>
+                            <text x="-50" y="-30" text-anchor="end" class="radar-label">剪刀 AP@0.5</text>
+
+                            <!-- V1 Polygon -->
+                            <!-- Values: 0.436, 0.58, 0.66, 0.492, 0.615, 0.36 -->
+                            <polygon class="radar-poly v1"
+                                points="0,-21.8 25.1,-14.5 28.6,16.5 0,24.6 -26.6,15.4 -15.6,-9" />
+
+                            <!-- V2 Polygon -->
+                            <!-- Values: 0.879, 0.64, 0.70, 0.823, 0.615, 0.728 -->
+                            <polygon id="poly-v2" class="radar-poly v2"
+                                points="0,-43.9 27.7,-16 30.3,17.5 0,41.1 -26.6,15.4 -31.5,-18" />
+
+                            <!-- V2 Data Points & Value Tags -->
+                            <g id="points-v2">
+                                <circle class="data-point v2" cx="0" cy="-43.9" /><text x="0" y="-46"
+                                    text-anchor="middle" class="radar-value-tag" style="fill:#007aff">0.879</text>
+                                <circle class="data-point v2" cx="27.7" cy="-16" /><text x="31" y="-18"
+                                    text-anchor="start" class="radar-value-tag" style="fill:#007aff">0.64</text>
+                                <circle class="data-point v2" cx="30.3" cy="17.5" /><text x="34" y="20"
+                                    text-anchor="start" class="radar-value-tag" style="fill:#007aff">0.70</text>
+                                <circle class="data-point v2" cx="0" cy="41.1" /><text x="0" y="46" text-anchor="middle"
+                                    class="radar-value-tag" style="fill:#007aff">0.823</text>
+                                <circle class="data-point v2" cx="-26.6" cy="15.4" /><text x="-31" y="18"
+                                    text-anchor="end" class="radar-value-tag" style="fill:#007aff">0.615</text>
+                                <circle class="data-point v2" cx="-31.5" cy="-18" /><text x="-35" y="-20"
+                                    text-anchor="end" class="radar-value-tag" style="fill:#007aff">0.728</text>
+                            </g>
+
+                            <!-- V1 Value Tags (Subtle) -->
+                            <g style="opacity:0.6">
+                                <text x="0" y="-24" text-anchor="middle" style="font-size:2.5px; fill:#777">0.436</text>
+                                <text x="30" y="14" text-anchor="start" style="font-size:2.5px; fill:#777">0.66</text>
+                            </g>
                         </g>
-                        <text x="60" y="7" text-anchor="middle" class="radar-label">人 True Positive</text>
-                        <text x="110" y="33" text-anchor="middle" class="radar-label">刀 True Positive</text>
-                        <text x="110" y="88" text-anchor="middle" class="radar-label">剪刀 True Positive</text>
-                        <text x="60" y="117" text-anchor="middle" class="radar-label">人 AP@0.5</text>
-                        <text x="10" y="88" text-anchor="middle" class="radar-label">刀 AP@0.5</text>
-                        <text x="10" y="33" text-anchor="middle" class="radar-label">剪刀 AP@0.5</text>
-                        <polygon class="radar-poly v1" points="60,38.2 85.1,45.5 88.6,76.5 60,84.6 33.4,75.4 44.4,51" />
-                        <polygon class="radar-poly v2" points="60,16.1 87.7,44 90.3,77.5 60,101.1 33.4,75.4 28.5,42" />
                     </svg>
                 </div>
             </div>
@@ -444,32 +546,57 @@
         <!-- 4. 知識蒸餾 -->
         <div id="distill" class="content-section">
             <div class="report-box">
-                <h2 class="section-title">知識蒸餾效能分析</h2>
+                <h2 class="section-title">知識蒸餾核心效能 (數據可視化)</h2>
                 <div class="radar-box">
-                    <svg class="radar-svg" viewBox="0 0 120 120">
-                        <g class="radar-grid">
-                            <circle cx="60" cy="60" r="10" />
-                            <circle cx="60" cy="60" r="20" />
-                            <circle cx="60" cy="60" r="30" />
-                            <circle cx="60" cy="60" r="40" />
-                            <circle cx="60" cy="60" r="50" />
-                            <line x1="60" y1="10" x2="60" y2="110" />
-                            <line x1="16.7" y1="35" x2="103.3" y2="85" />
-                            <line x1="16.7" y1="85" x2="103.3" y2="35" />
-                        </g>
-                        <!-- Based on Gemini_Generated_Image-Data_2 -->
-                        <text x="60" y="7" text-anchor="middle" class="radar-label">人 AP@0.5 (PR)</text>
-                        <text x="110" y="33" text-anchor="middle" class="radar-label">人 True Positive (CM)</text>
-                        <text x="110" y="88" text-anchor="middle" class="radar-label">刀 True Positive (CM)</text>
-                        <text x="60" y="117" text-anchor="middle" class="radar-label">剪刀 True Positive (CM)</text>
-                        <text x="10" y="88" text-anchor="middle" class="radar-label">剪刀 AP@0.5 (PR)</text>
-                        <text x="10" y="33" text-anchor="middle" class="radar-label">刀 AP@0.5 (PR)</text>
+                    <svg class="radar-svg" viewBox="0 0 140 140">
+                        <g transform="translate(70, 70)">
+                            <g class="radar-grid">
+                                <circle r="10" />
+                                <circle r="20" />
+                                <circle r="30" />
+                                <circle r="40" />
+                                <circle r="50" />
+                                <line x1="0" y1="-50" x2="0" y2="50" />
+                                <line x1="-43.3" y1="-25" x2="43.3" y2="25" />
+                                <line x1="-43.3" y1="25" x2="43.3" y2="-25" />
+                            </g>
+                            <!-- Labels (Axis for Distillation Data) -->
+                            <text y="-56" text-anchor="middle" class="radar-label">人 AP@0.5 (PR)</text>
+                            <text x="50" y="-30" text-anchor="start" class="radar-label">人 True Positive</text>
+                            <text x="50" y="34" text-anchor="start" class="radar-label">刀 True Positive</text>
+                            <text y="58" text-anchor="middle" class="radar-label">剪刀 True Positive</text>
+                            <text x="-50" y="34" text-anchor="end" class="radar-label">剪刀 AP@0.5</text>
+                            <text x="-50" y="-30" text-anchor="end" class="radar-label">刀 AP@0.5</text>
 
-                        <!-- Before (Light Blue) -->
-                        <polygon class="radar-poly v1" points="60,38.2 87.7,45.5 88.6,76.5 60,84.1 33.4,75.4 44.4,51" />
-                        <!-- After Distillation (Purple) -->
-                        <polygon class="radar-poly distill"
-                            points="60,18.8 88.6,44.5 90.3,77.5 60,101.1 33.4,75.4 28.5,42" />
+                            <!-- Before Polygon -->
+                            <polygon class="radar-poly v1"
+                                points="0,-21.8 27.7,-14.5 28.6,16.5 0,24.1 -26.6,15.4 -15.6,-9" />
+                            <!-- After Distill Polygon -->
+                            <polygon class="radar-poly distill"
+                                points="0,-41.1 28.6,-15.5 30.3,17.5 0,41.1 -26.6,15.4 -31.5,-18" />
+
+                            <!-- Distill Data Points -->
+                            <g>
+                                <circle class="data-point distill" cx="0" cy="-41.1" /><text x="0" y="-45"
+                                    text-anchor="middle" class="radar-value-tag"
+                                    style="fill:var(--accent-purple)">0.823</text>
+                                <circle class="data-point distill" cx="28.6" cy="-15.5" /><text x="32" y="-17"
+                                    text-anchor="start" class="radar-value-tag"
+                                    style="fill:var(--accent-purple)">0.64</text>
+                                <circle class="data-point distill" cx="30.3" cy="17.5" /><text x="34" y="20"
+                                    text-anchor="start" class="radar-value-tag"
+                                    style="fill:var(--accent-purple)">0.70</text>
+                                <circle class="data-point distill" cx="0" cy="41.1" /><text x="0" y="46"
+                                    text-anchor="middle" class="radar-value-tag"
+                                    style="fill:var(--accent-purple)">0.823</text>
+                                <circle class="data-point distill" cx="-26.6" cy="15.4" /><text x="-31" y="18"
+                                    text-anchor="end" class="radar-value-tag"
+                                    style="fill:var(--accent-purple)">0.615</text>
+                                <circle class="data-point distill" cx="-31.5" cy="-18" /><text x="-36" y="-20"
+                                    text-anchor="end" class="radar-value-tag"
+                                    style="fill:var(--accent-purple)">0.728</text>
+                            </g>
+                        </g>
                     </svg>
                 </div>
             </div>
@@ -484,20 +611,41 @@
     <div id="lightbox"><img src="" alt=""></div>
 
     <script>
+        // Smooth Custom Cursor
         const dot = document.getElementById('cursor-dot');
         const ring = document.getElementById('cursor-ring');
+        let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
         document.addEventListener('mousemove', (e) => {
-            dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
-            ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px';
+            mouseX = e.clientX; mouseY = e.clientY;
+            dot.style.left = mouseX + 'px'; dot.style.top = mouseY + 'px';
         });
 
-        document.querySelectorAll('button, .photo-item').forEach(el => {
-            el.addEventListener('mouseenter', () => ring.style.transform = 'translate(-50%,-50%) scale(1.5)');
-            el.addEventListener('mouseleave', () => ring.style.transform = 'translate(-50%,-50%) scale(1)');
+        function animateCursor() {
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
+            ring.style.left = ringX + 'px';
+            ring.style.top = ringY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        document.querySelectorAll('button, .photo-item, .radar-poly').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                ring.style.transform = 'translate(-50%,-50%) scale(1.4)';
+                ring.style.borderColor = 'rgba(200, 169, 126, 0.8)';
+            });
+            el.addEventListener('mouseleave', () => {
+                ring.style.transform = 'translate(-50%,-50%) scale(1)';
+                ring.style.borderColor = 'rgba(200, 169, 126, 0.4)';
+            });
         });
 
+        // Tabs & Bars
         function animateBars() {
-            document.querySelectorAll('.bar-fill').forEach(bar => { bar.style.width = bar.getAttribute('data-val') + '%'; });
+            document.querySelectorAll('.bar-fill').forEach(bar => {
+                bar.style.width = bar.getAttribute('data-val') + '%';
+            });
         }
 
         document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -513,11 +661,18 @@
             });
         });
 
+        // Lightbox
         const lb = document.getElementById('lightbox'), lbI = lb.querySelector('img');
         document.querySelectorAll('.photo-item img').forEach(i => {
             i.addEventListener('click', () => { lbI.src = i.src; lb.classList.add('open'); });
         });
         lb.addEventListener('click', () => lb.classList.remove('open'));
+
+        // Poly Hover Effect
+        document.querySelectorAll('.radar-poly').forEach(p => {
+            p.addEventListener('mouseenter', () => p.classList.add('active-poly'));
+            p.addEventListener('mouseleave', () => p.classList.remove('active-poly'));
+        });
 
         setTimeout(animateBars, 500);
     </script>
