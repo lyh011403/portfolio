@@ -77,8 +77,8 @@ CATEGORIES.embedded.items = [
     {
         type: 'iframe',
         src: './training-gallery.html',
-        thumb: './assets/training_report_cover.png',
-        title: '訓練數據詳細報告：版本演進歷程'
+        thumb: './assets/training_report_new_cover.png',
+        title: '訓練數據詳細報告：AI 模型成長分析'
     },
     {
         type: 'video',
