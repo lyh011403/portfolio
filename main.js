@@ -75,6 +75,12 @@ CATEGORIES.embedded.items = [
         title: 'Smart Safety Care'
     },
     {
+        type: 'iframe',
+        src: './training-gallery.html',
+        thumb: './assets/training_v2_3.png',
+        title: '訓練資料集：版本成長歷程'
+    },
+    {
         type: 'video',
         src: './assets/ssc_app.mp4',
         title: 'APP 影片介紹'
