@@ -12,16 +12,14 @@
         rel="stylesheet">
     <style>
         :root {
-            --bg: #0a0a0c;
-            --bg-2: #121216;
-            --surface: rgba(255, 255, 255, 0.05);
-            --border: rgba(255, 255, 255, 0.1);
-            --accent: #c8a97e;
-            /* warm gold */
+            --bg: #f8f9fa;
+            /* Light grey/white like Image 1 */
+            --surface: #ffffff;
+            --border: #e9ecef;
             --accent-blue: #007aff;
-            /* Apple-style blue from image 1 */
-            --text-1: #f5f5f5;
-            --text-2: #a0a0a8;
+            --accent-grey: #8e8e93;
+            --text-main: #1d1d1f;
+            --text-sub: #86868b;
         }
 
         * {
@@ -32,86 +30,93 @@
 
         body {
             background: var(--bg);
-            color: var(--text-1);
-            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Noto Sans TC', sans-serif;
             min-height: 100vh;
-            overflow-x: hidden;
             padding-bottom: 5rem;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 3rem 1.5rem;
         }
 
         header {
             margin-bottom: 3.5rem;
-            text-align: center;
+            text-align: left;
         }
 
-        .eyebrow {
-            font-size: 0.72rem;
+        .model-tag {
+            background: #e1f0ff;
+            color: var(--accent-blue);
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
             font-weight: 700;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 0.25em;
-            margin-bottom: 0.75rem;
-            display: block;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .model-tag::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent-blue);
+            border-radius: 50%;
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 900;
-            margin-bottom: 0.75rem;
-            background: linear-gradient(to bottom, #fff, #888);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
         }
 
         /* Tabs */
         .tabs {
             display: flex;
-            justify-content: center;
-            gap: 0.75rem;
-            margin-bottom: 4rem;
-            background: var(--surface);
-            padding: 0.5rem;
-            border-radius: 100px;
-            width: fit-content;
-            margin-inline: auto;
-            border: 1px solid var(--border);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
         }
 
         .tab-btn {
             background: transparent;
-            color: var(--text-2);
-            padding: 0.6rem 1.75rem;
-            border-radius: 100px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.35s cubic-bezier(0.19, 1, 0.22, 1);
+            color: var(--text-sub);
             border: none;
-        }
-
-        .tab-btn:hover {
-            color: var(--text-1);
+            padding: 0.5rem 0;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s;
         }
 
         .tab-btn.active {
-            background: #fff;
-            color: #000;
-            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+            color: var(--accent-blue);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent-blue);
+            border-radius: 2px;
         }
 
         /* Sections */
         .content-section {
             display: none;
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
         .content-section.active {
@@ -120,165 +125,85 @@
             transform: translateY(0);
         }
 
-        /* Grid 2x2 */
-        .grid-2x2 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-        }
-
-        .image-card {
-            background: var(--bg-2);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            overflow: hidden;
-            transition: transform 0.4s var(--ease), border-color 0.4s ease;
-            position: relative;
-        }
-
-        .image-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-4px);
-        }
-
-        .image-card img {
-            width: 100%;
-            aspect-ratio: 4/3;
-            object-fit: cover;
-            display: block;
-            opacity: 0.85;
-            transition: opacity 0.4s;
-        }
-
-        .image-card:hover img {
-            opacity: 1;
-        }
-
-        .image-card .info {
-            padding: 1.25rem 1.5rem;
-        }
-
-        .image-card h3 {
-            font-size: 1rem;
-            font-weight: 700;
-            margin-bottom: 0.4rem;
-            color: var(--text-1);
-        }
-
-        .image-card p {
-            font-size: 0.8rem;
-            color: var(--text-2);
-            line-height: 1.6;
-        }
-
-        /* 成果展示 (Image 1 Style) */
-        .stats-report {
-            background: #fff;
-            /* White bg like image 1 */
-            color: #333;
-            padding: 2.5rem;
+        /* Report Box */
+        .report-box {
+            background: var(--surface);
             border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
             margin-bottom: 2rem;
-            max-width: 800px;
-            margin-inline: auto;
+            border: 1px solid var(--border);
         }
 
-        .report-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
             margin-bottom: 2rem;
+            color: #000;
         }
 
-        .model-v2-tag {
-            background: #e1f0ff;
-            color: #007aff;
-            padding: 0.3rem 0.8rem;
-            border-radius: 100px;
-            font-weight: 700;
-            font-size: 0.75rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        .model-v2-tag::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            background: #007aff;
-            border-radius: 50%;
-        }
-
-        .report-title {
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: #1d1d1f;
-        }
-
+        /* Animated Bar Chart */
         .bar-chart {
             display: flex;
             flex-direction: column;
-            gap: 1.2rem;
+            gap: 1.5rem;
         }
 
         .bar-row {
             display: grid;
-            grid-template-columns: 100px 1fr;
+            grid-template-columns: 120px 1fr;
             align-items: center;
-            gap: 1rem;
+            gap: 1.5rem;
         }
 
         .cat-name {
             font-weight: 600;
-            font-size: 1rem;
-            color: #1d1d1f;
+            color: #333;
         }
 
         .bar-pair {
             display: flex;
             flex-direction: column;
-            gap: 0.4rem;
-            width: 100%;
+            gap: 0.5rem;
         }
 
         .bar-bg {
             background: #f1f3f5;
-            height: 24px;
-            border-radius: 6px;
+            height: 28px;
+            border-radius: 8px;
             position: relative;
             overflow: hidden;
         }
 
         .bar-fill {
             height: 100%;
-            border-radius: 6px;
+            border-radius: 8px;
             width: 0%;
             transition: width 1.5s cubic-bezier(0.19, 1, 0.22, 1);
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            padding-right: 0.6rem;
+            padding-right: 0.75rem;
             color: #fff;
-            font-size: 0.75rem;
-            font-weight: 800;
+            font-size: 0.8rem;
+            font-weight: 700;
         }
 
         .bar-fill.v1 {
-            background: #8e8e93;
+            background: var(--accent-grey);
         }
 
         .bar-fill.v2 {
-            background: #007aff;
+            background: var(--accent-blue);
         }
 
         .legend {
             display: flex;
             gap: 1.5rem;
             margin-top: 2rem;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: #8e8e93;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-sub);
         }
 
         .legend-item {
@@ -288,58 +213,72 @@
         }
 
         .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 3px;
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
         }
 
         .dot.v1 {
-            background: #8e8e93;
+            background: var(--accent-grey);
         }
 
         .dot.v2 {
-            background: #007aff;
+            background: var(--accent-blue);
         }
 
         /* Animated Radar SVG */
-        .radar-container {
-            width: 100%;
-            max-width: 400px;
-            margin: 2rem auto;
-            position: relative;
+        .radar-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 0;
         }
 
         .radar-svg {
             width: 100%;
-            height: 350px;
+            max-width: 500px;
+            height: auto;
         }
 
         .radar-grid circle,
         .radar-grid line {
-            stroke: rgba(255, 255, 255, 0.08);
+            stroke: #dee2e6;
             fill: none;
+            stroke-width: 0.5;
+        }
+
+        .radar-label {
+            font-size: 3.5px;
+            fill: var(--text-sub);
+            font-weight: 600;
+        }
+
+        .radar-val {
+            font-size: 3px;
+            fill: var(--text-main);
+            font-weight: 700;
         }
 
         .radar-poly {
-            fill-opacity: 0.2;
-            stroke-width: 2.5;
+            fill-opacity: 0.25;
+            stroke-width: 1;
             transition: all 1s ease;
         }
 
         .radar-poly.v1 {
-            stroke: #8e8e93;
-            fill: #8e8e93;
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
+            stroke: var(--accent-grey);
+            fill: var(--accent-grey);
+            stroke-dasharray: 500;
+            stroke-dashoffset: 500;
             animation: draw 2s forwards;
         }
 
         .radar-poly.v2 {
             stroke: var(--accent-blue);
             fill: var(--accent-blue);
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-            animation: draw 2s 0.5s forwards;
+            stroke-dasharray: 500;
+            stroke-dashoffset: 500;
+            animation: draw 2s 0.6s forwards;
         }
 
         @keyframes draw {
@@ -348,17 +287,57 @@
             }
         }
 
-        @media (max-width: 700px) {
-            .grid-2x2 {
+        /* Photo Grid */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .photo-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .photo-card img {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-card .info {
+            padding: 1rem 1.5rem;
+        }
+
+        .photo-card h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .photo-card p {
+            font-size: 0.75rem;
+            color: var(--text-sub);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .photo-grid {
                 grid-template-columns: 1fr;
             }
 
-            .report-title {
-                font-size: 1.8rem;
-            }
-
             .bar-row {
-                grid-template-columns: 70px 1fr;
+                grid-template-columns: 80px 1fr;
             }
         }
     </style>
@@ -367,186 +346,149 @@
 <body>
     <div class="container">
         <header>
-            <span class="eyebrow">Embedded AI Report</span>
+            <div class="model-tag">INTELLIGENT VISION SYSTEM</div>
             <h1>訓練數據詳細報告</h1>
-            <p class="subtitle">視覺演進與效能指標全面解析</p>
         </header>
 
         <div class="tabs">
             <button class="tab-btn active" data-tab="compare">優化成效</button>
-            <button class="tab-btn" data-tab="v1">1.0 數據</button>
-            <button class="tab-btn" data-tab="v2">2.0 數據</button>
-            <button class="tab-btn" data-tab="distill">技術優化</button>
+            <button class="tab-btn" data-tab="v1">v1.0 數據</button>
+            <button class="tab-btn" data-tab="v2">v2.0 數據</button>
         </div>
 
-        <!-- 優化成效 (Image 1 Style) -->
+        <!-- 優化成效頁面 -->
         <div id="compare" class="content-section active">
-            <div class="stats-report">
-                <div class="report-header">
-                    <div class="model-v2-tag">MODEL V2.0</div>
-                    <div class="tag-v2"
-                        style="background:#f1f3f5; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 800; color:#007aff">
-                        v2.0</div>
-                </div>
-                <h2 class="report-title">優化成效</h2>
-
+            <div class="report-box">
+                <h2 class="section-title">優化成效</h2>
                 <div class="bar-chart">
                     <div class="bar-row">
-                        <span class="cat-name">Person</span>
+                        <span class="cat-name">Person (mAP)</span>
                         <div class="bar-pair">
                             <div class="bar-bg">
-                                <div class="bar-fill v1" data-val="49">0.49</div>
+                                <div class="bar-fill v1" data-val="49.2">0.492</div>
                             </div>
                             <div class="bar-bg">
-                                <div class="bar-fill v2" data-val="80">0.80</div>
+                                <div class="bar-fill v2" data-val="82.3">0.823</div>
                             </div>
                         </div>
                     </div>
                     <div class="bar-row">
-                        <span class="cat-name">Knife</span>
+                        <span class="cat-name">Knife (mAP)</span>
                         <div class="bar-pair">
                             <div class="bar-bg">
-                                <div class="bar-fill v1" data-val="60">0.60</div>
+                                <div class="bar-fill v1" data-val="59.6">0.596</div>
                             </div>
                             <div class="bar-bg">
-                                <div class="bar-fill v2" data-val="70">0.70</div>
+                                <div class="bar-fill v2" data-val="61.5">0.615</div>
                             </div>
                         </div>
                     </div>
                     <div class="bar-row">
-                        <span class="cat-name">Scissors</span>
+                        <span class="cat-name">Scissors (mAP)</span>
                         <div class="bar-pair">
                             <div class="bar-bg">
-                                <div class="bar-fill v1" data-val="73">0.73</div>
+                                <div class="bar-fill v1" data-val="73.1">0.731</div>
                             </div>
                             <div class="bar-bg">
-                                <div class="bar-fill v2" data-val="78">0.78</div>
+                                <div class="bar-fill v2" data-val="72.8">0.728</div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="legend">
                     <div class="legend-item">
-                        <div class="dot v1"></div> v1.0
+                        <div class="dot v1"></div> v1.0 (Before)
                     </div>
                     <div class="legend-item">
-                        <div class="dot v2"></div> v2.0
+                        <div class="dot v2"></div> v2.0 (After)
                     </div>
                 </div>
             </div>
 
-            <!-- Radar Compare (Animated SVG) -->
-            <div class="radar-container">
-                <svg class="radar-svg" viewBox="0 0 100 100">
-                    <!-- Circles Grid -->
-                    <g class="radar-grid">
-                        <circle cx="50" cy="50" r="10" />
-                        <circle cx="50" cy="50" r="20" />
-                        <circle cx="50" cy="50" r="30" />
-                        <circle cx="50" cy="50" r="40" />
-                        <!-- Axes -->
-                        <line x1="50" y1="10" x2="50" y2="90" />
-                        <line x1="10" y1="50" x2="90" y2="50" />
-                    </g>
-                    <!-- V1 Polygon -->
-                    <polygon class="radar-poly v1" points="50,25 70,40 65,70 35,70 30,40" />
-                    <!-- V2 Polygon -->
-                    <polygon class="radar-poly v2" points="50,15 85,35 75,80 25,80 15,35" />
-                </svg>
-                <p style="text-align:center; color:var(--text-2); font-size:0.8rem; margin-top:1rem">綜合性能評測對比 (雷達圖動畫展示)
-                </p>
-            </div>
+            <div class="report-box">
+                <h2 class="section-title">前後訓練性能比較</h2>
+                <div class="radar-box">
+                    <svg class="radar-svg" viewBox="0 0 120 120">
+                        <!-- Grid circles -->
+                        <g class="radar-grid">
+                            <circle cx="60" cy="60" r="10" />
+                            <circle cx="60" cy="60" r="20" />
+                            <circle cx="60" cy="60" r="30" />
+                            <circle cx="60" cy="60" r="40" />
+                            <circle cx="60" cy="60" r="50" />
+                            <!-- Axis lines (6 axes) -->
+                            <line x1="60" y1="10" x2="60" y2="110" />
+                            <line x1="16.7" y1="35" x2="103.3" y2="85" />
+                            <line x1="16.7" y1="85" x2="103.3" y2="35" />
+                        </g>
+                        <!-- Labels -->
+                        <text x="60" y="7" text-anchor="middle" class="radar-label">人 TP (CM)</text>
+                        <text x="110" y="33" text-anchor="middle" class="radar-label">刀 TP (CM)</text>
+                        <text x="110" y="88" text-anchor="middle" class="radar-label">剪刀 TP (CM)</text>
+                        <text x="60" y="117" text-anchor="middle" class="radar-label">人 AP (PR)</text>
+                        <text x="10" y="88" text-anchor="middle" class="radar-label">刀 AP (PR)</text>
+                        <text x="10" y="33" text-anchor="middle" class="radar-label">剪刀 AP (PR)</text>
 
-            <div class="image-card" style="margin-top: 3rem;">
-                <img src="./assets/radar_compare.png" alt="Original Radar">
-                <div class="info">
-                    <h3>原始數據對比圖</h3>
-                    <p>1.0 版與 2.0 版在真實採樣環境下的各項精準度指標分佈圖點位對比。</p>
+                        <!-- V1 Data (Before) 
+                             人TP: 0.436 (r=21.8), 刀TP: 0.58 (r=29), 剪刀TP: 0.66 (r=33), 人AP: 0.492 (r=24.6), 刀AP: 0.615 (r=30.7), 剪刀AP: 0.36 (r=18)
+                        -->
+                        <polygon class="radar-poly v1" points="60,38.2 85.1,45.5 88.6,76.5 60,84.6 33.4,75.4 44.4,51" />
+
+                        <!-- V2 Data (After)
+                             人TP: 0.879 (r=43.9), 刀TP: 0.64 (r=32), 剪刀TP: 0.70 (r=35), 人AP: 0.823 (r=41.1), 刀AP: 0.615 (r=30.7), 剪刀AP: 0.728 (r=36.4)
+                        -->
+                        <polygon class="radar-poly v2" points="60,16.1 87.7,44 90.3,77.5 60,101.1 33.4,75.4 28.5,42" />
+                    </svg>
                 </div>
             </div>
         </div>
 
-        <!-- 1.0版 (2x2) -->
+        <!-- v1.0 數據 (2x2) -->
         <div id="v1" class="content-section">
-            <div class="grid-2x2">
-                <div class="image-card">
-                    <img src="./assets/training_v1_1.png" alt="v1-1">
-                    <div class="info">
-                        <h3>採集與標註</h3>
-                        <p>初步特徵提取</p>
+            <div class="report-box">
+                <h2 class="section-title">v1.0 訓練詳情</h2>
+                <div class="photo-grid">
+                    <div class="photo-card">
+                        <img src="./assets/training_v1_1.png" alt="v1_1">
+                        <div class="info">
+                            <h4>標註樣本採集</h4>
+                            <p>第一階段核心對象識別</p>
+                        </div>
                     </div>
-                </div>
-                <div class="image-card">
-                    <img src="./assets/training_v1_2.png" alt="v1-2">
-                    <div class="info">
-                        <h3>環境多樣性</h3>
-                        <p>基礎光線測試</p>
-                    </div>
-                </div>
-                <div class="image-card">
-                    <img src="./assets/training_v1_3.png" alt="v1-3">
-                    <div class="info">
-                        <h3>初步驗證</h3>
-                        <p>辨識核心確立</p>
+                    <div class="photo-card">
+                        <img src="./assets/training_v1_3.png" alt="v1_3">
+                        <div class="info">
+                            <h4>初步模型熱圖</h4>
+                            <p>視覺特徵分佈檢測</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 2.0版 (2x2) -->
+        <!-- v2.0 數據 (2x2) -->
         <div id="v2" class="content-section">
-            <div class="grid-2x2">
-                <div class="image-card">
-                    <img src="./assets/training_v2_1.png" alt="v2-1">
-                    <div class="info">
-                        <h3>資料增強</h3>
-                        <p>仿射變換擴展</p>
+            <div class="report-box">
+                <h2 class="section-title">v2.0 優化詳情</h2>
+                <div class="photo-grid">
+                    <div class="photo-card">
+                        <img src="./assets/training_v2_1.png" alt="v2_1">
+                        <div class="info">
+                            <h4>資料增強疊加</h4>
+                            <p>仿真多樣化場景樣本</p>
+                        </div>
                     </div>
-                </div>
-                <div class="image-card">
-                    <img src="./assets/training_v2_2.png" alt="v2-2">
-                    <div class="info">
-                        <h3>邊角案例</h3>
-                        <p>極端環境強化</p>
-                    </div>
-                </div>
-                <div class="image-card">
-                    <img src="./assets/training_v2_3.png" alt="v2-3">
-                    <div class="info">
-                        <h3>收斂成果</h3>
-                        <p>高精度穩定產出</p>
+                    <div class="photo-card">
+                        <img src="./assets/training_v2_3.png" alt="v2_3">
+                        <div class="info">
+                            <h4>精確度收斂圖</h4>
+                            <p>損失函數穩定下移曲線</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 知識蒸餾 -->
-        <div id="distill" class="content-section">
-            <div class="image-card" style="margin-bottom: 2rem;">
-                <img src="./assets/training_distill_1.png" alt="distill-1">
-                <div class="info">
-                    <h3>Teacher 模型</h3>
-                    <p>深度特徵提取</p>
-                </div>
-            </div>
-            <div class="grid-2x2">
-                <div class="image-card">
-                    <img src="./assets/training_distill_2.png" alt="distill-2">
-                    <div class="info">
-                        <h3>Student 模型</h3>
-                        <p>輕量化權重轉移</p>
-                    </div>
-                </div>
-                <div class="image-card">
-                    <img src="./assets/training_distill_3.png" alt="distill-3">
-                    <div class="info">
-                        <h3>部署測速</h3>
-                        <p>終端設備即時推論</p>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -567,16 +509,13 @@
                 target.classList.add('active');
 
                 if (btn.dataset.tab === 'compare') {
-                    // Reset and trigger bars
                     document.querySelectorAll('.bar-fill').forEach(b => b.style.width = '0%');
                     setTimeout(animateBars, 100);
                 }
-
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         });
 
-        // Init
         setTimeout(animateBars, 500);
     </script>
 </body>
