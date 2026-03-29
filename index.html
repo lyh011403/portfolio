@@ -148,7 +148,18 @@
         }
     </style>
 
+    <style>
+        #splash-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+    </style>
+
     <div id="splash-screen">
+        <canvas id="splash-canvas"></canvas>
         <div id="splash-mask"></div>
         <div class="splash-content">
             <div class="splash-meta" id="s-meta">YH. 2026</div>
@@ -160,6 +171,100 @@
     </div>
 
     <script>
+        // --- Splash Particle Logic (Node Connectivity) ---
+        (function () {
+            const sc = document.getElementById('splash-canvas');
+            const sctx = sc.getContext('2d');
+            let sw, sh;
+            let particles = [];
+            let sMouse = { x: null, y: null };
+
+            function resize() {
+                sw = sc.width = window.innerWidth;
+                sh = sc.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            window.addEventListener('mousemove', (e) => {
+                sMouse.x = e.clientX;
+                sMouse.y = e.clientY;
+            });
+            resize();
+
+            class SParticle {
+                constructor() {
+                    this.x = Math.random() * sw;
+                    this.y = Math.random() * sh;
+                    this.vx = (Math.random() - 0.5) * 0.6;
+                    this.vy = (Math.random() - 0.5) * 0.6;
+                    this.radius = Math.random() * 1.2 + 0.8;
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if (this.x < 0 || this.x > sw) this.vx *= -1;
+                    if (this.y < 0 || this.y > sh) this.vy *= -1;
+
+                    // Mouse interaction
+                    if (sMouse.x) {
+                        const dx = sMouse.x - this.x;
+                        const dy = sMouse.y - this.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 150) {
+                            this.x -= dx * 0.01;
+                            this.y -= dy * 0.01;
+                        }
+                    }
+                }
+                draw() {
+                    sctx.fillStyle = 'rgba(200, 169, 126, 0.45)';
+                    sctx.beginPath();
+                    sctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    sctx.fill();
+                }
+            }
+
+            function init() {
+                particles = [];
+                const count = Math.min(80, (sw * sh) / 15000);
+                for (let i = 0; i < count; i++) {
+                    particles.push(new SParticle());
+                }
+            }
+            init();
+
+            function drawLines() {
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < 160) {
+                            const opacity = 1 - (dist / 160);
+                            sctx.strokeStyle = `rgba(200, 169, 126, ${opacity * 0.15})`;
+                            sctx.lineWidth = 0.8;
+                            sctx.beginPath();
+                            sctx.moveTo(particles[i].x, particles[i].y);
+                            sctx.lineTo(particles[j].x, particles[j].y);
+                            sctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function loop() {
+                if (document.getElementById('splash-screen').classList.contains('hidden')) return;
+                sctx.clearRect(0, 0, sw, sh);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                drawLines();
+                requestAnimationFrame(loop);
+            }
+            loop();
+        })();
+
         // Splash Reveal Sequence
         window.addEventListener('load', () => {
             const nodes = [
@@ -170,14 +275,16 @@
                 { id: 's-sub', delay: 1400 }
             ];
             nodes.forEach(n => {
-                setTimeout(() => document.getElementById(n.id).classList.add('reveal-node'), n.delay);
+                setTimeout(() => {
+                    const el = document.getElementById(n.id);
+                    if (el) el.classList.add('reveal-node');
+                }, n.delay);
             });
         });
 
         // Splash Hide Logic
         document.getElementById('s-btn').addEventListener('click', () => {
             document.getElementById('splash-screen').classList.add('hidden');
-            // Notify background particles or music to start if needed
             const bgm = document.getElementById('bgm');
             if (bgm) bgm.play().catch(e => console.log("Splash audio trigger restricted"));
         });
