@@ -4,139 +4,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HAIN | 3D Artist & AI Developer Portfolio</title>
-    <!-- Animation Libs -->
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <title>HAIN Game Artist & AI Developer | Portfolio</title>
+    <meta name="description"
+        content="3D Artist & AI Developer. Specializing in game environment design, embedded AI systems, and cross-domain technical creativity.">
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&family=Noto+Sans+TC:wght@400;700;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap"
         rel="stylesheet">
-  <link rel="stylesheet" crossorigin href="/portfolio/assets/index-CCKJsynF.css">
-</head>
+
+<script type="module" crossorigin src="/portfolio/assets/index-DPi47KEn.js"></script>
+<link rel="stylesheet" crossorigin href="/portfolio/assets/index-DTkZGcOw.css">
 
 <body>
     <!-- Custom Cursor -->
-    <div id="cursor-dot"></div>
-    <div id="cursor-ring"></div>
-
-    <!-- 0. SPLASH SCREEN (High-End Overhaul Style) -->
-    <div id="splash-screen">
-        <div class="splash-content">
-            <div class="splash-credits">HAIN · 2026</div>
-            <h1 class="splash-title">HAIN PORTFOLIO</h1>
-            <p class="splash-desc">3D 美術師 & AI 開發者<br>專注於遊戲環境設計、嵌入式 AI 系統與跨領域技術創意</p>
-            <div class="splash-action">
-                <button id="enter-btn" class="btn-enter">
-                    <span>進入系統</span>
-                    <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-                        <path d="M3 8H13M13 8L8 3M13 8L8 13" stroke="currentColor" stroke-width="2" />
-                    </svg>
-                </button>
-            </div>
-        </div>
+    <div id="cursor-ring">
+        <div class="ring-track"></div>
+        <div class="ring-arc"></div>
     </div>
+    <div id="cursor-dot"></div>
 
-    <!-- Background Layer (Particle Ink) -->
+    <!-- Particle Ink Background Canvas -->
     <canvas id="ink-canvas"></canvas>
+    <!-- Semi-transparent mask for readability -->
     <div id="canvas-mask"></div>
 
-    <!-- Navigation -->
+    <!-- NAV -->
     <nav id="nav">
         <div class="nav-logo">YH.</div>
-        <div class="nav-links">
-            <a href="#featured">精選作品</a>
-            <a href="#portfolio">完整作品集</a>
-            <a href="./public/training-gallery.html">訓練數據報告</a>
-            <a href="#about">關於我</a>
-        </div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="#featured">精選</a></li>
+            <li><a href="#portfolio">作品集</a></li>
+            <li><a href="#skills">能力</a></li>
+            <li><a href="#about">關於</a></li>
+            <li><a href="#contact">聯絡我</a></li>
+        </ul>
+        <button class="nav-hamburger" id="nav-hamburger" aria-label="選單">
+            <span></span><span></span><span></span>
+        </button>
     </nav>
+    <!-- 行動版選單 -->
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="#featured" class="mobile-link">精選</a>
+        <a href="#portfolio" class="mobile-link">作品集</a>
+        <a href="#skills" class="mobile-link">能力</a>
+        <a href="#about" class="mobile-link">關於</a>
+        <a href="#contact" class="mobile-link">聯絡我</a>
+    </div>
 
-    <main id="main-content">
-        <!-- 1. HERO SECTION (Extreme Typography) -->
-        <section class="hero" id="home">
-            <div class="hero-container container">
-                <div class="hero-sub-top">3D ARTIST & AI DEVELOPER</div>
+    <main>
+        <!-- HERO -->
+        <section id="hero">
+            <div class="hero-inner">
+                <p class="hero-eyebrow"><!-- [可修改] 標頭小字 -->3D Artist & AI Developer</p>
                 <h1 class="hero-title">
-                    <span class="span-white">CREATING</span>
-                    <span class="span-gold">BEYOND</span>
-                    <span class="span-white">BOUNDARIES.</span>
+                    <span class="line"><!-- [可修改] 主標題第一行 -->CREATING</span>
+                    <span class="line accent-line"><!-- [可修改] 主標題第二行 -->BEYOND</span>
+                    <span class="line"><!-- [可修改] 主標題第三行 -->BOUNDARIES.</span>
                 </h1>
-                <p class="hero-desc-bottom">
-                    遊戲美術 × 嵌入式 AI × 硬體整合。<br>
-                    用技術驅動創意，用藝術表達工程。
-                </p>
+                <p class="hero-sub"><!-- [可修改] 簡介文字 -->遊戲美術 × 嵌入式 AI × 硬體整合。<br>用技術驅動創意，用藝術表達工程。</p>
             </div>
         </section>
 
-        <!-- 2. FEATURED PROJECTS -->
+        <!-- FEATURED PROJECTS -->
         <section id="featured" class="section">
             <div class="container">
-                <div class="section-label">01 — FEATURED WORKS</div>
-                <h2 class="section-title">精選作品</h2>
-                <div id="featured-container" class="featured-list">
-                    <!-- Injected by JS -->
-                </div>
+                <div class="section-label">01 — FEATURED PROJECTS</div>
+                <h2 class="section-title"><!-- [可修改] 區塊標題 -->精選作品</h2>
+                <p class="section-sub"><!-- [可修改] 區塊副標題 -->最能代表我核心實力的代表性專案。</p>
+            </div>
+            <div class="featured-list container" id="featured-container">
+                <!-- Injected by JS -->
             </div>
         </section>
 
-        <!-- 3. FULL PORTFOLIO -->
+        <!-- FULL PORTFOLIO: Six categories -->
         <section id="portfolio" class="section">
             <div class="container">
                 <div class="section-label">02 — FULL PORTFOLIO</div>
                 <h2 class="section-title">完整作品集</h2>
+            </div>
 
-                <div class="tabs-bar container" id="portfolio-tabs">
-                    <button class="tab-btn active" onclick="changeCategory('huangyi')">黃易群俠傳m</button>
-                    <button class="tab-btn" onclick="changeCategory('tianzi')">天子傳奇S</button>
-                    <button class="tab-btn" onclick="changeCategory('wlwl')">飄流幻境RE</button>
-                    <button class="tab-btn" onclick="changeCategory('embedded')">嵌入式AI影像</button>
-                    <button class="tab-btn" onclick="changeCategory('ai-3d')">AI 3D</button>
-                    <button class="tab-btn" onclick="changeCategory('ai-2d')">AI 2D</button>
-                    <button class="tab-btn" onclick="changeCategory('my-3d')">自製3D</button>
-                </div>
+            <!-- Category Tabs -->
+            <div class="tabs-bar container">
+                <button class="tab-btn active" data-cat="huangyi">黃易群俠傳m</button>
+                <button class="tab-btn" data-cat="tianzi">天子傳奇S</button>
+                <button class="tab-btn" data-cat="wlwl">飄流幻境RE</button>
+                <button class="tab-btn" data-cat="embedded">嵌入式AI影像</button>
+                <button class="tab-btn" data-cat="ai-3d">AI 3D</button>
+                <button class="tab-btn" data-cat="ai-2d">AI 2D</button>
+                <button class="tab-btn" data-cat="my-3d">自製3D</button>
+            </div>
 
-                <div class="portfolio-grid" id="portfolio-grid">
-                    <!-- Injected by JS -->
-                </div>
+            <div class="portfolio-grid container" id="portfolio-grid">
+                <!-- Injected by JS -->
             </div>
         </section>
 
-        <!-- 4. ABOUT & CONTACT -->
-        <section id="about" class="section">
+        <!-- PROFESSIONAL BREADTH (Skills) -->
+        <section id="skills" class="section">
             <div class="container">
-                <div class="section-label">03 — IDENTITY</div>
-                <h2 class="section-title">關於我</h2>
-                <div class="about-flex">
-                    <p class="about-p">我是一位擁有 3D 美術與 AI 研發跨領域能力的技術藝術家。目標是將高品質渲染與智能互動系統整合，創造獨特的沉浸式體驗。</p>
+                <div class="section-label">03 — PROFESSIONAL BREADTH</div>
+                <h2 class="section-title">跨領域實力</h2>
+                <div class="skills-grid">
+                    <div class="skill-card scroll-reveal">
+                        <div class="skill-top">
+                            <span class="skill-num">01</span>
+                            <h3>3D & Rendering</h3>
+                        </div>
+                        <p>高品質角色與場景建模，從 PBR 材質製作到即時渲染的完整流程。</p>
+                        <div class="skill-tags">
+                            <span>Blender</span><span>Unity</span><span>Unreal Engine</span>
+                        </div>
+                    </div>
+                    <div class="skill-card scroll-reveal">
+                        <div class="skill-top">
+                            <span class="skill-num">02</span>
+                            <h3>AI & Programming</h3>
+                        </div>
+                        <p>深度學習模型訓練與電腦視覺系統開發，精通主流 AI 框架與即時推論。</p>
+                        <div class="skill-tags">
+                            <span>Python</span><span>PyTorch</span><span>MediaPipe</span><span>OpenCV</span><span>YOLOv8</span>
+                        </div>
+                    </div>
+                    <div class="skill-card scroll-reveal">
+                        <div class="skill-top">
+                            <span class="skill-num">03</span>
+                            <h3>AI Image Recognition</h3>
+                        </div>
+                        <p>從資料標註到模型部署的完整 AI 影像辨識工作流：自建資料集、遷移學習提升初期準確率，知識蒸餾優化至邊緣端。</p>
+                        <div class="skill-tags">
+                            <span>遷移學習</span><span>知識蒸餾</span><span>LabelImg</span><span>Roboflow</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
+        <!-- ABOUT ME -->
+        <section id="about" class="section">
+            <div class="container about-grid">
+                <div class="about-flex">
+                    <div class="about-left scroll-reveal">
+                        <div class="section-label">04 — ABOUT ME</div>
+                        <h2 class="section-title"><!-- [可修改] 關於我標題 -->關於我</h2>
+                        <p class="about-p"><!-- [可修改] 關於我主文 -->我是一位兼具<strong>遊戲美術設計背景</strong>與<strong>AI
+                                技術開發能力</strong>的跨領域創作者。</p>
+                        <p class="about-p-sub"><!-- [可修改] 關於我子文 1 -->從遊戲公司的 3D 場景建模，到獨立研發嵌入式 AI
+                            影像辨識系統，目標是讓视覺藝術感知與工程邏輯在同一個作品中共存。</p>
+                        <p class="about-p-sub"><!-- [可修改] 關於我子文 2 -->現正積極尋找能同時發揮視覺創意與技術深度的機會。</p>
+                    </div>
+                    <div class="about-right scroll-reveal">
+                        <div class="stat-block">
+                            <div class="stat">
+                                <span class="stat-num">3</span>
+                                <span class="stat-label">Game Titles</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-num">3+</span>
+                                <span class="stat-label">Technical Portfolio</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-num">3D×AI</span>
+                                <span class="stat-label">Cross-tech Integration</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
         <section id="contact" class="section">
-            <div class="container" style="text-align: center;">
-                <h2 class="section-title">聯絡我</h2>
-                <a href="mailto:lyh0972717368@gmail.com" class="btn-enter"
-                    style="display:inline-block; margin-top:2rem;">lyh0972717368@gmail.com</a>
+            <div class="container contact-center scroll-reveal">
+                <div class="section-label">05 — CONTACT</div>
+                <h2 class="contact-title"><!-- [可修改] 聯絡我標題 -->聯絡我</h2>
+                <p class="contact-sub"><!-- [可修改] 聯絡我副標題 -->歡迎任何合作邀約或職缺洽談。</p>
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=lyh0972717368@gmail.com" target="_blank"
+                    class="btn-primary large">
+                    <span><!-- [可修改] E-mail 地址 -->lyh0972717368@gmail.com</span>
+                    <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8H13M13 8L8 3M13 8L8 13" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </a>
             </div>
         </section>
     </main>
 
-    <!-- Lightbox -->
-    <div id="lightbox">
+    <footer id="footer">
+        <div class="container footer-inner">
+            <span class="footer-logo">YH.</span>
+            <span class="footer-copy">© 2026 Game Artist & AI Developer. All Rights Reserved.</span>
+        </div>
+    </footer>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox" role="dialog" aria-modal="true" aria-label="作品預覽">
         <div id="lightbox-backdrop"></div>
         <div id="lightbox-inner">
-            <button id="lightbox-close">✕</button>
+            <button id="lightbox-close" aria-label="關閉">✕</button>
             <img id="lightbox-img" src="" alt="">
-            <video id="lightbox-video" controls muted loop></video>
-            <div id="lightbox-caption"></div>
+            <video id="lightbox-video" controls playsinline></video>
+            <p id="lightbox-caption"></p>
         </div>
     </div>
+    <!-- BACK TO TOP / MUSIC TONGLE / AUDIO -->
+    <button id="music-toggle" class="music-toggle" aria-label="Toggle Auto BGM">
+        <div class="music-bars">
+            <span></span><span></span><span></span><span></span>
+        </div>
+    </button>
+    <audio id="bgm" src="./assets/m.mp3" autoplay loop preload="auto"></audio>
 
-    <!-- Audio -->
-    <audio id="bgm" src="./assets/m.mp3" loop preload="auto"></audio>
-
-    <script src="./main.js"></script>
 </body>
 
 </html>
