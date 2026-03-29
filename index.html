@@ -107,12 +107,15 @@
 
             <!-- Category Tabs -->
             <!-- WebGL Ferrofluid & Pie Menu Container -->
-            <div id="ferro-nav-container" class="container">
-                <canvas id="ferro-canvas"></canvas>
-                <div id="pie-menu" class="pie-menu">
-                    <!-- Categories will be injected by JS -->
-                </div>
-                <div id="ferro-hint">點擊核心切換類別</div>
+            <!-- Category Tabs (Restored Version) -->
+            <div class="tabs-bar container" id="portfolio-tabs">
+                <button class="tab-btn active" onclick="changeCategory('huangyi')">黃易群俠傳m</button>
+                <button class="tab-btn" onclick="changeCategory('tianzi')">天子傳奇S</button>
+                <button class="tab-btn" onclick="changeCategory('wlwl')">飄流幻境RE</button>
+                <button class="tab-btn" onclick="changeCategory('embedded')">嵌入式AI影像</button>
+                <button class="tab-btn" onclick="changeCategory('ai-3d')">AI 3D</button>
+                <button class="tab-btn" onclick="changeCategory('ai-2d')">AI 2D</button>
+                <button class="tab-btn" onclick="changeCategory('my-3d')">自製3D</button>
             </div>
 
             <div class="portfolio-grid container" id="portfolio-grid">

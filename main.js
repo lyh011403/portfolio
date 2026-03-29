@@ -703,274 +703,32 @@ function initTextEffects() {
 initTextEffects();
 
 // ============================================================
-// 13. FERROFLUID WEBGL NAVIGATION & PIE MENU
+// 13. PORTFOLIO TABS LOGIC (RESTORED)
 // ============================================================
-function initFerroNav() {
-    const container = document.getElementById('ferro-nav-container');
-    const canvas = document.getElementById('ferro-canvas');
-    const pieMenu = document.getElementById('pie-menu');
-    if (!container || !canvas || !pieMenu) return;
+/* [可修改] 初次載入的分類鍵名 */
+let currentCategory = 'huangyi';
 
-    const gl = canvas.getContext('webgl');
-    if (!gl) {
-        container.innerHTML = '<p style="color:#666; font-size:0.8rem;">WebGL not supported</p>';
-        return;
-    }
+window.changeCategory = function (catKey) {
+    if (!CATEGORIES[catKey]) return;
+    currentCategory = catKey;
 
-    // --- 1. SHADERS (GLSL) ---
-    const vsSource = `
-        attribute vec2 position;
-        void main() { gl_Position = vec4(position, 0.0, 1.0); }
-    `;
-
-    const fsSource = `
-        precision highp float;
-        uniform float u_time;
-        uniform vec2 u_mouse;
-        uniform vec2 u_res;
-        uniform float u_active; // Is menu open?
-
-        // --- Simplex 3D Noise ---
-        vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-        vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-        vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
-        vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
-
-        float snoise(vec3 v) {
-            const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
-            const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
-            vec3 i  = floor(v + dot(v, C.yyy) );
-            vec3 x0 = v - i + dot(i, C.xxx) ;
-            vec3 g = step(x0.yzx, x0.xyz);
-            vec3 l = 1.0 - g;
-            vec3 i1 = min( g.xyz, l.zxy );
-            vec3 i2 = max( g.xyz, l.zxy );
-            vec3 x1 = x0 - i1 + C.xxx;
-            vec3 x2 = x0 - i2 + C.yyy;
-            vec3 x3 = x0 - D.yyy;
-            i = mod289(i);
-            vec4 p = permute( permute( permute(
-                     i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
-                   + i.y + vec4(0.0, i1.y, i2.y, 1.0 ))
-                   + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
-            float n_ = 0.142857142857;
-            vec3  ns = n_ * D.wyz - D.xzx;
-            vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
-            vec4 x_ = floor(j * ns.z);
-            vec4 y_ = floor(j - 7.0 * x_ );
-            vec4 x = x_ *ns.x + ns.yyyy;
-            vec4 y = y_ *ns.x + ns.yyyy;
-            vec4 h = 1.0 - abs(x) - abs(y);
-            vec4 b0 = vec4( x.xy, y.xy );
-            vec4 b1 = vec4( x.zw, y.zw );
-            vec4 s0 = floor(b0)*2.0 + 1.0;
-            vec4 s1 = floor(b1)*2.0 + 1.0;
-            vec4 sh = -step(h, vec4(0.0));
-            vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
-            vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
-            vec3 p0 = vec3(a0.xy,h.x);
-            vec3 p1 = vec3(a0.zw,h.y);
-            vec3 p2 = vec3(a1.xy,h.z);
-            vec3 p3 = vec3(a1.zw,h.w);
-            vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
-            p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
-            vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
-            m = m * m;
-            return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3) ) );
-        }
-
-        // --- SDF Scene ---
-        float sdf(vec3 p) {
-            float time = u_time * 0.4;
-            
-            // Mouse distance influence
-            vec2 m = (u_mouse - 0.5) * 2.0; 
-            m.y *= -1.0;
-            vec3 target = vec3(m * 1.5, 0.0);
-            float distToMouse = length(p - target);
-            
-            // Ridged Noise for spikes
-            float n = snoise(p * 2.5 + time);
-            float spikes = pow(1.0 - abs(n), 3.5); // Ridged noise formula
-            
-            // Influence of mouse on spikes
-            float mouseFact = smoothstep(2.5, 0.0, distToMouse);
-            spikes *= (1.0 + mouseFact * 3.0);
-            
-            // Core sphere
-            float sphere = length(p) - (1.1 + u_active * 0.3);
-            return sphere - (spikes * 0.15);
-        }
-
-        vec3 getNormal(vec3 p) {
-            vec2 e = vec2(0.001, 0.0);
-            return normalize(vec3(
-                sdf(p + e.xyy) - sdf(p - e.xyy),
-                sdf(p + e.yxy) - sdf(p - e.yxy),
-                sdf(p + e.yyx) - sdf(p - e.yyx)
-            ));
-        }
-
-        void main() {
-            vec2 uv = (gl_FragCoord.xy - 0.5 * u_res) / min(u_res.x, u_res.y);
-            vec3 ro = vec3(0.0, 0.0, -4.5); // Camera
-            vec3 rd = normalize(vec3(uv, 1.5)); // Direction
-
-            float d = 0.0;
-            float t = 0.0;
-            vec3 p;
-            
-            // Raymarch (減低步數提升效能：80 -> 48)
-            for(int i=0; i<48; i++) {
-                p = ro + rd * t;
-                d = sdf(p);
-                if(d < 0.001 || t > 10.0) break;
-                t += d;
+    // 更新按鈕樣式
+    const container = document.getElementById('portfolio-tabs');
+    if (container) {
+        container.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('onclick').includes(catKey)) {
+                btn.classList.add('active');
             }
-
-            vec3 color = vec3(0.01); // Background almost black
-
-            if(t < 10.0) {
-                vec3 n = getNormal(p);
-                vec3 viewDir = normalize(ro - p);
-                
-                // Ferrofluid Look: Black/Metallic
-                float fresnel = pow(1.0 - max(0.0, dot(n, viewDir)), 5.0);
-                float spec = pow(max(0.0, dot(reflect(-viewDir, n), vec3(0.0, 1.0, 1.0))), 20.0);
-                
-                // Dark material with high specular
-                color = vec3(0.02); // Base
-                color += spec * 0.5 * vec3(0.8, 0.9, 1.0); // Specular highlight
-                color += fresnel * vec3(0.5, 0.4, 0.3); // Edge glow (goldish)
-                
-                // Subtle ambient occlusion
-                color *= (1.0 - float(t)/10.0);
-            }
-
-            gl_FragColor = vec4(color, 1.0);
-        }
-    `;
-
-    function createShader(type, source) {
-        const s = gl.createShader(type);
-        gl.shaderSource(s, source);
-        gl.compileShader(s);
-        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-            console.error(gl.getShaderInfoLog(s));
-            return null;
-        }
-        return s;
-    }
-
-    const program = gl.createProgram();
-    gl.attachShader(program, createShader(gl.VERTEX_SHADER, vsSource));
-    gl.attachShader(program, createShader(gl.FRAGMENT_SHADER, fsSource));
-    gl.linkProgram(program);
-    gl.useProgram(program);
-
-    const vertices = new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]);
-    const buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-
-    const posAttr = gl.getAttribLocation(program, 'position');
-    gl.enableVertexAttribArray(posAttr);
-    gl.vertexAttribPointer(posAttr, 2, gl.FLOAT, false, 0, 0);
-
-    const uTime = gl.getUniformLocation(program, 'u_time');
-    const uMouse = gl.getUniformLocation(program, 'u_mouse');
-    const uRes = gl.getUniformLocation(program, 'u_res');
-    const uActive = gl.getUniformLocation(program, 'u_active');
-
-    let mouseX = 0.5, mouseY = 0.5, targetMouseX = 0.5, targetMouseY = 0.5;
-    let isMenuActive = false;
-
-    // --- 2. PIE MENU GENERATION ---
-    function buildPieMenu() {
-        pieMenu.innerHTML = '';
-        const cats = Object.keys(CATEGORIES);
-        const count = cats.length;
-        const radius = window.innerWidth < 768 ? 100 : 130;
-
-        cats.forEach((key, i) => {
-            const angle = (i / count) * Math.PI * 2;
-            const x = Math.cos(angle) * radius;
-            const y = Math.sin(angle) * radius;
-
-            const item = document.createElement('div');
-            item.className = 'pie-item';
-            if (key === currentCat) item.classList.add('active');
-            item.style.transform = `translate(${x}px, ${y}px)`;
-            item.innerHTML = `<span>${CATEGORIES[key].label}</span>`;
-
-            item.addEventListener('mouseenter', () => {
-                const rect = item.getBoundingClientRect();
-                const containerRect = container.getBoundingClientRect();
-                targetMouseX = (rect.left + rect.width / 2 - containerRect.left) / containerRect.width;
-                targetMouseY = (rect.top + rect.height / 2 - containerRect.top) / containerRect.height;
-            });
-
-            item.onclick = (e) => {
-                e.stopPropagation();
-                if (key === currentCat) return;
-                currentCat = key;
-                buildPortfolio(key);
-                buildPieMenu();
-                toggleMenu(false);
-            };
-            pieMenu.appendChild(item);
         });
     }
 
-    function toggleMenu(force) {
-        isMenuActive = force !== undefined ? force : !isMenuActive;
-        if (isMenuActive) {
-            pieMenu.classList.add('active');
-            gsap.fromTo(".pie-item",
-                { scale: 0, opacity: 0 },
-                { scale: 1, opacity: 1, duration: 0.5, stagger: 0.05, ease: "back.out(1.7)" }
-            );
-            document.getElementById('ferro-hint').innerText = '再次點擊關閉';
-        } else {
-            gsap.to(".pie-item", { scale: 0, opacity: 0, duration: 0.3, stagger: 0.02, ease: "power2.in" })
-                .eventCallback("onComplete", () => pieMenu.classList.remove('active'));
-            document.getElementById('ferro-hint').innerText = '點擊核心切換類別';
-        }
-    }
+    // 重新建構內容
+    buildPortfolio(catKey);
+};
 
-    function resize() {
-        const dpr = Math.min(window.devicePixelRatio || 1, 1.5); // 限制像素比，大幅提升 4K 螢幕效能
-        canvas.width = container.clientWidth * dpr;
-        canvas.height = container.clientHeight * dpr;
-        gl.viewport(0, 0, canvas.width, canvas.height);
-        buildPieMenu();
-    }
-    window.addEventListener('resize', resize);
-    resize();
-
-    // --- 3. INTERACTION ---
-    canvas.addEventListener('mousemove', (e) => {
-        targetMouseX = globalMouse.x / window.innerWidth;
-        targetMouseY = globalMouse.y / window.innerHeight;
-    });
-
-    canvas.addEventListener('click', () => toggleMenu());
-
-    // --- 4. RENDER LOOP ---
-    function render(time) {
-        // Smooth mouse move
-        mouseX += (targetMouseX - mouseX) * 0.1;
-        mouseY += (targetMouseY - mouseY) * 0.1;
-
-        gl.uniform1f(uTime, time * 0.001);
-        gl.uniform2f(uMouse, mouseX, mouseY);
-        gl.uniform2f(uRes, canvas.width, canvas.height);
-        gl.uniform1f(uActive, isMenuActive ? 1.0 : 0.0);
-
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
-        requestAnimationFrame(render);
-    }
-    requestAnimationFrame(render);
-}
-initFerroNav();
+// 頁面初始化後載入預設分類
+window.addEventListener('load', () => {
+    changeCategory(currentCategory);
+});
 
