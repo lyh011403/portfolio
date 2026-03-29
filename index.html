@@ -4,220 +4,339 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HAIN Game Artist & AI Developer | Portfolio</title>
-    <meta name="description"
-        content="3D Artist & AI Developer. Specializing in game environment design, embedded AI systems, and cross-domain technical creativity.">
+    <title>HAIN | Entrance</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&family=Noto+Sans+TC:wght@400;700;900&display=swap"
         rel="stylesheet">
+    <style>
+        :root {
+            --bg: #030303;
+            --accent: #c8a97e;
+            --text: #ffffff;
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-<script type="module" crossorigin src="/portfolio/assets/index-B3GTz0tK.js"></script>
-<link rel="stylesheet" crossorigin href="/portfolio/assets/index-DTkZGcOw.css">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: none;
+            /* We'll use the custom cursor */
+        }
+
+        /* Particles Layer */
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Overlay to darken slightly */
+        #mask {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, transparent, rgba(0, 0, 0, 0.8));
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Content Context */
+        .content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            width: 100%;
+            padding: 2rem;
+            max-width: 1000px;
+        }
+
+        .meta-text {
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.3em;
+            color: var(--text);
+            opacity: 0;
+            transform: translateY(20px);
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+        }
+
+        .main-logo {
+            font-size: clamp(4rem, 15vw, 10rem);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 0.9;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            transform: translateY(40px);
+            text-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
+        }
+
+        .main-logo .outline {
+            -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.2);
+            color: transparent;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(20px);
+            font-weight: 400;
+            letter-spacing: 0.05em;
+        }
+
+        .enter-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            padding: 1.2rem 3rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            transition: all 0.5s var(--ease);
+            opacity: 0;
+            transform: translateY(20px);
+            cursor: none;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .enter-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, var(--accent), transparent 70%);
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.6s var(--ease);
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .enter-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            padding-right: 4rem;
+            box-shadow: 0 0 30px rgba(200, 169, 126, 0.15);
+        }
+
+        .enter-btn:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .enter-btn .arrow {
+            transition: transform 0.5s var(--ease);
+        }
+
+        .enter-btn:hover .arrow {
+            transform: translateX(10px);
+        }
+
+        .sub-link {
+            display: block;
+            margin-top: 1.5rem;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            opacity: 0;
+        }
+
+        /* Custom Cursor Elements */
+        #cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: transform 0.15s linear;
+        }
+
+        #cursor-ring {
+            width: 40px;
+            height: 40px;
+            border: 1.5px solid rgba(200, 169, 126, 0.3);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, transform 0.3s var(--ease), border-color 0.3s;
+        }
+
+        .hover-active #cursor-ring {
+            width: 70px;
+            height: 70px;
+            background: rgba(200, 169, 126, 0.05);
+            border-color: var(--accent);
+        }
+
+        /* Animations */
+        @keyframes reveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .revealed {
+            animation: reveal 1.2s var(--ease) forwards;
+        }
+    </style>
+</head>
 
 <body>
-    <!-- Custom Cursor -->
-    <div id="cursor-ring">
-        <div class="ring-track"></div>
-        <div class="ring-arc"></div>
-    </div>
     <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
 
-    <!-- Particle Ink Background Canvas -->
-    <canvas id="ink-canvas"></canvas>
-    <!-- Semi-transparent mask for readability -->
-    <div id="canvas-mask"></div>
+    <canvas id="canvas"></canvas>
+    <div id="mask"></div>
 
-    <!-- NAV -->
-    <nav id="nav">
-        <div class="nav-logo">YH.</div>
-        <ul class="nav-links" id="nav-links">
-            <li><a href="#featured">精選</a></li>
-            <li><a href="#portfolio">作品集</a></li>
-            <li><a href="#skills">能力</a></li>
-            <li><a href="#about">關於</a></li>
-            <li><a href="#contact">聯絡我</a></li>
-        </ul>
-        <button class="nav-hamburger" id="nav-hamburger" aria-label="選單">
-            <span></span><span></span><span></span>
-        </button>
-    </nav>
-    <!-- 行動版選單 -->
-    <div class="mobile-menu" id="mobile-menu">
-        <a href="#featured" class="mobile-link">精選</a>
-        <a href="#portfolio" class="mobile-link">作品集</a>
-        <a href="#skills" class="mobile-link">能力</a>
-        <a href="#about" class="mobile-link">關於</a>
-        <a href="#contact" class="mobile-link">聯絡我</a>
+    <div class="content">
+        <div class="meta-text" id="meta">YH. 2026</div>
+        <h1 class="main-logo" id="logo">
+            HAIN<span class="outline">.</span>
+        </h1>
+        <p class="description" id="desc">
+            遊戲美術 × 嵌入式 AI × 硬體整合 / 用技術驅動創意，用藝術表達工程。
+        </p>
+        <a href="./home.html" class="enter-btn" id="enter-btn">
+            進入系統 <span class="arrow">→</span>
+        </a>
+        <span class="sub-link" id="sub">ENTER EXPERIENCE</span>
     </div>
 
-    <main>
-        <!-- HERO -->
-        <section id="hero">
-            <div class="hero-inner">
-                <p class="hero-eyebrow"><!-- [可修改] 標頭小字 -->3D Artist & AI Developer</p>
-                <h1 class="hero-title">
-                    <span class="line"><!-- [可修改] 主標題第一行 -->CREATING</span>
-                    <span class="line accent-line"><!-- [可修改] 主標題第二行 -->BEYOND</span>
-                    <span class="line"><!-- [可修改] 主標題第三行 -->BOUNDARIES.</span>
-                </h1>
-                <p class="hero-sub"><!-- [可修改] 簡介文字 -->遊戲美術 × 嵌入式 AI × 硬體整合。<br>用技術驅動創意，用藝術表達工程。</p>
-            </div>
-        </section>
+    <script>
+        // Custom Cursor Logic
+        const dot = document.getElementById('cursor-dot');
+        const ring = document.getElementById('cursor-ring');
+        let mX = 0, mY = 0, rX = 0, rY = 0;
 
-        <!-- FEATURED PROJECTS -->
-        <section id="featured" class="section">
-            <div class="container">
-                <div class="section-label">01 — FEATURED PROJECTS</div>
-                <h2 class="section-title"><!-- [可修改] 區塊標題 -->精選作品</h2>
-                <p class="section-sub"><!-- [可修改] 區塊副標題 -->最能代表我核心實力的代表性專案。</p>
-            </div>
-            <div class="featured-list container" id="featured-container">
-                <!-- Injected by JS -->
-            </div>
-        </section>
+        window.addEventListener('mousemove', e => {
+            mX = e.clientX;
+            mY = e.clientY;
+            dot.style.left = mX + 'px';
+            dot.style.top = mY + 'px';
+        });
 
-        <!-- FULL PORTFOLIO: Six categories -->
-        <section id="portfolio" class="section">
-            <div class="container">
-                <div class="section-label">02 — FULL PORTFOLIO</div>
-                <h2 class="section-title">完整作品集</h2>
-            </div>
+        function animCursor() {
+            rX += (mX - rX) * 0.15;
+            rY += (mY - rY) * 0.15;
+            ring.style.left = rX + 'px';
+            ring.style.top = rY + 'px';
+            requestAnimationFrame(animCursor);
+        }
+        animCursor();
 
-            <!-- Category Tabs -->
-            <div class="tabs-bar container">
-                <button class="tab-btn active" data-cat="huangyi">黃易群俠傳m</button>
-                <button class="tab-btn" data-cat="tianzi">天子傳奇S</button>
-                <button class="tab-btn" data-cat="wlwl">飄流幻境RE</button>
-                <button class="tab-btn" data-cat="embedded">嵌入式AI影像</button>
-                <button class="tab-btn" data-cat="ai-3d">AI 3D</button>
-                <button class="tab-btn" data-cat="ai-2d">AI 2D</button>
-                <button class="tab-btn" data-cat="my-3d">自製3D</button>
-            </div>
+        // Hover Effect
+        const b = document.getElementById('enter-btn');
+        b.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
+        b.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
 
-            <div class="portfolio-grid container" id="portfolio-grid">
-                <!-- Injected by JS -->
-            </div>
-        </section>
+        // Particle Canvas logic (Lightweight version of main background)
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let w, h;
 
-        <!-- PROFESSIONAL BREADTH (Skills) -->
-        <section id="skills" class="section">
-            <div class="container">
-                <div class="section-label">03 — PROFESSIONAL BREADTH</div>
-                <h2 class="section-title">跨領域實力</h2>
-                <div class="skills-grid">
-                    <div class="skill-card scroll-reveal">
-                        <div class="skill-top">
-                            <span class="skill-num">01</span>
-                            <h3>3D & Rendering</h3>
-                        </div>
-                        <p>高品質角色與場景建模，從 PBR 材質製作到即時渲染的完整流程。</p>
-                        <div class="skill-tags">
-                            <span>Blender</span><span>Unity</span><span>Unreal Engine</span>
-                        </div>
-                    </div>
-                    <div class="skill-card scroll-reveal">
-                        <div class="skill-top">
-                            <span class="skill-num">02</span>
-                            <h3>AI & Programming</h3>
-                        </div>
-                        <p>深度學習模型訓練與電腦視覺系統開發，精通主流 AI 框架與即時推論。</p>
-                        <div class="skill-tags">
-                            <span>Python</span><span>PyTorch</span><span>MediaPipe</span><span>OpenCV</span><span>YOLOv8</span>
-                        </div>
-                    </div>
-                    <div class="skill-card scroll-reveal">
-                        <div class="skill-top">
-                            <span class="skill-num">03</span>
-                            <h3>AI Image Recognition</h3>
-                        </div>
-                        <p>從資料標註到模型部署的完整 AI 影像辨識工作流：自建資料集、遷移學習提升初期準確率，知識蒸餾優化至邊緣端。</p>
-                        <div class="skill-tags">
-                            <span>遷移學習</span><span>知識蒸餾</span><span>LabelImg</span><span>Roboflow</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
 
-        <!-- ABOUT ME -->
-        <section id="about" class="section">
-            <div class="container about-grid">
-                <div class="about-flex">
-                    <div class="about-left scroll-reveal">
-                        <div class="section-label">04 — ABOUT ME</div>
-                        <h2 class="section-title"><!-- [可修改] 關於我標題 -->關於我</h2>
-                        <p class="about-p"><!-- [可修改] 關於我主文 -->我是一位兼具<strong>遊戲美術設計背景</strong>與<strong>AI
-                                技術開發能力</strong>的跨領域創作者。</p>
-                        <p class="about-p-sub"><!-- [可修改] 關於我子文 1 -->從遊戲公司的 3D 場景建模，到獨立研發嵌入式 AI
-                            影像辨識系統，目標是讓视覺藝術感知與工程邏輯在同一個作品中共存。</p>
-                        <p class="about-p-sub"><!-- [可修改] 關於我子文 2 -->現正積極尋找能同時發揮視覺創意與技術深度的機會。</p>
-                    </div>
-                    <div class="about-right scroll-reveal">
-                        <div class="stat-block">
-                            <div class="stat">
-                                <span class="stat-num">3</span>
-                                <span class="stat-label">Game Titles</span>
-                            </div>
-                            <div class="stat">
-                                <span class="stat-num">3+</span>
-                                <span class="stat-label">Technical Portfolio</span>
-                            </div>
-                            <div class="stat">
-                                <span class="stat-num">3D×AI</span>
-                                <span class="stat-label">Cross-tech Integration</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * w;
+                this.y = Math.random() * h;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.life = Math.random() * 0.5 + 0.2;
+                this.r = Math.random() * 1.5 + 0.5;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > w || this.y < 0 || this.y > h) this.reset();
+            }
+            draw() {
+                ctx.fillStyle = `rgba(200, 169, 126, ${this.life})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
 
-        <!-- CONTACT -->
-        <section id="contact" class="section">
-            <div class="container contact-center scroll-reveal">
-                <div class="section-label">05 — CONTACT</div>
-                <h2 class="contact-title"><!-- [可修改] 聯絡我標題 -->聯絡我</h2>
-                <p class="contact-sub"><!-- [可修改] 聯絡我副標題 -->歡迎任何合作邀約或職缺洽談。</p>
-                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=lyh0972717368@gmail.com" target="_blank"
-                    class="btn-primary large">
-                    <span><!-- [可修改] E-mail 地址 -->lyh0972717368@gmail.com</span>
-                    <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-                        <path d="M3 8H13M13 8L8 3M13 8L8 13" stroke="currentColor" stroke-width="1.5"
-                            stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </a>
-            </div>
-        </section>
-    </main>
+        function init() {
+            resize();
+            particles = [];
+            for (let i = 0; i < 60; i++) particles.push(new Particle());
+        }
 
-    <footer id="footer">
-        <div class="container footer-inner">
-            <span class="footer-logo">YH.</span>
-            <span class="footer-copy">© 2026 Game Artist & AI Developer. All Rights Reserved.</span>
-        </div>
-    </footer>
+        function loop() {
+            ctx.clearRect(0, 0, w, h);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(loop);
+        }
 
-    <!-- LIGHTBOX -->
-    <div id="lightbox" role="dialog" aria-modal="true" aria-label="作品預覽">
-        <div id="lightbox-backdrop"></div>
-        <div id="lightbox-inner">
-            <button id="lightbox-close" aria-label="關閉">✕</button>
-            <img id="lightbox-img" src="" alt="">
-            <video id="lightbox-video" controls playsinline></video>
-            <p id="lightbox-caption"></p>
-        </div>
-    </div>
-    <!-- BACK TO TOP / MUSIC TONGLE / AUDIO -->
-    <button id="music-toggle" class="music-toggle" aria-label="Toggle Auto BGM">
-        <div class="music-bars">
-            <span></span><span></span><span></span><span></span>
-        </div>
-    </button>
-    <audio id="bgm" src="./assets/m.mp3" autoplay loop preload="auto"></audio>
+        window.addEventListener('resize', resize);
+        init();
+        loop();
 
+        // Text reveal sequences
+        window.addEventListener('load', () => {
+            const sequence = [
+                { id: 'meta', delay: 200 },
+                { id: 'logo', delay: 400 },
+                { id: 'desc', delay: 600 },
+                { id: 'enter-btn', delay: 900 },
+                { id: 'sub', delay: 1100 }
+            ];
+
+            sequence.forEach(item => {
+                setTimeout(() => {
+                    document.getElementById(item.id).classList.add('revealed');
+                }, item.id === 'logo' ? item.delay + 300 : item.delay);
+                // Giant logo take slightly longer to feel 'heavy'
+            });
+        });
+    </script>
 </body>
 
 </html>
