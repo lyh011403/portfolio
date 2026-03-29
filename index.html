@@ -13,7 +13,10 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap"
         rel="stylesheet">
+    <!-- Animation Libs -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <link rel="stylesheet" href="./style.css">
+</head>
 
 <body>
     <!-- Custom Cursor -->
@@ -22,6 +25,24 @@
         <div class="ring-arc"></div>
     </div>
     <div id="cursor-dot"></div>
+
+    <!-- 12. SPLASH SCREEN (NEW) -->
+    <div id="splash-screen">
+        <div class="splash-content">
+            <div class="splash-credits">LEO · 2026</div>
+            <h1 class="splash-title">FRIDGEAI</h1>
+            <p class="splash-desc">以 YOLOv11 影像辨識與 Gemini 生成式 AI 為核心<br>重新定義現代廚房管理體驗</p>
+            <div class="splash-action">
+                <button id="enter-btn" class="btn-enter">
+                    <span>進入系統</span>
+                    <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8H13M13 8L8 3M13 8L8 13" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                </button>
+                <div class="enter-sub">ENTER EXPERIENCE</div>
+            </div>
+        </div>
+    </div>
 
     <!-- Particle Ink Background Canvas -->
     <canvas id="ink-canvas"></canvas>
@@ -85,14 +106,13 @@
             </div>
 
             <!-- Category Tabs -->
-            <div class="tabs-bar container">
-                <button class="tab-btn active" data-cat="huangyi">黃易群俠傳m</button>
-                <button class="tab-btn" data-cat="tianzi">天子傳奇S</button>
-                <button class="tab-btn" data-cat="wlwl">飄流幻境RE</button>
-                <button class="tab-btn" data-cat="embedded">嵌入式AI影像</button>
-                <button class="tab-btn" data-cat="ai-3d">AI 3D</button>
-                <button class="tab-btn" data-cat="ai-2d">AI 2D</button>
-                <button class="tab-btn" data-cat="my-3d">自製3D</button>
+            <!-- WebGL Ferrofluid & Pie Menu Container -->
+            <div id="ferro-nav-container" class="container">
+                <canvas id="ferro-canvas"></canvas>
+                <div id="pie-menu" class="pie-menu">
+                    <!-- Categories will be injected by JS -->
+                </div>
+                <div id="ferro-hint">點擊核心切換類別</div>
             </div>
 
             <div class="portfolio-grid container" id="portfolio-grid">

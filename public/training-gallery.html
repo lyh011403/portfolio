@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>訓練數據詳細報告</title>
+    <title>Smart Safety Care | 模型訓練歷程報告</title>
+    <!-- GSAP for premium animations -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -440,6 +442,160 @@
             transform: scale(1);
         }
 
+        /* WebGL Ferrofluid Navigation Container */
+        #ferro-nav-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            margin: 2rem 0 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, rgba(30, 30, 35, 1) 0%, rgba(10, 10, 12, 0) 70%);
+            border-radius: 24px;
+            overflow: visible;
+        }
+
+        /* Splash Screen Overlay for Report */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #1a1a1d 0%, #0a0a0c 100%);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: transform 1.2s cubic-bezier(0.85, 0, 0.15, 1), opacity 1s ease;
+        }
+
+        .splash-content {
+            text-align: center;
+            color: #fff;
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .splash-credits {
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            color: rgba(200, 169, 126, 0.6);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .splash-title {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+            background: linear-gradient(180deg, #fff 30%, #a0a0a0 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .splash-desc {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 3rem;
+            letter-spacing: 1px;
+        }
+
+        .btn-enter {
+            background: transparent;
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            color: #fff;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-enter:hover {
+            background: #fff;
+            color: #000;
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+        }
+
+        .enter-sub {
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        #ferro-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 5;
+            border-radius: 20px;
+        }
+
+        .pie-menu {
+            position: relative;
+            z-index: 10;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+        }
+
+        .pie-item {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: rgba(200, 169, 126, 0.1);
+            border: 1px solid rgba(200, 169, 126, 0.4);
+            backdrop-filter: blur(12px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #c8a97e;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: background 0.3s, border 0.3s;
+            user-select: none;
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        .pie-item:hover,
+        .pie-item.active {
+            background: rgba(200, 169, 126, 0.3);
+            border-color: #c8a97e;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(200, 169, 126, 0.3);
+        }
+
+        #ferro-hint {
+            position: absolute;
+            bottom: 20px;
+            color: rgba(200, 169, 126, 0.6);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            pointer-events: none;
+            z-index: 6;
+            text-transform: uppercase;
+        }
+
         @media (max-width: 700px) {
             h1 {
                 font-size: 2.2rem;
@@ -483,15 +639,37 @@
     <div id="cursor-dot"></div>
     <div id="cursor-ring"></div>
 
+    <div id="splash-screen">
+        <div class="splash-content">
+            <div class="splash-credits">LEO · 2026</div>
+            <h1 class="splash-title">FRIDGEAI</h1>
+            <p class="splash-desc">以 YOLOv11 影像辨識與 Gemini 生成式 AI 為核心<br>重新定義現代廚房管理體驗</p>
+            <div class="splash-action">
+                <button id="enter-btn" class="btn-enter">
+                    <span>進入報告</span>
+                    <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8H13M13 8L8 3M13 8L8 13" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                </button>
+                <div class="enter-sub">ENTER REPORT</div>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <header>
             <h1>訓練數據詳細報告</h1>
         </header>
 
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="v1">v1.0 數據</button>
-            <button class="tab-btn" data-tab="v2">v2.0 提升</button>
-            <button class="tab-btn" data-tab="distill">知識蒸餾</button>
+        <!-- v1 v2 知識蒸餾的導覽 -->
+        <div id="ferro-nav-container">
+            <canvas id="ferro-canvas"></canvas>
+            <div id="pie-menu" class="pie-menu">
+                <div class="pie-item active" data-target="v1"><span>V1.0<br>初始版本</span></div>
+                <div class="pie-item" data-target="v2"><span>V2.0<br>學習遷移</span></div>
+                <div class="pie-item" data-target="distill"><span>壓縮<br>知識蒸餾</span></div>
+            </div>
+            <div id="ferro-hint">點擊核心切換章節</div>
         </div>
 
         <!-- 1. v1.0 數據 -->
@@ -511,6 +689,18 @@
                         <span class="cat-name">人 (Person) AP</span>
                         <div class="bar-bg">
                             <div class="bar-fill v1" data-val="49.2">0.492</div>
+                        </div>
+                    </div>
+                    <div class="bar-row">
+                        <span class="cat-name">刀具 (Knife) AP</span>
+                        <div class="bar-bg">
+                            <div class="bar-fill v1" data-val="59.6">0.596</div>
+                        </div>
+                    </div>
+                    <div class="bar-row">
+                        <span class="cat-name">剪刀 (Scissors) AP</span>
+                        <div class="bar-bg">
+                            <div class="bar-fill v1" data-val="73.1">0.731</div>
                         </div>
                     </div>
                 </div>
@@ -576,9 +766,49 @@
                                 <div class="bar-fill v2" data-val="80.2">0.802 (+63%)</div>
                             </div>
                         </div>
+                        <div class="bar-row">
+                            <span class="cat-name">刀具 (Knife) AP</span>
+                            <div class="bar-bg">
+                                <div class="bar-fill v2" data-val="69.6">0.696 (+16.7%)</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <span class="cat-name">剪刀 (Scissors) AP</span>
+                            <div class="bar-bg">
+                                <div class="bar-fill v2" data-val="77.8">0.778 (+6.4%)</div>
+                            </div>
+                        </div>
                     </div>
-                    <p style="font-size: 0.95rem; font-weight: 700; color: var(--accent-green);">整體 mAP@0.5 從 0.607 提升至
+                    <p style="font-size: 0.95rem; font-weight: 700; color: var(--accent-green); margin-bottom: 2rem;">整體
+                        mAP@0.5 從 0.607 提升至
                         0.758 (+24.8%)</p>
+
+                    <h4
+                        style="margin-bottom: 1rem; color: var(--text-sub); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">
+                        各類別精進幅度 (AP Increase)</h4>
+                    <div class="chart-container"
+                        style="background: rgba(52, 199, 89, 0.05); border: 1px dashed rgba(52, 199, 89, 0.2); padding: 1.5rem; border-radius: 12px;">
+                        <div class="bar-row">
+                            <span class="cat-name">人 (Person)</span>
+                            <div class="bar-bg" style="height: 12px;">
+                                <div class="bar-fill" data-val="63" style="background: var(--accent-green);">+63%</div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <span class="cat-name">刀具 (Knife)</span>
+                            <div class="bar-bg" style="height: 12px;">
+                                <div class="bar-fill" data-val="16.7" style="background: var(--accent-green);">+16.7%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bar-row">
+                            <span class="cat-name">剪刀 (Scissors)</span>
+                            <div class="bar-bg" style="height: 12px;">
+                                <div class="bar-fill" data-val="6.4" style="background: var(--accent-green);">+6.4%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="photo-grid" style="margin-top:2rem">
@@ -651,30 +881,213 @@
     <!-- Lightbox -->
     <div id="lightbox"><img src="" alt=""></div>
 
-    <script>
-        const dot = document.getElementById('cursor-dot'), ring = document.getElementById('cursor-ring');
-        let mX = 0, mY = 0, rX = 0, rY = 0;
-        document.addEventListener('mousemove', (e) => { mX = e.clientX; mY = e.clientY; dot.style.left = mX + 'px'; dot.style.top = mY + 'px'; });
-        function anim() { rX += (mX - rX) * 0.15; rY += (mY - rY) * 0.15; ring.style.left = rX + 'px'; ring.style.top = rY + 'px'; requestAnimationFrame(anim); }
-        anim();
-        document.querySelectorAll('button, .photo-item').forEach(el => {
+    // --- 0. SPLASH SCREEN (NEW) ---
+    function initSplash() {
+    const splash = document.getElementById('splash-screen');
+    const enterBtn = document.getElementById('enter-btn');
+    if (!splash || !enterBtn) return;
+    const tl = gsap.timeline();
+    tl.from(".splash-credits", { opacity: 0, y: 10, duration: 0.8, delay: 0.5 })
+    .from(".splash-title", { opacity: 0, scale: 0.9, filter: "blur(10px)", duration: 1.5, ease: "expo.out" }, "-=0.4")
+    .from(".splash-desc", { opacity: 0, y: 20, duration: 1 }, "-=1")
+    .from(".splash-action", { opacity: 0, scale: 0.8, duration: 0.8, ease: "back.out(1.7)" }, "-=0.5");
+    enterBtn.addEventListener('click', () => {
+    gsap.to(splash, { scale: 1.3, opacity: 0, duration: 1.2, ease: "expo.inOut", onComplete: () => {
+    splash.style.display = 'none'; } });
+    });
+    }
+    initSplash();
+
+    // --- 1. SETTINGS & DATA ---
+    const SECTIONS = {
+    v1: { label: '初始版本' },
+    v2: { label: '學習遷移' },
+    distill: { label: '知識蒸餾' }
+    };
+    let activeSection = 'v1';
+
+    // --- 2. GLOBAL MOUSE & GSAP ---
+    const globalMouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    document.addEventListener('mousemove', e => {
+    globalMouse.x = e.clientX;
+    globalMouse.y = e.clientY;
+    }, { passive: true });
+
+    // --- 3. WEBGL FERROFLUID ENGINE ---
+    const container = document.getElementById('ferro-nav-container');
+    const canvas = document.getElementById('ferro-canvas');
+    const pieMenu = document.getElementById('pie-menu');
+    if (canvas) {
+    const gl = canvas.getContext('webgl');
+    const vs = `attribute vec2 p;void main(){gl_Position=vec4(p,0,1);}`;
+    const fs = `
+    precision highp float;
+    uniform float u_time;
+    uniform vec2 u_res;
+    uniform vec2 u_mouse;
+    uniform float u_active;
+
+    float snoise(vec3 v);
+    float sdf(vec3 p) {
+    float sphere = length(p) - (u_active > 0.5 ? 1.6 : 1.2);
+    // Spiky noise
+    float noise = abs(snoise(p * 2.5 + u_time * 0.4)) * 0.6;
+    float spikes = (1.0 - abs(snoise(p * 12.0 + u_time * 2.0))) * 0.25;
+    return sphere - noise - (u_active > 0.5 ? spikes * 2.0 : spikes * 0.4);
+    }
+
+    // Simplified snoise for performance
+    vec3 mod289(vec3 x){return x-floor(x*(1.0/289.0))*289.0;}
+    vec4 mod289(vec4 x){return x-floor(x*(1.0/289.0))*289.0;}
+    vec4 permute(vec4 x){return mod289(((x*34.0)+1.0)*x);}
+    vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-0.85373472095314*r;}
+    float snoise(vec3 v){
+    const vec2 C=vec2(1.0/6.0,1.0/3.0);const vec4 D=vec4(0.0,0.5,1.0,2.0);
+    vec3 i=floor(v+dot(v,C.yyy));vec3 x0=v-i+dot(i,C.xxx);
+    vec3 g=step(x0.yzx,x0.xyz);vec3 l=1.0-g;vec3 i1=min(g.xyz,l.zxy);vec3 i2=max(g.xyz,l.zxy);
+    vec3 x1=x0-i1+C.xxx;vec3 x2=x0-i2+C.yyy;vec3 x3=x0-D.yyy;
+    i=mod289(i);vec4
+    p=permute(permute(permute(i.z+vec4(0.0,i1.z,i2.z,1.0))+i.y+vec4(0.0,i1.y,i2.y,1.0))+i.x+vec4(0.0,i1.x,i2.x,1.0));
+    float n_=0.142857142857;vec3 ns=n_*D.wyz-D.xzx;vec4 j=p-49.0*floor(p*ns.z*ns.z);
+    vec4 x_=floor(j*ns.z);vec4 y_=floor(j-7.0*x_);vec4 x=x_*ns.x+ns.yyyy;vec4 y=y_*ns.x+ns.yyyy;
+    vec4 h=1.0-abs(x)-abs(y);vec4 b0=vec4(x.xy,y.xy);vec4 b1=vec4(x.zw,y.zw);
+    vec4 s0=floor(b0)*2.0+1.0;vec4 s1=floor(b1)*2.0+1.0;vec4 sh=-step(h,vec4(0.0));
+    vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
+    vec3 p0=vec3(a0.xy,h.x);vec3 p1=vec3(a0.zw,h.y);vec3 p2=vec3(a1.xy,h.z);vec3 p3=vec3(a1.zw,h.w);
+    vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
+    p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;
+    vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0);
+    m=m*m;return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
+    }
+
+    void main() {
+    vec2 uv = (gl_FragCoord.xy - 0.5 * u_res) / u_res.y * 5.0;
+    vec3 ro = vec3(0,0,-5);
+    vec3 rd = normalize(vec3(uv, 2.5));
+    // Mouse Influence (Magnetic Attraction)
+    rd.xy += (u_mouse - 0.5) * 0.35;
+
+    float t = 0.0, d;
+    for(int i=0; i<48; i++){ d=sdf(ro + rd * t); if(d < 0.001 || t> 10.0) break;
+        t += d;
+        }
+        if(t < 10.0) { vec3 p=ro + rd * t; vec2 e=vec2(0.01, 0); vec3
+            n=normalize(vec3(sdf(p+e.xyy)-sdf(p-e.xyy),sdf(p+e.yxy)-sdf(p-e.yxy),sdf(p+e.yyx)-sdf(p-e.yyx))); float
+            fres=pow(1.0 + dot(rd, n), 3.0); float spec=pow(max(dot(reflect(rd, n), vec3(0.57)), 0.0), 32.0); vec3
+            col=mix(vec3(0.02), vec3(0.8, 0.7, 0.5), fres * 0.6); col +=spec * 0.8; gl_FragColor=vec4(col, 1.0); } else
+            { gl_FragColor=vec4(0.0, 0.0, 0.0, 0.0); } } `; function createShader(gl, t, s) { const
+            sh=gl.createShader(t); gl.shaderSource(sh, s); gl.compileShader(sh); return sh; } const
+            prog=gl.createProgram(); gl.attachShader(prog, createShader(gl, gl.VERTEX_SHADER, vs));
+            gl.attachShader(prog, createShader(gl, gl.FRAGMENT_SHADER, fs)); gl.linkProgram(prog); gl.useProgram(prog);
+            const posLoc=gl.getAttribLocation(prog, 'p' ); const posBuf=gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, posBuf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1,
+            3]), gl.STATIC_DRAW); gl.enableVertexAttribArray(posLoc); gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false,
+            0, 0); const uTime=gl.getUniformLocation(prog, 'u_time' ); const uRes=gl.getUniformLocation(prog, 'u_res' );
+            const uMouse=gl.getUniformLocation(prog, 'u_mouse' ); const uActive=gl.getUniformLocation(prog, 'u_active'
+            ); let mouseX=0.5, mouseY=0.5, targetMouseX=0.5, targetMouseY=0.5; let isMenuActive=false; function
+            render(time) { const dpr=Math.min(window.devicePixelRatio, 1.5); if (canvas.width !==container.clientWidth *
+            dpr) { canvas.width=container.clientWidth * dpr; canvas.height=container.clientHeight * dpr; gl.viewport(0,
+            0, canvas.width, canvas.height); } mouseX +=(targetMouseX - mouseX) * 0.1; mouseY +=(targetMouseY - mouseY)
+            * 0.1; gl.uniform1f(uTime, time * 0.001); gl.uniform2f(uRes, canvas.width, canvas.height);
+            gl.uniform2f(uMouse, mouseX, 1.0 - mouseY); gl.uniform1f(uActive, isMenuActive ? 1.0 : 0.0);
+            gl.drawArrays(gl.TRIANGLES, 0, 3); requestAnimationFrame(render); } requestAnimationFrame(render); //
+            Interaction canvas.addEventListener('mousemove', e=> {
+            if (!isMenuActive) {
+            const rect = canvas.getBoundingClientRect();
+            targetMouseX = (e.clientX - rect.left) / rect.width;
+            targetMouseY = (e.clientY - rect.top) / rect.height;
+            }
+            });
+            canvas.addEventListener('click', () => toggleMenu());
+
+            function toggleMenu(force) {
+            isMenuActive = (force !== undefined) ? force : !isMenuActive;
+            if (isMenuActive) {
+            gsap.to(".pie-item", {
+            scale: 1, opacity: 1, duration: 0.6,
+            stagger: 0.1, ease: "back.out(1.7)"
+            });
+            document.getElementById('ferro-hint').innerText = '點擊核心關閉選單';
+            } else {
+            gsap.to(".pie-item", {
+            scale: 0, opacity: 0, duration: 0.4,
+            stagger: 0.05, ease: "power2.in"
+            });
+            document.getElementById('ferro-hint').innerText = '點擊核心切換章節';
+            }
+            }
+
+            // Pie Items Positioning & Hover
+            const items = document.querySelectorAll('.pie-item');
+            items.forEach((item, i) => {
+            const count = items.length;
+            const angle = (i / count) * Math.PI * 2 - Math.PI / 2;
+            const radius = 130;
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+            item.style.left = `calc(50% + ${x}px)`;
+            item.style.top = `calc(50% + ${y}px)`;
+            item.style.marginLeft = '-50px';
+            item.style.marginTop = '-50px';
+
+            item.addEventListener('mouseenter', () => {
+            const rect = item.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+            targetMouseX = (rect.left + rect.width / 2 - containerRect.left) / containerRect.width;
+            targetMouseY = (rect.top + rect.height / 2 - containerRect.top) / containerRect.height;
+            });
+            item.addEventListener('mouseleave', () => {
+            // Optional: reset mouse if needed
+            });
+            item.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const target = item.getAttribute('data-target');
+            items.forEach(el => el.classList.remove('active'));
+            item.classList.add('active');
+            switchTab(target);
+            toggleMenu(false);
+            });
+            });
+            }
+
+            // --- 4. TAB LOGIC ---
+            function switchTab(id) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.bar-fill').forEach(b => b.style.width = '0%');
+            setTimeout(animateBars, 100);
+            }
+
+            function animateBars() {
+            document.querySelectorAll('.content-section.active .bar-fill').forEach(bar => {
+            bar.style.width = bar.getAttribute('data-val') + '%';
+            });
+            }
+            setTimeout(animateBars, 500);
+
+            // --- 5. CURSOR & LIGHTBOX (Original kept & optimized) ---
+            const dot = document.getElementById('cursor-dot'), ring = document.getElementById('cursor-ring');
+            let rX = 0, rY = 0;
+            function animCursor() {
+            rX += (globalMouse.x - rX) * 0.15;
+            rY += (globalMouse.y - rY) * 0.15;
+            dot.style.left = globalMouse.x + 'px'; dot.style.top = globalMouse.y + 'px';
+            ring.style.left = rX + 'px'; ring.style.top = rY + 'px';
+            requestAnimationFrame(animCursor);
+            }
+            animCursor();
+
+            document.querySelectorAll('button, .photo-item, .pie-item').forEach(el => {
             el.addEventListener('mouseenter', () => ring.style.transform = 'translate(-50%,-50%) scale(1.5)');
             el.addEventListener('mouseleave', () => ring.style.transform = 'translate(-50%,-50%) scale(1)');
-        });
-        function animateBars() { document.querySelectorAll('.content-section.active .bar-fill').forEach(bar => { bar.style.width = bar.getAttribute('data-val') + '%'; }); }
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-                btn.classList.add('active'); document.getElementById(btn.dataset.tab).classList.add('active');
-                document.querySelectorAll('.bar-fill').forEach(b => b.style.width = '0%'); setTimeout(animateBars, 100);
             });
-        });
-        const lb = document.getElementById('lightbox'), lbI = lb.querySelector('img');
-        document.querySelectorAll('.photo-item img').forEach(i => { i.addEventListener('click', () => { lbI.src = i.src; lb.classList.add('open'); }); });
-        lb.addEventListener('click', () => lb.classList.remove('open'));
-        setTimeout(animateBars, 500);
-    </script>
+
+            const lb = document.getElementById('lightbox'), lbI = lb.querySelector('img');
+            document.querySelectorAll('.photo-item img').forEach(i => {
+            i.addEventListener('click', () => { lbI.src = i.src; lb.classList.add('open'); });
+            });
+            lb.addEventListener('click', () => lb.classList.remove('open'));
+            </script>
 </body>
 
 </html>
