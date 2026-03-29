@@ -17,6 +17,7 @@
             --border: #e1e1e6;
             --accent-blue: #007aff;
             --accent-green: #34c759;
+            --accent-purple: #5856d6;
             --accent-grey: #aeb1b6;
             --text-main: #1d1d1f;
             --text-sub: #86868b;
@@ -119,7 +120,7 @@
             border-radius: 10px;
         }
 
-        /* Sections */
+        /* Content Sections */
         .content-section {
             display: none;
         }
@@ -146,7 +147,7 @@
             background: #fff;
             border-radius: 32px;
             padding: 2.5rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.025);
             margin-bottom: 2.5rem;
             border: 1px solid #eee;
         }
@@ -172,25 +173,25 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
         }
 
         .stage-num {
             background: var(--accent-blue);
             color: #fff;
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
             font-weight: 900;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         .strategy-title {
             font-weight: 800;
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             color: #000;
         }
 
@@ -208,14 +209,18 @@
             margin-right: 0.5rem;
         }
 
+        .label.purple {
+            color: var(--accent-purple);
+        }
+
         .reason-box {
             padding-left: 1rem;
-            border-left: 2px solid #ddd;
+            border-left: 3px solid #eee;
             margin: 1.5rem 0;
         }
 
         .reason-title {
-            font-weight: 700;
+            font-weight: 800;
             color: #555;
             margin-bottom: 0.5rem;
             display: block;
@@ -262,22 +267,22 @@
 
         .bar-bg {
             background: #f2f2f7;
-            height: 28px;
-            border-radius: 8px;
+            height: 30px;
+            border-radius: 9px;
             overflow: hidden;
         }
 
         .bar-fill {
             height: 100%;
-            border-radius: 8px;
+            border-radius: 9px;
             width: 0%;
             transition: width 2s var(--ease);
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            padding-right: 1rem;
+            padding-right: 1.2rem;
             color: #fff;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 800;
         }
 
@@ -289,10 +294,66 @@
             background: var(--accent-blue);
         }
 
-        /* Summary Stats Cards */
+        /* Compression Display */
+        .compression-box {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            justify-content: center;
+            padding: 2.5rem 0;
+            background: linear-gradient(135deg, #f9f9fb, #fff);
+            border-radius: 20px;
+            border: 1px dashed #ddd;
+            margin: 2rem 0;
+        }
+
+        .file-status {
+            text-align: center;
+        }
+
+        .file-size {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #000;
+            display: block;
+            margin-bottom: 0.4rem;
+        }
+
+        .file-label {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .compress-arrow {
+            font-size: 2rem;
+            color: var(--accent-blue);
+            animation: arrowSlide 1.5s infinite;
+        }
+
+        @keyframes arrowSlide {
+            0% {
+                opacity: 0.2;
+                transform: translateX(-5px);
+            }
+
+            50% {
+                opacity: 1;
+                transform: translateX(5px);
+            }
+
+            100% {
+                opacity: 0.2;
+                transform: translateX(-5px);
+            }
+        }
+
+        /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
             margin-top: 1.5rem;
         }
@@ -300,13 +361,19 @@
         .stat-card {
             background: #fff;
             border: 1px solid #eee;
-            padding: 1.2rem;
-            border-radius: 16px;
-            text-align: center;
+            padding: 1.5rem;
+            border-radius: 20px;
+            text-align: left;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-blue);
         }
 
         .stat-label {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-weight: 700;
             color: var(--text-sub);
             display: block;
@@ -314,17 +381,10 @@
         }
 
         .stat-val {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 900;
             color: #000;
-        }
-
-        .stat-diff {
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: var(--accent-green);
-            display: block;
-            margin-top: 0.2rem;
+            line-height: 1.4;
         }
 
         /* Photo Grid */
@@ -341,10 +401,6 @@
             border: 1px solid #eee;
             cursor: zoom-in;
             transition: transform 0.4s var(--ease);
-        }
-
-        .photo-item:hover {
-            transform: scale(1.02);
         }
 
         .photo-item img {
@@ -393,9 +449,31 @@
                 grid-template-columns: 1fr;
             }
 
-            .bar-row {
-                grid-template-columns: 1fr;
-                gap: 0.5rem;
+            .compression-box {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .compress-arrow {
+                transform: rotate(90deg);
+                animation: arrowSlideVertical 1.5s infinite;
+            }
+
+            @keyframes arrowSlideVertical {
+                0% {
+                    opacity: 0.2;
+                    transform: translateY(-5px) rotate(90deg);
+                }
+
+                50% {
+                    opacity: 1;
+                    transform: translateY(5px) rotate(90deg);
+                }
+
+                100% {
+                    opacity: 0.2;
+                    transform: translateY(-5px) rotate(90deg);
+                }
             }
         }
     </style>
@@ -424,7 +502,8 @@
                     <span class="label">檢測現狀：</span> 模型展現出明顯的類別失衡與背景干擾問題。
                 </div>
                 <p>
-                    特別針對<strong>「人」</strong>的類別，在複雜監控背景下的漏報率高達 <strong>64%</strong>，导致其 AP 值僅為 0.492。這意味著系統在安全性上仍有很大漏洞。
+                    特別針對<strong>「人」</strong>的類別，在複雜監控背景下的漏報率高達 <strong>64%</strong>，致使其 AP 值僅為
+                    <strong>0.492</strong>。這意謂著系統在安全性上仍有很大漏洞。
                 </p>
 
                 <div class="chart-container">
@@ -434,19 +513,12 @@
                             <div class="bar-fill v1" data-val="49.2">0.492</div>
                         </div>
                     </div>
-                    <div class="bar-row">
-                        <span class="cat-name">刀 (Knife) AP</span>
-                        <div class="bar-bg">
-                            <div class="bar-fill v1" data-val="59.6">0.596</div>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="reason-box">
                     <span class="reason-title">⚠️ 分析與缺陷探討：</span>
                     <p>
-                        若模型對「人」的定義太狹隘（只見過少量場景下的行人），會產生嚴重的<strong>過擬合 (Overfitting)</strong>
-                        問題。這說明第一版缺乏足夠的海量通用數據來「識別人體輪廓」。
+                        若模型對「人」的定義太狹隘，會產生嚴重的<strong>過擬合 (Overfitting)</strong> 問題。這說明第一版缺乏足夠的海量通用數據來「識別人體輪廓」。
                     </p>
                 </div>
 
@@ -462,10 +534,9 @@
             <div class="report-box">
                 <h2 class="section-title">v2.0 兩階段遷移訓練策略</h2>
                 <p>
-                    為了解決第一版對行人辨識的薄弱，我採取了專業的<strong>兩階段遷移學習 (Two-stage Transfer Learning)</strong>，讓模型從「看懂世界」到「學會專業」。
+                    為了解決第一版對行人辨識的薄弱，我採取了<strong>兩階段遷移學習 (Two-stage Transfer Learning)</strong>，讓模型從「看懂世界」成長為「掌握專業」。
                 </p>
 
-                <!-- Stage 1 -->
                 <div class="strategy-card">
                     <div class="strategy-header">
                         <div class="stage-num">1</div>
@@ -476,12 +547,11 @@
                     </div>
                     <div class="reason-box">
                         <span class="reason-title">💡 為什麼要這一步？</span>
-                        <p>模型需要先學會理解基礎的線條、邊緣與圓形，進而組成「人體」輪廓。這能避免因直接使用小數據從零開始練（Scratch）而導致的過擬合問題。</p>
+                        <p>模型需要先學會理解基礎的線條、邊緣與圓形，進而組成「人體」輪廓。這能避免因直接使用小數據從零開始練（Scratch）而導致的定義狹隘與過擬合。</p>
                     </div>
                     <div class="result-box">✓ 實驗結果：模型獲得了強大的底層通用特徵提取能力。</div>
                 </div>
 
-                <!-- Stage 2 -->
                 <div class="strategy-card">
                     <div class="strategy-header">
                         <div class="stage-num">2</div>
@@ -492,13 +562,13 @@
                     </div>
                     <div class="reason-box">
                         <span class="reason-title">💡 為什麼要這一步？</span>
-                        <p>讓模型把第一階段學到的「通用視覺能力」，轉化成解決專案問題的「專業能力」。使其適應專案環境下的背景分佈（如家中的特定光線與視角）。</p>
+                        <p>讓模型把學到的「通用視覺能力」，轉化成解決專案問題的「專業能力」。使其適應專案環境下的背景分佈（如家中光線與視角）。</p>
                     </div>
-                    <div class="result-box">✓ 實驗結果：在保持「抓人」優勢的同時，學會了在專案場景中精準辨識危險目標。</div>
+                    <div class="result-box">✓ 實驗結果：保持「抓人」優勢的同時，學會了精準辨識危險目標。</div>
                 </div>
 
                 <div class="report-box" style="box-shadow: none; border: 1px solid #e1e4e8; background: #fff;">
-                    <h3 style="margin-bottom: 2rem;">📈 優化成果總結</h3>
+                    <h3 style="margin-bottom: 1.5rem;">📈 優化成果總結</h3>
                     <div class="chart-container">
                         <div class="bar-row">
                             <span class="cat-name">人 (Person) AP</span>
@@ -506,30 +576,9 @@
                                 <div class="bar-fill v2" data-val="80.2">0.802 (+63%)</div>
                             </div>
                         </div>
-                        <div class="bar-row">
-                            <span class="cat-name">刀 (Knife) AP</span>
-                            <div class="bar-bg">
-                                <div class="bar-fill v2" data-val="69.6">0.696 (+16.7%)</div>
-                            </div>
-                        </div>
                     </div>
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <span class="stat-label">整體 mAP@0.5</span>
-                            <span class="stat-val">0.758</span>
-                            <span class="stat-diff">+24.8%</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-label">行人重漏報率</span>
-                            <span class="stat-val">21%</span>
-                            <span class="stat-diff">↓ 降幅極大</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-label">場景魯棒性</span>
-                            <span class="stat-val">High</span>
-                            <span class="stat-diff">優化顯著</span>
-                        </div>
-                    </div>
+                    <p style="font-size: 0.95rem; font-weight: 700; color: var(--accent-green);">整體 mAP@0.5 從 0.607 提升至
+                        0.758 (+24.8%)</p>
                 </div>
 
                 <div class="photo-grid" style="margin-top:2rem">
@@ -543,13 +592,55 @@
         <div id="distill" class="content-section">
             <div class="report-box">
                 <h2 class="section-title">知識蒸餾 (Knowledge Distillation)</h2>
-                <div class="action-row">
-                    <span class="label">部署方案：</span> 實現嵌入式設備 (Edge AI) 上的實時推論。
-                </div>
-                <p>
-                    使用 Teacher Model 引導輕量化 Student Model，在大幅降低參數量與推論延遲的同時，成功保留了接近原模型 95% 的精確度。
+                <p class="desc-text">
+                    為了滿足 <strong>Smart Safety Care</strong> 系統在各類運算資源受限設備（如中低階電腦或行動端）的實時監控需求，我實施了先進的知識蒸餾技術。
                 </p>
-                <div class="photo-grid" style="margin-top:2rem">
+
+                <div class="strategy-card" style="border-color: var(--accent-purple);">
+                    <div class="strategy-header">
+                        <div class="stage-num" style="background:var(--accent-purple)">★</div>
+                        <span class="strategy-title">模型壓縮與軟標籤學習</span>
+                    </div>
+
+                    <div class="action-row">
+                        <span class="label purple">模型壓縮：</span> 將權重從 49.7 MB 壓縮至 6 MB (約 88% 壓縮率)。
+                    </div>
+
+                    <div class="compression-box">
+                        <div class="file-status"><span class="file-size">49.7 <small>MB</small></span><span
+                                class="file-label">Teacher Model</span></div>
+                        <div class="compress-arrow">➜</div>
+                        <div class="file-status" style="color:var(--accent-purple)"><span class="file-size">6.0
+                                <small>MB</small></span><span class="file-label">Student Model</span></div>
+                    </div>
+
+                    <div class="reason-box" style="border-left-color: var(--accent-purple);">
+                        <span class="reason-title">💡 軟標籤學習 (Soft Label Learning)：</span>
+                        <p>透過教師模型的機率分佈引導學生模型，讓學生模型學到了物件之間的<strong>「相似性」</strong>資訊（例如刀子和剪刀的細微差異），而不僅僅是硬性的對錯，顯著提升了小模型的魯棒性。
+                        </p>
+                    </div>
+
+                    <div class="action-row">
+                        <span class="label purple">技術細節：</span> 以高精度的第二版模型為 Teacher，引導輕量化 <strong>YOLOv8n</strong> 作為
+                        Student。
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-label">最終精度 (mAP50)</span>
+                            <span class="stat-val">≈ 0.75</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">運算資源痛點解決</span>
+                            <span class="stat-val">Real-time Smooth</span>
+                        </div>
+                    </div>
+
+                    <div class="result-box" style="color:var(--accent-purple)">✓
+                        最終成果：成功實現了「低功耗、高精度」的邊緣端部署需求，使即時監控不再受限於硬體性能。</div>
+                </div>
+
+                <div class="photo-grid">
                     <div class="photo-item"><img src="./assets/training_distill_1.png" alt="distill_1"></div>
                     <div class="photo-item"><img src="./assets/training_distill_2.png" alt="distill_2"></div>
                 </div>
@@ -557,56 +648,31 @@
         </div>
     </div>
 
-    <!-- Lightbox Overlay -->
+    <!-- Lightbox -->
     <div id="lightbox"><img src="" alt=""></div>
 
     <script>
-        const dot = document.getElementById('cursor-dot');
-        const ring = document.getElementById('cursor-ring');
-        let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX; mouseY = e.clientY;
-            dot.style.left = mouseX + 'px'; dot.style.top = mouseY + 'px';
-        });
-
-        function animateCursor() {
-            ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
-            ring.style.left = ringX + 'px'; ring.style.top = ringY + 'px';
-            requestAnimationFrame(animateCursor);
-        }
-        animateCursor();
-
+        const dot = document.getElementById('cursor-dot'), ring = document.getElementById('cursor-ring');
+        let mX = 0, mY = 0, rX = 0, rY = 0;
+        document.addEventListener('mousemove', (e) => { mX = e.clientX; mY = e.clientY; dot.style.left = mX + 'px'; dot.style.top = mY + 'px'; });
+        function anim() { rX += (mX - rX) * 0.15; rY += (mY - rY) * 0.15; ring.style.left = rX + 'px'; ring.style.top = rY + 'px'; requestAnimationFrame(anim); }
+        anim();
         document.querySelectorAll('button, .photo-item').forEach(el => {
             el.addEventListener('mouseenter', () => ring.style.transform = 'translate(-50%,-50%) scale(1.5)');
             el.addEventListener('mouseleave', () => ring.style.transform = 'translate(-50%,-50%) scale(1)');
         });
-
-        function animateBars() {
-            document.querySelectorAll('.content-section.active .bar-fill').forEach(bar => {
-                bar.style.width = bar.getAttribute('data-val') + '%';
-            });
-        }
-
+        function animateBars() { document.querySelectorAll('.content-section.active .bar-fill').forEach(bar => { bar.style.width = bar.getAttribute('data-val') + '%'; }); }
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
                 document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-                btn.classList.add('active');
-                const target = document.getElementById(btn.dataset.tab);
-                target.classList.add('active');
-
-                document.querySelectorAll('.bar-fill').forEach(b => b.style.width = '0%');
-                setTimeout(animateBars, 100);
+                btn.classList.add('active'); document.getElementById(btn.dataset.tab).classList.add('active');
+                document.querySelectorAll('.bar-fill').forEach(b => b.style.width = '0%'); setTimeout(animateBars, 100);
             });
         });
-
         const lb = document.getElementById('lightbox'), lbI = lb.querySelector('img');
-        document.querySelectorAll('.photo-item img').forEach(i => {
-            i.addEventListener('click', () => { lbI.src = i.src; lb.classList.add('open'); });
-        });
+        document.querySelectorAll('.photo-item img').forEach(i => { i.addEventListener('click', () => { lbI.src = i.src; lb.classList.add('open'); }); });
         lb.addEventListener('click', () => lb.classList.remove('open'));
-
         setTimeout(animateBars, 500);
     </script>
 </body>
