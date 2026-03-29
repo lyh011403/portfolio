@@ -886,6 +886,14 @@
     const splash = document.getElementById('splash-screen');
     const enterBtn = document.getElementById('enter-btn');
     if (!splash || !enterBtn) return;
+
+    // 如果 URL 包含 ?direct=1，直接跳過進場畫面
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('direct') === '1') {
+    splash.style.display = 'none';
+    return;
+    }
+
     const tl = gsap.timeline();
     tl.from(".splash-credits", { opacity: 0, y: 10, duration: 0.8, delay: 0.5 })
     .from(".splash-title", { opacity: 0, scale: 0.9, filter: "blur(10px)", duration: 1.5, ease: "expo.out" }, "-=0.4")
