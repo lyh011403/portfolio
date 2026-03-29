@@ -17,7 +17,7 @@
             --border: #e1e1e6;
             --accent-blue: #007aff;
             --accent-green: #34c759;
-            --accent-grey: #8e8e93;
+            --accent-grey: #aeb1b6;
             --text-main: #1d1d1f;
             --text-sub: #86868b;
             --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -152,52 +152,93 @@
         }
 
         .section-title {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 800;
             margin-bottom: 1.5rem;
             color: #000;
+            letter-spacing: -0.01em;
+        }
+
+        /* Progress Card */
+        .strategy-card {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid #eee;
+        }
+
+        .strategy-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stage-num {
+            background: var(--accent-blue);
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: 900;
+            font-size: 0.9rem;
+        }
+
+        .strategy-title {
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: #000;
+        }
+
+        .action-row {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid #f0f0f0;
+            margin: 1rem 0;
+        }
+
+        .label {
+            font-weight: 800;
+            color: var(--accent-blue);
+            margin-right: 0.5rem;
+        }
+
+        .reason-box {
+            padding-left: 1rem;
+            border-left: 2px solid #ddd;
+            margin: 1.5rem 0;
+        }
+
+        .reason-title {
+            font-weight: 700;
+            color: #555;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .result-box {
+            color: var(--accent-green);
+            font-weight: 800;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         /* Typography */
-        .desc-text {
+        p {
             line-height: 1.8;
             color: #444;
             font-size: 1.05rem;
-            margin: 1.5rem 0;
         }
 
-        .highlight-box {
-            background: #f8f9fa;
-            border-radius: 16px;
-            padding: 1.5rem;
-            border-left: 4px solid var(--accent-blue);
-            margin: 1.5rem 0;
-        }
-
-        .highlight-box.green {
-            border-color: var(--accent-green);
-            background: #f2faf4;
-        }
-
-        .highlight-title {
-            font-weight: 800;
+        strong {
             color: #000;
-            margin-bottom: 0.5rem;
-            display: block;
-            font-size: 1.1rem;
-        }
-
-        .list-item {
-            margin-bottom: 0.8rem;
-            display: flex;
-            gap: 0.8rem;
-            align-items: flex-start;
-        }
-
-        .list-item::before {
-            content: '•';
-            color: var(--accent-blue);
-            font-weight: 900;
         }
 
         /* Bar Charts */
@@ -248,34 +289,6 @@
             background: var(--accent-blue);
         }
 
-        /* Photo Grid */
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .photo-item {
-            border-radius: 20px;
-            overflow: hidden;
-            background: #fff;
-            border: 1px solid #eee;
-            cursor: zoom-in;
-            transition: transform 0.4s var(--ease);
-        }
-
-        .photo-item:hover {
-            transform: scale(1.02);
-        }
-
-        .photo-item img {
-            width: 100%;
-            aspect-ratio: 4/3;
-            object-fit: cover;
-            display: block;
-        }
-
         /* Summary Stats Cards */
         .stats-grid {
             display: grid;
@@ -312,6 +325,33 @@
             color: var(--accent-green);
             display: block;
             margin-top: 0.2rem;
+        }
+
+        /* Photo Grid */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .photo-item {
+            border-radius: 20px;
+            overflow: hidden;
+            background: #fff;
+            border: 1px solid #eee;
+            cursor: zoom-in;
+            transition: transform 0.4s var(--ease);
+        }
+
+        .photo-item:hover {
+            transform: scale(1.02);
+        }
+
+        .photo-item img {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            display: block;
         }
 
         /* Lightbox */
@@ -357,10 +397,6 @@
                 grid-template-columns: 1fr;
                 gap: 0.5rem;
             }
-
-            .photo-grid {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
@@ -376,17 +412,19 @@
 
         <div class="tabs">
             <button class="tab-btn active" data-tab="v1">v1.0 數據</button>
-            <button class="tab-btn" data-tab="v2">v2.0 數據</button>
+            <button class="tab-btn" data-tab="v2">v2.0 提升</button>
             <button class="tab-btn" data-tab="distill">知識蒸餾</button>
         </div>
 
         <!-- 1. v1.0 數據 -->
         <div id="v1" class="content-section active">
             <div class="report-box">
-                <h2 class="section-title">v1.0 初始版本分析</h2>
-
-                <p class="desc-text">
-                    根據第一版測試結果，模型展現出明顯的類別失衡與背景干擾問題。特別是「人」的類別，其<strong>漏報率高達 64%</strong>，導致 AP 值僅為 0.492。
+                <h2 class="section-title">v1.0 初始版本診斷</h2>
+                <div class="action-row">
+                    <span class="label">檢測現狀：</span> 模型展現出明顯的類別失衡與背景干擾問題。
+                </div>
+                <p>
+                    特別針對<strong>「人」</strong>的類別，在複雜監控背景下的漏報率高達 <strong>64%</strong>，导致其 AP 值僅為 0.492。這意味著系統在安全性上仍有很大漏洞。
                 </p>
 
                 <div class="chart-container">
@@ -402,19 +440,14 @@
                             <div class="bar-fill v1" data-val="59.6">0.596</div>
                         </div>
                     </div>
-                    <div class="bar-row">
-                        <span class="cat-name">剪刀 (Scissors) AP</span>
-                        <div class="bar-bg">
-                            <div class="bar-fill v1" data-val="73.1">0.731</div>
-                        </div>
-                    </div>
                 </div>
 
-                <div class="highlight-box">
-                    <span class="highlight-title">下一步優化策略：</span>
-                    <div class="list-item">增加「人」的樣本多樣性，特別是在複雜背景下的標註。</div>
-                    <div class="list-item">引入更多的背景負樣本（Background images），以降低模型將雜物誤判為刀具/剪刀的機率。</div>
-                    <div class="list-item">調整 Loss Function，增加對漏報（False Negatives）的懲罰權重。</div>
+                <div class="reason-box">
+                    <span class="reason-title">⚠️ 分析與缺陷探討：</span>
+                    <p>
+                        若模型對「人」的定義太狹隘（只見過少量場景下的行人），會產生嚴重的<strong>過擬合 (Overfitting)</strong>
+                        問題。這說明第一版缺乏足夠的海量通用數據來「識別人體輪廓」。
+                    </p>
                 </div>
 
                 <div class="photo-grid">
@@ -424,29 +457,48 @@
             </div>
         </div>
 
-        <!-- 2. v2.0 數據 -->
+        <!-- 2. v2.0 提升 -->
         <div id="v2" class="content-section">
             <div class="report-box">
-                <h2 class="section-title">v2.0 性能優化策略</h2>
-
-                <p class="desc-text">
-                    為了提升系統的安全性與可靠性，我採取了<strong>兩階段遷移學習（Two-stage Transfer Learning）</strong>策略進行深度優化：
+                <h2 class="section-title">v2.0 兩階段遷移訓練策略</h2>
+                <p>
+                    為了解決第一版對行人辨識的薄弱，我採取了專業的<strong>兩階段遷移學習 (Two-stage Transfer Learning)</strong>，讓模型從「看懂世界」到「學會專業」。
                 </p>
 
-                <div class="highlight-box">
-                    <span class="highlight-title">第一階段：特徵提取強化 (General Feature Extraction)</span>
-                    <div class="list-item"><strong>技術手段：</strong> 導入針對行人檢測深度優化的預訓練權重（Pre-trained Weights）。</div>
-                    <div class="list-item"><strong>優化目標：</strong> 賦予模型強大的底層特徵提取能力，提升對人體輪廓在不同姿態下的魯棒性（Robustness）。</div>
+                <!-- Stage 1 -->
+                <div class="strategy-card">
+                    <div class="strategy-header">
+                        <div class="stage-num">1</div>
+                        <span class="strategy-title">通用特徵強化 (General Feature Extraction)</span>
+                    </div>
+                    <div class="action-row">
+                        <span class="label">執行動作：</span> 導入抓人能力領先的數據訓練權重 (如 COCO/CrowdHuman/ImageNet)。
+                    </div>
+                    <div class="reason-box">
+                        <span class="reason-title">💡 為什麼要這一步？</span>
+                        <p>模型需要先學會理解基礎的線條、邊緣與圓形，進而組成「人體」輪廓。這能避免因直接使用小數據從零開始練（Scratch）而導致的過擬合問題。</p>
+                    </div>
+                    <div class="result-box">✓ 實驗結果：模型獲得了強大的底層通用特徵提取能力。</div>
                 </div>
 
-                <div class="highlight-box">
-                    <span class="highlight-title">第二階段：領域數據微調 (Domain-specific Fine-tuning)</span>
-                    <div class="list-item"><strong>技術手段：</strong> 疊加專案場景的自有數據集，並針對「刀具」與「剪刀」等危險物品進行樣本擴增與數據增強。</div>
-                    <div class="list-item"><strong>優化目標：</strong> 讓模型適應特定監控場景的背景分佈，解決第一版中嚴重的背景干擾問題。</div>
+                <!-- Stage 2 -->
+                <div class="strategy-card">
+                    <div class="strategy-header">
+                        <div class="stage-num">2</div>
+                        <span class="strategy-title">特定場景微調與疊加 (Domain-specific Fine-tuning)</span>
+                    </div>
+                    <div class="action-row">
+                        <span class="label">執行動作：</span> 疊加專案場景自有數據集，同時增加「刀具」與「剪刀」的特定目標樣本。
+                    </div>
+                    <div class="reason-box">
+                        <span class="reason-title">💡 為什麼要這一步？</span>
+                        <p>讓模型把第一階段學到的「通用視覺能力」，轉化成解決專案問題的「專業能力」。使其適應專案環境下的背景分佈（如家中的特定光線與視角）。</p>
+                    </div>
+                    <div class="result-box">✓ 實驗結果：在保持「抓人」優勢的同時，學會了在專案場景中精準辨識危險目標。</div>
                 </div>
 
                 <div class="report-box" style="box-shadow: none; border: 1px solid #e1e4e8; background: #fff;">
-                    <h3 style="margin-bottom: 1.5rem;">📈 優化成果總結</h3>
+                    <h3 style="margin-bottom: 2rem;">📈 優化成果總結</h3>
                     <div class="chart-container">
                         <div class="bar-row">
                             <span class="cat-name">人 (Person) AP</span>
@@ -460,12 +512,6 @@
                                 <div class="bar-fill v2" data-val="69.6">0.696 (+16.7%)</div>
                             </div>
                         </div>
-                        <div class="bar-row">
-                            <span class="cat-name">剪刀 (Scissors) AP</span>
-                            <div class="bar-bg">
-                                <div class="bar-fill v2" data-val="77.8">0.778 (+6.4%)</div>
-                            </div>
-                        </div>
                     </div>
                     <div class="stats-grid">
                         <div class="stat-card">
@@ -474,22 +520,19 @@
                             <span class="stat-diff">+24.8%</span>
                         </div>
                         <div class="stat-card">
-                            <span class="stat-label">行人 AP 提升</span>
-                            <span class="stat-val">0.802</span>
-                            <span class="stat-diff">+63.0%</span>
+                            <span class="stat-label">行人重漏報率</span>
+                            <span class="stat-val">21%</span>
+                            <span class="stat-diff">↓ 降幅極大</span>
                         </div>
                         <div class="stat-card">
-                            <span class="stat-label">漏報率 (Miss Rate)</span>
-                            <span class="stat-val">21%</span>
-                            <span class="stat-diff">↓ from 64%</span>
+                            <span class="stat-label">場景魯棒性</span>
+                            <span class="stat-val">High</span>
+                            <span class="stat-diff">優化顯著</span>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="report-box" style="margin-top:-1.5rem">
-                <h2 class="section-title">v2.0 訓練成果影像</h2>
-                <div class="photo-grid">
+                <div class="photo-grid" style="margin-top:2rem">
                     <div class="photo-item"><img src="./assets/training_v2_1.png" alt="v2_1"></div>
                     <div class="photo-item"><img src="./assets/training_v2_3.png" alt="v2_3"></div>
                 </div>
@@ -500,17 +543,13 @@
         <div id="distill" class="content-section">
             <div class="report-box">
                 <h2 class="section-title">知識蒸餾 (Knowledge Distillation)</h2>
-                <p class="desc-text">
-                    為了滿足嵌入式設備（如 Jetson Nano / Raspberry Pi）的實時推論需求，我實施了知識蒸餾技術。
-                </p>
-                <div class="highlight-box">
-                    <span class="highlight-title">模型壓縮策略：</span>
-                    <div class="list-item"><strong>技術手段：</strong> 使用大參數 Teacher Model 下指導輕量化 Student Model（如 Nano/Tiny
-                        系列）。</div>
-                    <div class="list-item"><strong>優化成果：</strong> 在大幅降低參數量與推論延遲的同時，保留了 Teacher Model 接近 95% 的精確度表現。
-                    </div>
+                <div class="action-row">
+                    <span class="label">部署方案：</span> 實現嵌入式設備 (Edge AI) 上的實時推論。
                 </div>
-                <div class="photo-grid">
+                <p>
+                    使用 Teacher Model 引導輕量化 Student Model，在大幅降低參數量與推論延遲的同時，成功保留了接近原模型 95% 的精確度。
+                </p>
+                <div class="photo-grid" style="margin-top:2rem">
                     <div class="photo-item"><img src="./assets/training_distill_1.png" alt="distill_1"></div>
                     <div class="photo-item"><img src="./assets/training_distill_2.png" alt="distill_2"></div>
                 </div>
@@ -518,7 +557,7 @@
         </div>
     </div>
 
-    <!-- Lightbox -->
+    <!-- Lightbox Overlay -->
     <div id="lightbox"><img src="" alt=""></div>
 
     <script>
