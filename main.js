@@ -70,14 +70,14 @@ for (let i = 1; i <= 21; i++)
 CATEGORIES.embedded.items = [
     {
         type: 'iframe',
-        src: './public/ssc.html',
-        thumb: './public/assets/embedded_1.jpg',
+        src: './ssc.html',
+        thumb: './assets/embedded_1.jpg',
         title: 'Smart Safety Care'
     },
     {
         type: 'iframe',
-        src: './public/training-gallery.html',
-        thumb: './public/assets/training_report_new_cover.png',
+        src: './training-gallery.html',
+        thumb: './assets/training_report_new_cover.png',
         title: '訓練數據詳細報告：AI 模型成長分析'
     },
     {
