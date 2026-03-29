@@ -4,9 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Safety Care | 模型訓練歷程報告</title>
-    <!-- GSAP for premium animations -->
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <title>訓練數據詳細報告 | Smart Safety Care</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -40,6 +38,7 @@
             padding-bottom: 5rem;
             cursor: none;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
         .container {
@@ -162,20 +161,21 @@
             letter-spacing: -0.01em;
         }
 
-        /* Progress Card */
+        /* Strategy Card */
         .strategy-card {
             background: #f8f9fa;
             border-radius: 20px;
-            padding: 2rem;
+            padding: 2.2rem;
             margin: 2rem 0;
             border: 1px solid #eee;
+            position: relative;
         }
 
         .strategy-header {
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.5rem;
         }
 
         .stage-num {
@@ -193,22 +193,22 @@
 
         .strategy-title {
             font-weight: 800;
-            font-size: 1.3rem;
+            font-size: 1.352rem;
             color: #000;
         }
 
         .action-row {
             background: #fff;
             border-radius: 12px;
-            padding: 1rem;
+            padding: 1.2rem;
             border: 1px solid #f0f0f0;
-            margin: 1rem 0;
+            margin: 1.2rem 0;
         }
 
         .label {
             font-weight: 800;
             color: var(--accent-blue);
-            margin-right: 0.5rem;
+            margin-right: 0.8rem;
         }
 
         .label.purple {
@@ -216,7 +216,7 @@
         }
 
         .reason-box {
-            padding-left: 1rem;
+            padding-left: 1.2rem;
             border-left: 3px solid #eee;
             margin: 1.5rem 0;
         }
@@ -224,87 +224,50 @@
         .reason-title {
             font-weight: 800;
             color: #555;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.6rem;
             display: block;
         }
 
-        .result-box {
-            color: var(--accent-green);
-            font-weight: 800;
-            margin-top: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        /* Typography */
-        p {
-            line-height: 1.8;
-            color: #444;
-            font-size: 1.05rem;
-        }
-
-        strong {
-            color: #000;
-        }
-
-        /* Bar Charts */
-        .chart-container {
-            margin: 2rem 0;
-        }
-
-        .bar-row {
+        /* Statistics */
+        .stats-grid {
             display: grid;
-            grid-template-columns: 140px 1fr;
-            align-items: center;
-            gap: 1.5rem;
-            margin-bottom: 1rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
         }
 
-        .cat-name {
+        .stat-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 1.5rem;
+            border-radius: 20px;
+            text-align: left;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
             font-weight: 700;
-            color: #333;
-            font-size: 0.95rem;
+            color: var(--text-sub);
+            display: block;
+            margin-bottom: 0.3rem;
         }
 
-        .bar-bg {
-            background: #f2f2f7;
-            height: 30px;
-            border-radius: 9px;
-            overflow: hidden;
-        }
-
-        .bar-fill {
-            height: 100%;
-            border-radius: 9px;
-            width: 0%;
-            transition: width 2s var(--ease);
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 1.2rem;
-            color: #fff;
-            font-size: 0.85rem;
-            font-weight: 800;
-        }
-
-        .bar-fill.v1 {
-            background: var(--accent-grey);
-        }
-
-        .bar-fill.v2 {
-            background: var(--accent-blue);
+        .stat-val {
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: #000;
+            line-height: 1.4;
         }
 
         /* Compression Display */
         .compression-box {
             display: flex;
             align-items: center;
-            gap: 2rem;
+            gap: 2.5rem;
             justify-content: center;
-            padding: 2.5rem 0;
+            padding: 3rem 0;
             background: linear-gradient(135deg, #f9f9fb, #fff);
-            border-radius: 20px;
+            border-radius: 24px;
             border: 1px dashed #ddd;
             margin: 2rem 0;
         }
@@ -314,7 +277,7 @@
         }
 
         .file-size {
-            font-size: 2.2rem;
+            font-size: 2.6rem;
             font-weight: 900;
             color: #000;
             display: block;
@@ -322,15 +285,15 @@
         }
 
         .file-label {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 800;
             color: var(--text-sub);
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.12em;
         }
 
         .compress-arrow {
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: var(--accent-blue);
             animation: arrowSlide 1.5s infinite;
         }
@@ -352,41 +315,52 @@
             }
         }
 
-        /* Stats Grid */
-        .stats-grid {
+        /* Bar Charts */
+        .chart-container {
+            margin: 2rem 0;
+        }
+
+        .bar-row {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-top: 1.5rem;
+            grid-template-columns: 140px 1fr;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.2rem;
         }
 
-        .stat-card {
-            background: #fff;
-            border: 1px solid #eee;
-            padding: 1.5rem;
-            border-radius: 20px;
-            text-align: left;
-            transition: transform 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-blue);
-        }
-
-        .stat-label {
-            font-size: 0.8rem;
+        .cat-name {
             font-weight: 700;
-            color: var(--text-sub);
-            display: block;
-            margin-bottom: 0.3rem;
+            color: #333;
+            font-size: 0.95rem;
         }
 
-        .stat-val {
-            font-size: 1.3rem;
-            font-weight: 900;
-            color: #000;
-            line-height: 1.4;
+        .bar-bg {
+            background: #f2f2f7;
+            height: 32px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 2s var(--ease);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1.2rem;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 800;
+        }
+
+        .bar-fill.v1 {
+            background: var(--accent-grey);
+        }
+
+        .bar-fill.v2 {
+            background: var(--accent-blue);
         }
 
         /* Photo Grid */
@@ -410,6 +384,16 @@
             aspect-ratio: 4/3;
             object-fit: cover;
             display: block;
+        }
+
+        .result-box {
+            color: var(--accent-green);
+            font-weight: 800;
+            margin-top: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 1.05rem;
         }
 
         /* Lightbox */
@@ -442,158 +426,14 @@
             transform: scale(1);
         }
 
-        /* WebGL Ferrofluid Navigation Container */
-        #ferro-nav-container {
-            position: relative;
-            width: 100%;
-            height: 380px;
-            margin: 2rem 0 4rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle at center, rgba(30, 30, 35, 1) 0%, rgba(10, 10, 12, 0) 70%);
-            border-radius: 24px;
-            overflow: visible;
+        p {
+            line-height: 1.8;
+            color: #444;
+            font-size: 1.05rem;
         }
 
-        /* Splash Screen Overlay for Report */
-        #splash-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, #1a1a1d 0%, #0a0a0c 100%);
-            z-index: 99999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            transition: transform 1.2s cubic-bezier(0.85, 0, 0.15, 1), opacity 1s ease;
-        }
-
-        .splash-content {
-            text-align: center;
-            color: #fff;
-            max-width: 800px;
-            padding: 2rem;
-        }
-
-        .splash-credits {
-            font-size: 0.85rem;
-            letter-spacing: 4px;
-            color: rgba(200, 169, 126, 0.6);
-            margin-bottom: 1.5rem;
-            font-weight: 500;
-        }
-
-        .splash-title {
-            font-family: 'Inter', 'Noto Sans TC', sans-serif;
-            font-size: clamp(3rem, 10vw, 6rem);
-            font-weight: 900;
-            margin-bottom: 1rem;
-            letter-spacing: -1px;
-            background: linear-gradient(180deg, #fff 30%, #a0a0a0 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .splash-desc {
-            font-size: 1rem;
-            line-height: 1.6;
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 3rem;
-            letter-spacing: 1px;
-        }
-
-        .btn-enter {
-            background: transparent;
-            border: 1.5px solid rgba(255, 255, 255, 0.2);
-            padding: 0.8rem 2.5rem;
-            border-radius: 50px;
-            color: #fff;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .btn-enter:hover {
-            background: #fff;
+        strong {
             color: #000;
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
-        }
-
-        .enter-sub {
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.3);
-            text-transform: uppercase;
-            margin-top: 10px;
-        }
-
-        #ferro-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-            z-index: 5;
-            border-radius: 20px;
-        }
-
-        .pie-menu {
-            position: relative;
-            z-index: 10;
-            width: 0;
-            height: 0;
-            pointer-events: none;
-        }
-
-        .pie-item {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            background: rgba(200, 169, 126, 0.1);
-            border: 1px solid rgba(200, 169, 126, 0.4);
-            backdrop-filter: blur(12px);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #c8a97e;
-            font-size: 0.85rem;
-            font-weight: 700;
-            cursor: pointer;
-            pointer-events: auto;
-            transition: background 0.3s, border 0.3s;
-            user-select: none;
-            opacity: 0;
-            transform: scale(0);
-        }
-
-        .pie-item:hover,
-        .pie-item.active {
-            background: rgba(200, 169, 126, 0.3);
-            border-color: #c8a97e;
-            color: #fff;
-            box-shadow: 0 0 20px rgba(200, 169, 126, 0.3);
-        }
-
-        #ferro-hint {
-            position: absolute;
-            bottom: 20px;
-            color: rgba(200, 169, 126, 0.6);
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            pointer-events: none;
-            z-index: 6;
-            text-transform: uppercase;
         }
 
         @media (max-width: 700px) {
@@ -607,29 +447,12 @@
 
             .compression-box {
                 flex-direction: column;
-                gap: 1rem;
+                padding: 2rem;
             }
 
-            .compress-arrow {
-                transform: rotate(90deg);
-                animation: arrowSlideVertical 1.5s infinite;
-            }
-
-            @keyframes arrowSlideVertical {
-                0% {
-                    opacity: 0.2;
-                    transform: translateY(-5px) rotate(90deg);
-                }
-
-                50% {
-                    opacity: 1;
-                    transform: translateY(5px) rotate(90deg);
-                }
-
-                100% {
-                    opacity: 0.2;
-                    transform: translateY(-5px) rotate(90deg);
-                }
+            .bar-row {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
             }
         }
     </style>
@@ -639,37 +462,15 @@
     <div id="cursor-dot"></div>
     <div id="cursor-ring"></div>
 
-    <div id="splash-screen">
-        <div class="splash-content">
-            <div class="splash-credits">HAIN · 2026</div>
-            <h1 class="splash-title">HAIN PORTFOLIO</h1>
-            <p class="splash-desc">3D 美術師 & AI 開發者<br>模型訓練歷程與技術實踐報告</p>
-            <div class="splash-action">
-                <button id="enter-btn" class="btn-enter">
-                    <span>進入報告</span>
-                    <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-                        <path d="M3 8H13M13 8L8 3M13 8L8 13" stroke="currentColor" stroke-width="2" />
-                    </svg>
-                </button>
-                <div class="enter-sub">ENTER REPORT</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container">
+    <div class="container" id="main-content">
         <header>
             <h1>訓練數據詳細報告</h1>
         </header>
 
-        <!-- v1 v2 知識蒸餾的導覽 -->
-        <div id="ferro-nav-container">
-            <canvas id="ferro-canvas"></canvas>
-            <div id="pie-menu" class="pie-menu">
-                <div class="pie-item active" data-target="v1"><span>V1.0<br>初始版本</span></div>
-                <div class="pie-item" data-target="v2"><span>V2.0<br>學習遷移</span></div>
-                <div class="pie-item" data-target="distill"><span>壓縮<br>知識蒸餾</span></div>
-            </div>
-            <div id="ferro-hint">點擊核心切換章節</div>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="v1">v1.0 數據</button>
+            <button class="tab-btn" data-tab="v2">v2.0 提升</button>
+            <button class="tab-btn" data-tab="distill">知識蒸餾</button>
         </div>
 
         <!-- 1. v1.0 數據 -->
@@ -697,12 +498,6 @@
                             <div class="bar-fill v1" data-val="59.6">0.596</div>
                         </div>
                     </div>
-                    <div class="bar-row">
-                        <span class="cat-name">剪刀 (Scissors) AP</span>
-                        <div class="bar-bg">
-                            <div class="bar-fill v1" data-val="73.1">0.731</div>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="reason-box">
@@ -723,33 +518,28 @@
         <div id="v2" class="content-section">
             <div class="report-box">
                 <h2 class="section-title">v2.0 兩階段遷移訓練策略</h2>
-                <p>
-                    為了解決第一版對行人辨識的薄弱，我採取了<strong>兩階段遷移學習 (Two-stage Transfer Learning)</strong>，讓模型從「看懂世界」成長為「掌握專業」。
-                </p>
+                <p>為了解決第一版對行人辨識的薄弱，我採取了<strong>兩階段遷移學習 (Two-stage Transfer Learning)</strong>，讓模型從「看懂世界」成長為「掌握專業」。</p>
 
                 <div class="strategy-card">
                     <div class="strategy-header">
-                        <div class="stage-num">1</div>
-                        <span class="strategy-title">通用特徵強化 (General Feature Extraction)</span>
+                        <div class="stage-num">1</div><span class="strategy-title">通用特徵強化 (General Feature
+                            Extraction)</span>
                     </div>
-                    <div class="action-row">
-                        <span class="label">執行動作：</span> 導入抓人能力領先的數據訓練權重 (如 COCO/CrowdHuman/ImageNet)。
-                    </div>
+                    <div class="action-row"><span class="label">執行動作：</span> 導入抓人能力領先的數據訓練權重 (如
+                        COCO/CrowdHuman/ImageNet)。</div>
                     <div class="reason-box">
                         <span class="reason-title">💡 為什麼要這一步？</span>
-                        <p>模型需要先學會理解基礎的線條、邊緣與圓形，進而組成「人體」輪廓。這能避免因直接使用小數據從零開始練（Scratch）而導致的定義狹隘與過擬合。</p>
+                        <p>模型需要先學會理解基礎的線條、邊緣與圓形，進而組成「人體」輪廓。這能避免因直接使用小數據從零開始練而導致的過擬合問題。</p>
                     </div>
                     <div class="result-box">✓ 實驗結果：模型獲得了強大的底層通用特徵提取能力。</div>
                 </div>
 
                 <div class="strategy-card">
                     <div class="strategy-header">
-                        <div class="stage-num">2</div>
-                        <span class="strategy-title">特定場景微調與疊加 (Domain-specific Fine-tuning)</span>
+                        <div class="stage-num">2</div><span class="strategy-title">特定場景微調與疊加 (Domain-specific
+                            Fine-tuning)</span>
                     </div>
-                    <div class="action-row">
-                        <span class="label">執行動作：</span> 疊加專案場景自有數據集，同時增加「刀具」與「剪刀」的特定目標樣本。
-                    </div>
+                    <div class="action-row"><span class="label">執行動作：</span> 疊加專案場景自有數據集，同時增加「刀具」與「剪刀」的特定目標樣本。</div>
                     <div class="reason-box">
                         <span class="reason-title">💡 為什麼要這一步？</span>
                         <p>讓模型把學到的「通用視覺能力」，轉化成解決專案問題的「專業能力」。使其適應專案環境下的背景分佈（如家中光線與視角）。</p>
@@ -757,58 +547,27 @@
                     <div class="result-box">✓ 實驗結果：保持「抓人」優勢的同時，學會了精準辨識危險目標。</div>
                 </div>
 
-                <div class="report-box" style="box-shadow: none; border: 1px solid #e1e4e8; background: #fff;">
-                    <h3 style="margin-bottom: 1.5rem;">📈 優化成果總結</h3>
+                <div class="report-box" style="box-shadow:none; border:1px solid #e1e4e8;">
+                    <h3 style="margin-bottom:1.5rem">📈 優化成果總結</h3>
                     <div class="chart-container">
-                        <div class="bar-row">
-                            <span class="cat-name">人 (Person) AP</span>
+                        <div class="bar-row"><span class="cat-name">人 (Person) AP</span>
                             <div class="bar-bg">
                                 <div class="bar-fill v2" data-val="80.2">0.802 (+63%)</div>
                             </div>
                         </div>
-                        <div class="bar-row">
-                            <span class="cat-name">刀具 (Knife) AP</span>
+                        <div class="bar-row"><span class="cat-name">刀具 (Knife) AP</span>
                             <div class="bar-bg">
                                 <div class="bar-fill v2" data-val="69.6">0.696 (+16.7%)</div>
                             </div>
                         </div>
-                        <div class="bar-row">
-                            <span class="cat-name">剪刀 (Scissors) AP</span>
-                            <div class="bar-bg">
-                                <div class="bar-fill v2" data-val="77.8">0.778 (+6.4%)</div>
-                            </div>
-                        </div>
                     </div>
-                    <p style="font-size: 0.95rem; font-weight: 700; color: var(--accent-green); margin-bottom: 2rem;">整體
-                        mAP@0.5 從 0.607 提升至
-                        0.758 (+24.8%)</p>
-
-                    <h4
-                        style="margin-bottom: 1rem; color: var(--text-sub); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">
-                        各類別精進幅度 (AP Increase)</h4>
-                    <div class="chart-container"
-                        style="background: rgba(52, 199, 89, 0.05); border: 1px dashed rgba(52, 199, 89, 0.2); padding: 1.5rem; border-radius: 12px;">
-                        <div class="bar-row">
-                            <span class="cat-name">人 (Person)</span>
-                            <div class="bar-bg" style="height: 12px;">
-                                <div class="bar-fill" data-val="63" style="background: var(--accent-green);">+63%</div>
-                            </div>
-                        </div>
-                        <div class="bar-row">
-                            <span class="cat-name">刀具 (Knife)</span>
-                            <div class="bar-bg" style="height: 12px;">
-                                <div class="bar-fill" data-val="16.7" style="background: var(--accent-green);">+16.7%
-                                </div>
-                            </div>
-                        </div>
-                        <div class="bar-row">
-                            <span class="cat-name">剪刀 (Scissors)</span>
-                            <div class="bar-bg" style="height: 12px;">
-                                <div class="bar-fill" data-val="6.4" style="background: var(--accent-green);">+6.4%
-                                </div>
-                            </div>
-                        </div>
+                    <div class="stats-grid">
+                        <div class="stat-card"><span class="stat-label">整體 mAP@0.5</span><span class="stat-val">0.758
+                                (+24.8%)</span></div>
+                        <div class="stat-card"><span class="stat-label">行人漏報率</span><span class="stat-val">21% (↓
+                                銳減)</span></div>
                     </div>
+                    <div class="result-box">✓ 結論：顯著提升了安全監控在複雜場景下的實用價值。</div>
                 </div>
 
                 <div class="photo-grid" style="margin-top:2rem">
@@ -822,19 +581,16 @@
         <div id="distill" class="content-section">
             <div class="report-box">
                 <h2 class="section-title">知識蒸餾 (Knowledge Distillation)</h2>
-                <p class="desc-text">
-                    為了滿足 <strong>Smart Safety Care</strong> 系統在各類運算資源受限設備（如中低階電腦或行動端）的實時監控需求，我實施了先進的知識蒸餾技術。
-                </p>
+                <p>為了滿足 <strong>Smart Safety Care</strong> 系統在各種運算資源受限設備上的實時監控需求，我實施了先進的知識蒸餾技術。</p>
 
                 <div class="strategy-card" style="border-color: var(--accent-purple);">
                     <div class="strategy-header">
-                        <div class="stage-num" style="background:var(--accent-purple)">★</div>
-                        <span class="strategy-title">模型壓縮與軟標籤學習</span>
+                        <div class="stage-num" style="background:var(--accent-purple)">★</div><span
+                            class="strategy-title">模型壓縮與軟標籤學習</span>
                     </div>
 
-                    <div class="action-row">
-                        <span class="label purple">模型壓縮：</span> 將權重從 49.7 MB 壓縮至 6 MB (約 88% 壓縮率)。
-                    </div>
+                    <div class="action-row"><span class="label purple">模型壓縮 (Model Compression)：</span> 將模型從
+                        <strong>49.7 MB</strong> 壓縮至 <strong>6 MB</strong> (約 88% 的壓縮率)，極大提升了推理速度。</div>
 
                     <div class="compression-box">
                         <div class="file-status"><span class="file-size">49.7 <small>MB</small></span><span
@@ -846,14 +602,11 @@
 
                     <div class="reason-box" style="border-left-color: var(--accent-purple);">
                         <span class="reason-title">💡 軟標籤學習 (Soft Label Learning)：</span>
-                        <p>透過教師模型的機率分佈引導學生模型，讓學生模型學到了物件之間的<strong>「相似性」</strong>資訊（例如刀子和剪刀的細微差異），而不僅僅是硬性的對錯，顯著提升了小模型的魯棒性。
-                        </p>
+                        <p>透過教師模型的機率分佈引導學生模型，讓其學到了物件之間的<strong>「相似性」</strong>資訊（例如刀子和剪刀的細微差異），而不僅僅是硬性的對錯。</p>
                     </div>
 
-                    <div class="action-row">
-                        <span class="label purple">技術細節：</span> 以高精度的第二版模型為 Teacher，引導輕量化 <strong>YOLOv8n</strong> 作為
-                        Student。
-                    </div>
+                    <div class="action-row"><span class="label purple">技術手段：</span> 以高精度的第二版模型為 Teacher，引導輕量化
+                        <strong>YOLOv8n</strong> 作為 Student。</div>
 
                     <div class="stats-grid">
                         <div class="stat-card">
@@ -861,13 +614,13 @@
                             <span class="stat-val">≈ 0.75</span>
                         </div>
                         <div class="stat-card">
-                            <span class="stat-label">運算資源痛點解決</span>
+                            <span class="stat-label">部署成果</span>
                             <span class="stat-val">Real-time Smooth</span>
                         </div>
                     </div>
 
-                    <div class="result-box" style="color:var(--accent-purple)">✓
-                        最終成果：成功實現了「低功耗、高精度」的邊緣端部署需求，使即時監控不再受限於硬體性能。</div>
+                    <div class="result-box" style="color:var(--accent-purple)">✓ 成果：成功實現了「低功耗、高精度」的邊緣端部署，使即時監控
+                        (Real-time tracking) 在配備受限的裝置上更加流暢。</div>
                 </div>
 
                 <div class="photo-grid">
@@ -878,224 +631,54 @@
         </div>
     </div>
 
-    <!-- Lightbox -->
+    <!-- Lightbox Overlay -->
     <div id="lightbox"><img src="" alt=""></div>
 
-    // --- 0. SPLASH SCREEN (NEW) ---
-    function initSplash() {
-    const splash = document.getElementById('splash-screen');
-    const enterBtn = document.getElementById('enter-btn');
-    if (!splash || !enterBtn) return;
+    <script>
+        // Cursor Logic
+        const dot = document.getElementById('cursor-dot'), ring = document.getElementById('cursor-ring');
+        let mX = 0, mY = 0, rX = 0, rY = 0;
+        document.addEventListener('mousemove', (e) => { mX = e.clientX; mY = e.clientY; dot.style.left = mX + 'px'; dot.style.top = mY + 'px'; });
+        function anim() { rX += (mX - rX) * 0.15; rY += (mY - rY) * 0.15; ring.style.left = rX + 'px'; ring.style.top = rY + 'px'; requestAnimationFrame(anim); }
+        anim();
 
-    // 如果 URL 包含 ?direct=1，直接跳過進場畫面
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('direct') === '1') {
-    splash.style.display = 'none';
-    return;
-    }
-
-    const tl = gsap.timeline();
-    tl.from(".splash-credits", { opacity: 0, y: 10, duration: 0.8, delay: 0.5 })
-    .from(".splash-title", { opacity: 0, scale: 0.9, filter: "blur(10px)", duration: 1.5, ease: "expo.out" }, "-=0.4")
-    .from(".splash-desc", { opacity: 0, y: 20, duration: 1 }, "-=1")
-    .from(".splash-action", { opacity: 0, scale: 0.8, duration: 0.8, ease: "back.out(1.7)" }, "-=0.5");
-    enterBtn.addEventListener('click', () => {
-    gsap.to(splash, { scale: 1.3, opacity: 0, duration: 1.2, ease: "expo.inOut", onComplete: () => {
-    splash.style.display = 'none'; } });
-    });
-    }
-    initSplash();
-
-    // --- 1. SETTINGS & DATA ---
-    const SECTIONS = {
-    v1: { label: '初始版本' },
-    v2: { label: '學習遷移' },
-    distill: { label: '知識蒸餾' }
-    };
-    let activeSection = 'v1';
-
-    // --- 2. GLOBAL MOUSE & GSAP ---
-    const globalMouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-    document.addEventListener('mousemove', e => {
-    globalMouse.x = e.clientX;
-    globalMouse.y = e.clientY;
-    }, { passive: true });
-
-    // --- 3. WEBGL FERROFLUID ENGINE ---
-    const container = document.getElementById('ferro-nav-container');
-    const canvas = document.getElementById('ferro-canvas');
-    const pieMenu = document.getElementById('pie-menu');
-    if (canvas) {
-    const gl = canvas.getContext('webgl');
-    const vs = `attribute vec2 p;void main(){gl_Position=vec4(p,0,1);}`;
-    const fs = `
-    precision highp float;
-    uniform float u_time;
-    uniform vec2 u_res;
-    uniform vec2 u_mouse;
-    uniform float u_active;
-
-    float snoise(vec3 v);
-    float sdf(vec3 p) {
-    float sphere = length(p) - (u_active > 0.5 ? 1.6 : 1.2);
-    // Spiky noise
-    float noise = abs(snoise(p * 2.5 + u_time * 0.4)) * 0.6;
-    float spikes = (1.0 - abs(snoise(p * 12.0 + u_time * 2.0))) * 0.25;
-    return sphere - noise - (u_active > 0.5 ? spikes * 2.0 : spikes * 0.4);
-    }
-
-    // Simplified snoise for performance
-    vec3 mod289(vec3 x){return x-floor(x*(1.0/289.0))*289.0;}
-    vec4 mod289(vec4 x){return x-floor(x*(1.0/289.0))*289.0;}
-    vec4 permute(vec4 x){return mod289(((x*34.0)+1.0)*x);}
-    vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-0.85373472095314*r;}
-    float snoise(vec3 v){
-    const vec2 C=vec2(1.0/6.0,1.0/3.0);const vec4 D=vec4(0.0,0.5,1.0,2.0);
-    vec3 i=floor(v+dot(v,C.yyy));vec3 x0=v-i+dot(i,C.xxx);
-    vec3 g=step(x0.yzx,x0.xyz);vec3 l=1.0-g;vec3 i1=min(g.xyz,l.zxy);vec3 i2=max(g.xyz,l.zxy);
-    vec3 x1=x0-i1+C.xxx;vec3 x2=x0-i2+C.yyy;vec3 x3=x0-D.yyy;
-    i=mod289(i);vec4
-    p=permute(permute(permute(i.z+vec4(0.0,i1.z,i2.z,1.0))+i.y+vec4(0.0,i1.y,i2.y,1.0))+i.x+vec4(0.0,i1.x,i2.x,1.0));
-    float n_=0.142857142857;vec3 ns=n_*D.wyz-D.xzx;vec4 j=p-49.0*floor(p*ns.z*ns.z);
-    vec4 x_=floor(j*ns.z);vec4 y_=floor(j-7.0*x_);vec4 x=x_*ns.x+ns.yyyy;vec4 y=y_*ns.x+ns.yyyy;
-    vec4 h=1.0-abs(x)-abs(y);vec4 b0=vec4(x.xy,y.xy);vec4 b1=vec4(x.zw,y.zw);
-    vec4 s0=floor(b0)*2.0+1.0;vec4 s1=floor(b1)*2.0+1.0;vec4 sh=-step(h,vec4(0.0));
-    vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
-    vec3 p0=vec3(a0.xy,h.x);vec3 p1=vec3(a0.zw,h.y);vec3 p2=vec3(a1.xy,h.z);vec3 p3=vec3(a1.zw,h.w);
-    vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
-    p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;
-    vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0);
-    m=m*m;return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
-    }
-
-    void main() {
-    vec2 uv = (gl_FragCoord.xy - 0.5 * u_res) / u_res.y * 5.0;
-    vec3 ro = vec3(0,0,-5);
-    vec3 rd = normalize(vec3(uv, 2.5));
-    // Mouse Influence (Magnetic Attraction)
-    rd.xy += (u_mouse - 0.5) * 0.35;
-
-    float t = 0.0, d;
-    for(int i=0; i<48; i++){ d=sdf(ro + rd * t); if(d < 0.001 || t> 10.0) break;
-        t += d;
-        }
-        if(t < 10.0) { vec3 p=ro + rd * t; vec2 e=vec2(0.01, 0); vec3
-            n=normalize(vec3(sdf(p+e.xyy)-sdf(p-e.xyy),sdf(p+e.yxy)-sdf(p-e.yxy),sdf(p+e.yyx)-sdf(p-e.yyx))); float
-            fres=pow(1.0 + dot(rd, n), 3.0); float spec=pow(max(dot(reflect(rd, n), vec3(0.57)), 0.0), 32.0); vec3
-            col=mix(vec3(0.02), vec3(0.8, 0.7, 0.5), fres * 0.6); col +=spec * 0.8; gl_FragColor=vec4(col, 1.0); } else
-            { gl_FragColor=vec4(0.0, 0.0, 0.0, 0.0); } } `; function createShader(gl, t, s) { const
-            sh=gl.createShader(t); gl.shaderSource(sh, s); gl.compileShader(sh); return sh; } const
-            prog=gl.createProgram(); gl.attachShader(prog, createShader(gl, gl.VERTEX_SHADER, vs));
-            gl.attachShader(prog, createShader(gl, gl.FRAGMENT_SHADER, fs)); gl.linkProgram(prog); gl.useProgram(prog);
-            const posLoc=gl.getAttribLocation(prog, 'p' ); const posBuf=gl.createBuffer();
-            gl.bindBuffer(gl.ARRAY_BUFFER, posBuf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1,
-            3]), gl.STATIC_DRAW); gl.enableVertexAttribArray(posLoc); gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false,
-            0, 0); const uTime=gl.getUniformLocation(prog, 'u_time' ); const uRes=gl.getUniformLocation(prog, 'u_res' );
-            const uMouse=gl.getUniformLocation(prog, 'u_mouse' ); const uActive=gl.getUniformLocation(prog, 'u_active'
-            ); let mouseX=0.5, mouseY=0.5, targetMouseX=0.5, targetMouseY=0.5; let isMenuActive=false; function
-            render(time) { const dpr=Math.min(window.devicePixelRatio, 1.5); if (canvas.width !==container.clientWidth *
-            dpr) { canvas.width=container.clientWidth * dpr; canvas.height=container.clientHeight * dpr; gl.viewport(0,
-            0, canvas.width, canvas.height); } mouseX +=(targetMouseX - mouseX) * 0.1; mouseY +=(targetMouseY - mouseY)
-            * 0.1; gl.uniform1f(uTime, time * 0.001); gl.uniform2f(uRes, canvas.width, canvas.height);
-            gl.uniform2f(uMouse, mouseX, 1.0 - mouseY); gl.uniform1f(uActive, isMenuActive ? 1.0 : 0.0);
-            gl.drawArrays(gl.TRIANGLES, 0, 3); requestAnimationFrame(render); } requestAnimationFrame(render); //
-            Interaction canvas.addEventListener('mousemove', e=> {
-            if (!isMenuActive) {
-            const rect = canvas.getBoundingClientRect();
-            targetMouseX = (e.clientX - rect.left) / rect.width;
-            targetMouseY = (e.clientY - rect.top) / rect.height;
-            }
-            });
-            canvas.addEventListener('click', () => toggleMenu());
-
-            function toggleMenu(force) {
-            isMenuActive = (force !== undefined) ? force : !isMenuActive;
-            if (isMenuActive) {
-            gsap.to(".pie-item", {
-            scale: 1, opacity: 1, duration: 0.6,
-            stagger: 0.1, ease: "back.out(1.7)"
-            });
-            document.getElementById('ferro-hint').innerText = '點擊核心關閉選單';
-            } else {
-            gsap.to(".pie-item", {
-            scale: 0, opacity: 0, duration: 0.4,
-            stagger: 0.05, ease: "power2.in"
-            });
-            document.getElementById('ferro-hint').innerText = '點擊核心切換章節';
-            }
-            }
-
-            // Pie Items Positioning & Hover
-            const items = document.querySelectorAll('.pie-item');
-            items.forEach((item, i) => {
-            const count = items.length;
-            const angle = (i / count) * Math.PI * 2 - Math.PI / 2;
-            const radius = 130;
-            const x = Math.cos(angle) * radius;
-            const y = Math.sin(angle) * radius;
-            item.style.left = `calc(50% + ${x}px)`;
-            item.style.top = `calc(50% + ${y}px)`;
-            item.style.marginLeft = '-50px';
-            item.style.marginTop = '-50px';
-
-            item.addEventListener('mouseenter', () => {
-            const rect = item.getBoundingClientRect();
-            const containerRect = container.getBoundingClientRect();
-            targetMouseX = (rect.left + rect.width / 2 - containerRect.left) / containerRect.width;
-            targetMouseY = (rect.top + rect.height / 2 - containerRect.top) / containerRect.height;
-            });
-            item.addEventListener('mouseleave', () => {
-            // Optional: reset mouse if needed
-            });
-            item.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const target = item.getAttribute('data-target');
-            items.forEach(el => el.classList.remove('active'));
-            item.classList.add('active');
-            switchTab(target);
-            toggleMenu(false);
-            });
-            });
-            }
-
-            // --- 4. TAB LOGIC ---
-            function switchTab(id) {
-            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.bar-fill').forEach(b => b.style.width = '0%');
-            setTimeout(animateBars, 100);
-            }
-
-            function animateBars() {
-            document.querySelectorAll('.content-section.active .bar-fill').forEach(bar => {
-            bar.style.width = bar.getAttribute('data-val') + '%';
-            });
-            }
-            setTimeout(animateBars, 500);
-
-            // --- 5. CURSOR & LIGHTBOX (Original kept & optimized) ---
-            const dot = document.getElementById('cursor-dot'), ring = document.getElementById('cursor-ring');
-            let rX = 0, rY = 0;
-            function animCursor() {
-            rX += (globalMouse.x - rX) * 0.15;
-            rY += (globalMouse.y - rY) * 0.15;
-            dot.style.left = globalMouse.x + 'px'; dot.style.top = globalMouse.y + 'px';
-            ring.style.left = rX + 'px'; ring.style.top = rY + 'px';
-            requestAnimationFrame(animCursor);
-            }
-            animCursor();
-
-            document.querySelectorAll('button, .photo-item, .pie-item').forEach(el => {
+        // Interactive Elements Hover
+        document.querySelectorAll('button, .photo-item').forEach(el => {
             el.addEventListener('mouseenter', () => ring.style.transform = 'translate(-50%,-50%) scale(1.5)');
             el.addEventListener('mouseleave', () => ring.style.transform = 'translate(-50%,-50%) scale(1)');
-            });
+        });
 
-            const lb = document.getElementById('lightbox'), lbI = lb.querySelector('img');
-            document.querySelectorAll('.photo-item img').forEach(i => {
-            i.addEventListener('click', () => { lbI.src = i.src; lb.classList.add('open'); });
+        // Bar Animation
+        function animateBars() {
+            document.querySelectorAll('.content-section.active .bar-fill').forEach(bar => {
+                bar.style.width = bar.getAttribute('data-val') + '%';
             });
-            lb.addEventListener('click', () => lb.classList.remove('open'));
-            </script>
+        }
+
+        // Tab Switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab).classList.add('active');
+
+                // Reset and re-animate bars
+                document.querySelectorAll('.bar-fill').forEach(b => b.style.width = '0%');
+                setTimeout(animateBars, 150);
+            });
+        });
+
+        // Lightbox Zoom
+        const lb = document.getElementById('lightbox'), lbI = lb.querySelector('img');
+        document.querySelectorAll('.photo-item img').forEach(i => {
+            i.addEventListener('click', () => { lbI.src = i.src; lb.classList.add('open'); });
+        });
+        lb.addEventListener('click', () => lb.classList.remove('open'));
+
+        // Initial Start
+        window.addEventListener('load', () => setTimeout(animateBars, 600));
+    </script>
 </body>
 
 </html>
