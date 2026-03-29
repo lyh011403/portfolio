@@ -70,13 +70,13 @@ for (let i = 1; i <= 21; i++)
 CATEGORIES.embedded.items = [
     {
         type: 'iframe',
-        src: './ssc.html',
+        src: './public/ssc.html',
         thumb: './assets/embedded_1.jpg',
         title: 'Smart Safety Care'
     },
     {
         type: 'iframe',
-        src: './training-gallery.html',
+        src: './public/training-gallery.html?direct=1',
         thumb: './assets/training_report_new_cover.png',
         title: '訓練數據詳細報告：AI 模型成長分析'
     },
@@ -203,7 +203,14 @@ function buildPortfolio(cat) {
             el.addEventListener('mouseenter', () => v.play());
             el.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0; });
         }
-        el.addEventListener('click', () => openLightbox(item));
+        el.addEventListener('click', () => {
+            if (item.type === 'iframe') {
+                // 如果是報告或簡報類，直接全螢幕跳轉以提供完整體驗（避免在 Lightbox 內嵌套兩層進場畫面）
+                window.location.href = item.src;
+            } else {
+                openLightbox(item);
+            }
+        });
         grid.appendChild(el);
     });
 
