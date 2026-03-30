@@ -17,361 +17,319 @@
     <link rel="icon" type="image/png" href="./public/assets/LOGO.png">
 
 <body>
-    <!-- Splash Entrance Screen -->
+    <!-- ============================================
+         SPLASH SCREEN - CYBERPUNK GLITCH LOADER
+         ============================================ -->
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+        /* ── 全螢幕加載覆蓋層 ── */
         #splash-screen {
             position: fixed;
             inset: 0;
-            background: #030303;
+            background: #000;
             z-index: 100000;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            font-family: 'Share Tech Mono', 'Inter', monospace;
             overflow: hidden;
-            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
             user-select: none;
         }
 
-        #splash-screen.hidden {
-            opacity: 0;
-            pointer-events: none;
-            transform: scale(1.1);
+        /* 進主頁的退出動畫：平滑縮放淡出 */
+        #splash-screen.exit-glitch {
+            animation: screen-exit 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes screen-exit {
+            0%   { opacity: 1; transform: scale(1); filter: blur(0); }
+            100% { opacity: 0; transform: scale(1.1); filter: blur(10px); pointer-events: none; }
         }
 
-        #splash-mask {
+        #splash-screen.hidden {
+            display: none;
+        }
+
+        /* ── 掃描線背景 ── */
+        #splash-scanlines {
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at center, transparent, rgba(0, 0, 0, 0.8));
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(255,255,255,0.012) 2px,
+                rgba(255,255,255,0.012) 4px
+            );
+            pointer-events: none;
             z-index: 1;
+            animation: scanline-drift 8s linear infinite;
+        }
+        @keyframes scanline-drift {
+            from { background-position: 0 0; }
+            to   { background-position: 0 100px; }
         }
 
+        /* ── 故障橫線 ── */
+        #splash-glitch-bar {
+            position: absolute;
+            height: 2px;
+            background: rgba(255,255,255,0.06);
+            left: 0; right: 0;
+            top: 33%;
+            animation: glitch-bar-slide 4s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 2;
+        }
+        @keyframes glitch-bar-slide {
+            0%,100% { top: 33%; opacity: 0.06; }
+            25%      { top: 60%; opacity: 0.18; }
+            50%      { top: 20%; opacity: 0.06; }
+            75%      { top: 75%; opacity: 0.14; }
+        }
+
+        /* ── 主體內容 ── */
         .splash-content {
             position: relative;
-            z-index: 2;
+            z-index: 10;
             text-align: center;
             width: 100%;
             padding: 2rem;
-            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
+        /* ── 標題區 (初始進場) ── */
         .splash-meta {
-            font-size: 0.9rem;
-            font-weight: 700;
-            letter-spacing: 0.5em;
-            /* 增加間距 */
-            color: #fff;
-            margin-bottom: 2.5rem;
+            font-size: 0.72rem;
+            font-weight: 400;
+            letter-spacing: 0.6em;
+            color: rgba(255,255,255,0.35);
+            margin-bottom: 2rem;
             text-transform: uppercase;
             opacity: 0;
-            transform: translateY(20px);
-            position: relative;
-            display: inline-block;
-            overflow: hidden;
-            padding: 0.2rem 0;
-        }
-
-        /* 掃描線光效改為如星光閃爍的微弱動態 */
-        .splash-meta::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 80%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            animation: meta-shimmer 6s infinite ease-in-out;
-        }
-
-        @keyframes meta-shimmer {
-            0% {
-                left: -100%;
-            }
-
-            30% {
-                left: 100%;
-            }
-
-            100% {
-                left: 100%;
-            }
+            transform: translateY(10px);
         }
 
         .splash-logo {
-            font-size: clamp(3rem, 15vw, 9rem);
+            font-size: clamp(3.5rem, 14vw, 9rem);
             font-weight: 900;
             letter-spacing: -0.04em;
             line-height: 0.9;
-            margin-bottom: 2.5rem;
+            margin-bottom: 1.5rem;
             opacity: 0;
-            transform: translateY(40px);
+            transform: translateY(30px);
+            color: #fff;
             position: relative;
-            cursor: pointer;
-
-            /* 探照燈效果基礎設定 */
-            color: rgba(255, 255, 255, 0.15);
-            background: radial-gradient(circle 120px at var(--x, 50%) var(--y, 50%),
-                    #c8a97e 0%,
-                    rgba(200, 169, 126, 0.4) 50%,
-                    transparent 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
-        .splash-logo .outline {
-            -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.1);
-            color: transparent;
-            transition: all 0.4s ease;
-        }
-
-        /* 懸停時僅增加光感，不變大 */
-        .splash-logo:hover {
-            transform: translateY(-2px);
-        }
-
-        .splash-desc {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 4rem;
-            font-weight: 300;
-            letter-spacing: 0.1em;
+        /* Glitch 文字效果 */
+        .splash-logo::before,
+        .splash-logo::after {
+            content: 'HAIN.';
+            position: absolute;
+            top: 0; left: 0; right: 0;
             opacity: 0;
-            transform: translateY(20px);
-            /* 漸變色質感 */
-            background: linear-gradient(to right, #fff, rgba(255, 255, 255, 0.4), #fff);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: text-shine 5s linear infinite;
+        }
+        .splash-logo::before {
+            color: #ff003c;
+            animation: logo-glitch-1 6s infinite;
+        }
+        .splash-logo::after {
+            color: #00d4ff;
+            animation: logo-glitch-2 6s infinite;
+        }
+        @keyframes logo-glitch-1 {
+            0%,94%,100% { opacity:0; clip-path: inset(0 0 100% 0); }
+            95% { opacity:0.7; clip-path: inset(20% 0 60% 0); transform: translate(-3px,0); }
+            97% { opacity:0.7; clip-path: inset(50% 0 30% 0); transform: translate(2px,0); }
+            99% { opacity:0; }
+        }
+        @keyframes logo-glitch-2 {
+            0%,91%,100% { opacity:0; clip-path: inset(0 0 100% 0); }
+            92% { opacity:0.6; clip-path: inset(60% 0 10% 0); transform: translate(3px,0); }
+            94% { opacity:0.6; clip-path: inset(10% 0 70% 0); transform: translate(-2px,0); }
+            96% { opacity:0; }
         }
 
-        @keyframes text-shine {
-            to {
-                background-position: 200% center;
-            }
-        }
-
-        /* 讓文字隨背景粒子「呼吸」的微光 */
-        .splash-meta,
         .splash-desc {
-            animation: text-breathing 4s ease-in-out infinite alternate;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.4);
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(10px);
         }
 
-        @keyframes text-breathing {
-            from {
-                text-shadow: 0 0 5px rgba(200, 169, 126, 0);
-            }
-
-            to {
-                text-shadow: 0 0 15px rgba(200, 169, 126, 0.4);
-            }
-        }
-
+        /* ── 進入按鈕 ── */
         .splash-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 1.5rem;
-            padding: 1.2rem 3.5rem;
+            gap: 1rem;
+            padding: 0.9rem 3rem;
             background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 100px;
+            border: 1px solid rgba(255,255,255,0.5);
             color: #fff;
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.3em;
             cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: border-color 0.3s, color 0.3s, box-shadow 0.3s;
             position: relative;
             overflow: hidden;
-            opacity: 0;
-            transform: translateY(20px);
         }
-
+        .splash-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+            transition: left 0.5s;
+        }
+        .splash-btn:hover::before { left: 100%; }
         .splash-btn:hover {
-            border-color: #c8a97e;
-            color: #c8a97e;
-            padding-right: 4.5rem;
-            box-shadow: 0 0 30px rgba(200, 169, 126, 0.15);
+            border-color: #fff;
+            box-shadow: 0 0 20px rgba(255,255,255,0.15), inset 0 0 20px rgba(255,255,255,0.03);
+        }
+        /* 按鈕點擊後收縮消失動畫 */
+        .splash-btn.clicked {
+            animation: btn-collapse 0.5s ease forwards;
+        }
+        @keyframes btn-collapse {
+            0%   { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.9); }
         }
 
-        .splash-btn .arrow {
-            transition: transform 0.5s ease;
+        /* ── 內容轉場動畫 ── */
+        .splash-intro-exit {
+            animation: content-jump 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
         }
-
-        .splash-btn:hover .arrow {
-            transform: translateX(10px);
+        @keyframes content-jump {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.85); filter: blur(5px); }
         }
 
         .splash-sub {
             display: block;
-            margin-top: 1.5rem;
-            font-size: 0.7rem;
-            color: rgba(255, 255, 255, 0.3);
+            margin-top: 1rem;
+            font-size: 0.62rem;
+            color: rgba(255,255,255,0.2);
             text-transform: uppercase;
-            letter-spacing: 0.2em;
+            letter-spacing: 0.4em;
             opacity: 0;
         }
 
-        #loader-container {
-            display: none;
+        /* ════════════════════════════════
+           CYBERPUNK LOADER (加載中畫面)
+           ════════════════════════════════ */
+        #loader-screen {
+            position: absolute;
+            inset: 0;
+            background: #000;
+            display: flex;
             flex-direction: column;
             align-items: center;
-            width: 460px; /* 稍微加寬以符合圖中比例 */
-            position: fixed; 
-            top: 50%;
-            left: 50%;
-            margin-top: -20px;
-            margin-left: -230px;
+            justify-content: center;
             opacity: 0;
-            transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 99999;
-        }
-
-        #loader-container.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        /* HUD 標題與百分比容器 */
-        .loader-header {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 20px;
-            font-family: 'Inter', monospace;
-            color: #fff;
-            text-transform: uppercase;
-        }
-
-        .loader-tag {
-            font-size: 1.2rem;
-            font-weight: 800;
-            letter-spacing: 0.2em;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
-        }
-
-        .loader-val {
-            font-size: 1rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        /* HUD 外殼與容器：如參考圖的質感 */
-        #bar-shell {
-            width: 100%;
-            height: 14px; /* 加粗以符合圖中方塊感 */
-            background: rgba(255, 255, 255, 0.08); 
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 2px;
-            position: relative;
-            overflow: visible; 
-        }
-
-        #bar-fill {
-            width: 0%;
-            height: 100%;
-            background: #fff; /* 高亮純白填充 */
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.2);
-            position: relative;
-            transition: none; 
-        }
-
-        /* 裝飾線：條下方的小線段 */
-        .loader-deco {
-            width: 100%;
-            height: 3px;
-            background: #fff;
-            margin-top: 10px;
-            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);
-        }
-
-        /* Canvas 疊加層：全螢幕 */
-        #loader-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
             pointer-events: none;
-            z-index: 9999;
+            transition: opacity 0.5s ease;
+            z-index: 20;
+        }
+        #loader-screen.active {
+            opacity: 1;
+            pointer-events: all;
         }
 
-        .loader-info {
-            display: flex;
-            justify-content: flex-end;
-            width: 100%;
-            margin-top: 25px;
-            font-family: 'Inter', monospace;
-            font-size: 0.85rem;
-            color: #c8a97e;
+        /* LOADING 文字 */
+        #loader-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.1rem;
+            color: #fff;
+            letter-spacing: 0.5em;
             text-transform: uppercase;
-            letter-spacing: 0.5em; /* 增大字距 */
-            font-weight: 800;
-            opacity: 0.8;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+            position: relative;
+        }
+        /* 加載文字與百分比 (移除故障效果) */
+        #loader-label .glitch-percent {
+            color: #fff;
+            position: relative;
+            display: inline-block;
+            min-width: 5ch;
+            text-align: left;
         }
 
-        /* 呼吸燈動畫 */
-        @keyframes sparkler-breathing {
-            from { 
-                transform: translateY(-50%) scale(0.8);
-                filter: brightness(1);
-                box-shadow: 0 0 10px #ffd700;
-            }
-            to { 
-                transform: translateY(-50%) scale(1.2);
-                filter: brightness(1.8);
-                box-shadow: 0 0 20px #fff, 0 0 40px #ffd700, 0 0 60px #ff8c00;
-            }
+        /* ── 進度條外框 ── */
+        #cp-bar-outer {
+            width: clamp(300px, 50vw, 600px);
+            height: 18px;
+            border: 1px solid rgba(255,255,255,0.6);
+            position: relative;
+            box-shadow:
+                0 0 8px rgba(255,255,255,0.2),
+                inset 0 0 8px rgba(0,0,0,0.8);
+        }
+        /* 角落裝飾 */
+        #cp-bar-outer::before,
+        #cp-bar-outer::after {
+            content: '';
+            position: absolute;
+            width: 6px; height: 6px;
+            border: 1px solid rgba(255,255,255,0.9);
+        }
+        #cp-bar-outer::before { top: -4px; left: -4px; border-right: none; border-bottom: none; }
+        #cp-bar-outer::after  { bottom: -4px; right: -4px; border-left: none; border-top: none; }
+
+        /* 進度條填充 (移除故障跳動) */
+        #cp-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: #fff;
+            position: relative;
+            transition: none;
+            box-shadow:
+                0 0 12px rgba(255,255,255,0.8),
+                0 0 30px rgba(255,255,255,0.4);
         }
 
-        /* 茂密噴散動畫 */
-        @keyframes sparkler-scatter-lush {
-            0% {
-                transform: translate(0, -50%) scale(1);
-                opacity: 1;
-            }
-            100% {
-                /* 粒子向外噴射路徑更分散與變小 */
-                transform: translate(35px, -80%) scale(0);
-                opacity: 0;
-                box-shadow: 
-                    30px -30px 0 #fff,
-                    -25px 35px 0 #ffd700,
-                    40px 20px 0 #ff8c00,
-                    -35px -25px 0 #fff,
-                    20px 45px 0 #ffd700,
-                    50px -15px 0 #ff8c00,
-                    -40px 15px 0 #fff,
-                    15px -50px 0 #ffd700,
-                    35px 35px 0 #ff8c00,
-                    -15px 55px 0 #fff;
-            }
-        }
-
-        .loader-info {
-            display: flex;
-            justify-content: flex-end;
-            width: 100%;
-            margin-top: 15px;
-            font-family: 'Inter', monospace;
-            font-size: 0.8rem;
-            color: #c8a97e;
+        /* ── 進度條下方狀態文字 ── */
+        #loader-status {
+            margin-top: 1.2rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 0.25em;
             text-transform: uppercase;
-            letter-spacing: 0.3em;
-            font-weight: 700;
+            min-height: 1em;
+        }
+
+        /* ── 進度條右上方的小裝飾線 ── */
+        .cp-deco-line {
+            position: absolute;
+            top: -10px; right: 0;
+            width: 30%; height: 1px;
+            background: rgba(255,255,255,0.25);
+        }
+        .cp-deco-line::before {
+            content: '';
+            position: absolute;
+            right: 0; top: -4px;
+            width: 4px; height: 9px;
+            background: rgba(255,255,255,0.5);
         }
 
         /* Revealed Classes for JS */
         .reveal-node {
             opacity: 1 !important;
             transform: translateY(0) !important;
-            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
         }
     </style>
 
@@ -387,172 +345,86 @@
 
     <div id="splash-screen">
         <canvas id="splash-canvas"></canvas>
-        <div id="splash-mask"></div>
-        <div class="splash-content">
-            <div class="splash-meta" id="s-meta">YH. 2026</div>
-            <h1 class="splash-logo" id="s-logo">HAIN<span class="outline">.</span></h1>
-            <p class="splash-desc" id="s-desc">遊戲美術 × 嵌入式 AI × 硬體整合 / 用技術驅動創意，用藝術表達工程。</p>
-            <button class="splash-btn" id="s-btn">進入系統 <span class="arrow">→</span></button>
-            <div class="splash-sub" id="s-sub">ENTER EXPERIENCE</div>
+        <div id="splash-scanlines"></div>
+        <div id="splash-glitch-bar"></div>
+
+        <!-- 初始進場介紹 -->
+        <div class="splash-content" id="splash-intro">
+            <div class="splash-meta" id="s-meta">YH. 2026 &nbsp;/&nbsp; GAME ARTIST &nbsp;+&nbsp; AI DEV</div>
+            <h1 class="splash-logo" id="s-logo">HAIN.</h1>
+            <p class="splash-desc" id="s-desc">遊戲美術 × 嵌入式 AI × 硬體整合</p>
+            <button class="splash-btn" id="s-btn">ENTER SYSTEM <span class="arrow">→</span></button>
+            <span class="splash-sub" id="s-sub">[ INITIALIZE PROTOCOL ]</span>
         </div>
 
-        <div id="loader-container">
-            <div class="loader-header">
-                <div class="loader-tag">LOADING</div>
-                <div class="loader-val" id="l-percent">0%</div>
+        <!-- 賽博朋克加載畫面 -->
+        <div id="loader-screen">
+            <div id="loader-label">
+                LOADING &nbsp;<span class="glitch-percent" id="l-percent">0%</span>
             </div>
-            <div id="bar-shell">
-                <div id="bar-fill"></div>
+            <div id="cp-bar-outer">
+                <div class="cp-deco-line"></div>
+                <div id="cp-bar-fill"></div>
             </div>
-            <div class="loader-deco"></div>
+            <div id="loader-status" id="l-status">INITIALIZING SYSTEMS...</div>
         </div>
     </div>
 
     <script>
-        // --- 網頁登錄微動畫邏輯 ---
-        function revealMain() {
-            const main = document.querySelector('main');
-            if (main) {
-                main.style.opacity = '1';
-                main.style.transform = 'translateY(0)';
-                main.style.filter = 'blur(0)';
-            }
-        }
-
-        // --- Splash Particle Logic (Node Connectivity) ---
+        // ════════════════════════════════════════════
+        //  Splash Canvas - 星點背景 (極稀疏)
+        // ════════════════════════════════════════════
         (function () {
             const sc = document.getElementById('splash-canvas');
             const sctx = sc.getContext('2d');
-            let sw, sh;
-            let particles = [];
-            let sMouse = { x: null, y: null };
+            let sw, sh, particles = [];
 
-            function resize() {
-                sw = sc.width = window.innerWidth;
-                sh = sc.height = window.innerHeight;
-            }
+            function resize() { sw = sc.width = window.innerWidth; sh = sc.height = window.innerHeight; }
             window.addEventListener('resize', resize);
             resize();
 
-            // Text Spotlight Logic
-            const sLogo = document.getElementById('s-logo');
-            window.addEventListener('mousemove', (e) => {
-                sMouse.x = e.clientX;
-                sMouse.y = e.clientY;
-
-                if (sLogo) {
-                    const rect = sLogo.getBoundingClientRect();
-                    const lx = e.clientX - rect.left;
-                    const ly = e.clientY - rect.top;
-                    sLogo.style.setProperty('--x', `${lx}px`);
-                    sLogo.style.setProperty('--y', `${ly}px`);
-                }
-            });
-
-            class SParticle {
-                constructor() {
+            class Dot {
+                constructor() { this.reset(); }
+                reset() {
                     this.x = Math.random() * sw;
                     this.y = Math.random() * sh;
-                    this.vx = (Math.random() - 0.5) * 0.4;
-                    this.vy = (Math.random() - 0.5) * 0.4;
-                    // 星空隨機大小與呼吸頻率
-                    this.radius = Math.random() * 1.5 + 0.5;
+                    this.r = Math.random() * 0.8 + 0.2;
+                    this.a = Math.random() * 0.25;
                     this.phase = Math.random() * Math.PI * 2;
-                    this.phaseSpeed = 0.01 + Math.random() * 0.03;
-                    this.baseOpacity = 0.1 + Math.random() * 0.4;
-                }
-                update() {
-                    this.x += this.vx;
-                    this.y += this.vy;
-                    this.phase += this.phaseSpeed;
-
-                    if (this.x < 0 || this.x > sw) this.vx *= -1;
-                    if (this.y < 0 || this.y > sh) this.vy *= -1;
-
-                    // Mouse interaction
-                    if (sMouse.x) {
-                        const dx = sMouse.x - this.x;
-                        const dy = sMouse.y - this.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-                        if (dist < 150) {
-                            this.x -= dx * 0.005;
-                            this.y -= dy * 0.005;
-                        }
-                    }
+                    this.speed = 0.005 + Math.random() * 0.01;
                 }
                 draw() {
-                    const breathing = (Math.sin(this.phase) + 1) / 2; // 0 ~ 1
-                    const opacity = this.baseOpacity + (breathing * 0.3);
-
-                    sctx.fillStyle = `rgba(200, 169, 126, ${opacity})`;
-                    // 特大亮度會有閃爍光暈感
-                    if (this.baseOpacity > 0.4) {
-                        sctx.shadowBlur = breathing * 8;
-                        sctx.shadowColor = 'rgba(200, 169, 126, 0.5)';
-                    } else {
-                        sctx.shadowBlur = 0;
-                    }
-
+                    this.phase += this.speed;
+                    const op = this.a * ((Math.sin(this.phase) + 1) / 2);
+                    sctx.fillStyle = `rgba(255,255,255,${op})`;
                     sctx.beginPath();
-                    sctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    sctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
                     sctx.fill();
-                    sctx.shadowBlur = 0; // 重置
                 }
             }
 
-            function init() {
-                particles = [];
-                // 數量增加為原先約 1.5 ~ 2 倍
-                const count = Math.min(150, (sw * sh) / 8000);
-                for (let i = 0; i < count; i++) {
-                    particles.push(new SParticle());
-                }
-            }
-            init();
-
-            function drawLines() {
-                for (let i = 0; i < particles.length; i++) {
-                    for (let j = i + 1; j < particles.length; j++) {
-                        const dx = particles[i].x - particles[j].x;
-                        const dy = particles[i].y - particles[j].y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-
-                        if (dist < 160) {
-                            const opacity = 1 - (dist / 160);
-                            sctx.strokeStyle = `rgba(200, 169, 126, ${opacity * 0.15})`;
-                            sctx.lineWidth = 0.8;
-                            sctx.beginPath();
-                            sctx.moveTo(particles[i].x, particles[i].y);
-                            sctx.lineTo(particles[j].x, particles[j].y);
-                            sctx.stroke();
-                        }
-                    }
-                }
-            }
+            for (let i = 0; i < 80; i++) particles.push(new Dot());
 
             function loop() {
                 if (document.getElementById('splash-screen').classList.contains('hidden')) return;
                 sctx.clearRect(0, 0, sw, sh);
-                particles.forEach(p => {
-                    p.update();
-                    p.draw();
-                });
-                drawLines();
+                particles.forEach(p => p.draw());
                 requestAnimationFrame(loop);
             }
             loop();
         })();
 
-        // Splash Reveal Sequence
+        // ════════════════════════════════════════════
+        //  Reveal Sequence
+        // ════════════════════════════════════════════
         window.addEventListener('load', () => {
-            const nodes = [
+            [
                 { id: 's-meta', delay: 300 },
                 { id: 's-logo', delay: 600 },
                 { id: 's-desc', delay: 900 },
-                { id: 's-btn', delay: 1200 },
-                { id: 's-sub', delay: 1400 }
-            ];
-            nodes.forEach(n => {
+                { id: 's-btn',  delay: 1200 },
+                { id: 's-sub',  delay: 1400 }
+            ].forEach(n => {
                 setTimeout(() => {
                     const el = document.getElementById(n.id);
                     if (el) el.classList.add('reveal-node');
@@ -560,83 +432,101 @@
             });
         });
 
-        // --- 讀取系統邏輯 (純淨 HUD 版) ---
-        (function() {
-            const shell = document.getElementById('bar-shell');
-            const fill = document.getElementById('bar-fill');
-            const sBtn = document.getElementById('s-btn');
-            const loader = document.getElementById('loader-container');
-            
+        // ════════════════════════════════════════════
+        //  Cyberpunk Loader
+        // ════════════════════════════════════════════
+        (function () {
+            const sBtn       = document.getElementById('s-btn');
+            const loaderScr  = document.getElementById('loader-screen');
+            const barFill    = document.getElementById('cp-bar-fill');
+            const percentEl  = document.getElementById('l-percent');
+            const statusEl   = document.getElementById('loader-status');
+            const splashIntro = document.getElementById('splash-intro');
+
             let currentPercent = 0;
-            let isExploded = false;
+            let isDone = false;
 
-            // --- 讀取條純淨邏輯 ---
-            function tick() {
-                if (document.getElementById('splash-screen').classList.contains('hidden')) return;
-                // 純淨模式：僅維持循環直到完成
-                requestAnimationFrame(tick);
+            const statusMessages = [
+                'INITIALIZING SYSTEMS...',
+                'ESTABLISHING NEURAL LINK...',
+                'LOADING ASSETS...',
+                'CALIBRATING RENDER ENGINE...',
+                'COMPILING SHADERS...',
+                'SYNCHRONIZING DATA STREAM...',
+                'VERIFYING INTEGRITY...',
+                'SYSTEM READY'
+            ];
+
+            // 移除原本的視覺故障函數
+            function triggerGlitch() {
+                // 不再執行視覺抖動
             }
 
-            function explode() {
-                if(isExploded) return;
-                isExploded = true;
-                
-                setTimeout(() => {
-                    document.getElementById('splash-screen').classList.add('hidden');
-                    revealMain();
-                    const bgm = document.getElementById('bgm');
-                    if (bgm) bgm.play().catch(e => {});
-                }, 400); 
-            }
-
-            function performLoading() {
-                const step = Math.floor(Math.random() * 5) + 2;
-                currentPercent += step;
-                if (currentPercent > 100) currentPercent = 100;
-
-                if (fill) fill.style.width = `${currentPercent}%`;
-                const percentEl = document.getElementById('l-percent');
-                if (percentEl) percentEl.innerText = `${currentPercent}%`;
-
-                if (currentPercent < 100) {
-                    setTimeout(performLoading, Math.random() * 70 + 30);
-                } else {
-                    explode();
+            // 隨機更新狀態文字
+            let statusIdx = 0;
+            function updateStatus() {
+                const progress = currentPercent / 100;
+                const idx = Math.min(Math.floor(progress * statusMessages.length), statusMessages.length - 1);
+                if (idx !== statusIdx) {
+                    statusIdx = idx;
+                    statusEl.textContent = statusMessages[idx];
                 }
             }
 
-            sBtn.addEventListener('click', () => {
-                // 1. 隱藏啟動文字
-                const splashElements = ['s-meta', 's-logo', 's-desc', 's-btn', 's-sub'];
-                splashElements.forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) {
-                        el.style.opacity = '0';
-                        el.style.transform = 'translateY(-20px)';
-                        el.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
-                        setTimeout(() => (el.style.display = 'none'), 800);
-                    }
-                });
+            function doLoad() {
+                if (isDone) return;
 
-                // 2. 顯示讀取條
+                // 隨機步進 1~3%，偶爾短暫停頓
+                const step = Math.floor(Math.random() * 3) + 1;
+                currentPercent = Math.min(currentPercent + step, 100);
+
+                barFill.style.width = currentPercent + '%';
+                percentEl.textContent = currentPercent + '%';
+                updateStatus();
+
+                // 隨機觸發故障效果
+                if (Math.random() < 0.25) triggerGlitch();
+
+                if (currentPercent < 100) {
+                    const delay = Math.random() * 120 + 40;
+                    setTimeout(doLoad, delay);
+                } else {
+                    isDone = true;
+                    statusEl.textContent = 'SYSTEM READY';
+                    setTimeout(finishLoad, 600);
+                }
+            }
+
+            function finishLoad() {
+                // 觸發退出故障動畫
+                const splash = document.getElementById('splash-screen');
+                splash.classList.add('exit-glitch');
+
+                // 同時播放 BGM
+                const bgm = document.getElementById('bgm');
+                if (bgm) bgm.play().catch(() => {});
+
+                // 動畫結束後隱藏
                 setTimeout(() => {
-                    if (loader) loader.classList.add('active');
-                    requestAnimationFrame(tick);
-                    performLoading();
-                }, 400);
+                    splash.classList.add('hidden');
+                }, 800);
+            }
+
+            // 按鈕點擊事件：先跳轉（內容縮小）再載入
+            sBtn.addEventListener('click', () => {
+                sBtn.disabled = true;
+                // 加入跳轉微動畫
+                splashIntro.classList.add('splash-intro-exit');
+
+                setTimeout(() => {
+                    // 內容完全消失後，顯示加載畫面
+                    splashIntro.style.display = 'none';
+                    loaderScr.classList.add('active');
+                    setTimeout(doLoad, 300);
+                }, 800);
             });
         })();
     </script>
-
-    <style>
-        /* 網頁主體初始隱藏狀態 (微動畫準備) */
-        main {
-            opacity: 0;
-            transform: translateY(30px);
-            filter: blur(10px);
-            transition: all 1.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-    </style>
     <!-- Custom Cursor -->
     <div id="cursor-ring">
         <div class="ring-track"></div>
