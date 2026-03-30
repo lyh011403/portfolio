@@ -15,8 +15,8 @@
         rel="stylesheet">
     <link rel="icon" type="image/png" href="/portfolio/assets/LOGO-DwXJY4XJ.png">
 
-<script type="module" crossorigin src="/portfolio/assets/index-DIcQDnqM.js"></script>
-<link rel="stylesheet" crossorigin href="/portfolio/assets/index-EM4nt-XR.css">
+<script type="module" crossorigin src="/portfolio/assets/index-15ehSXAq.js"></script>
+<link rel="stylesheet" crossorigin href="/portfolio/assets/index-DIhNlP4N.css">
 
 <body>
     <!-- Splash Entrance Screen -->
@@ -222,10 +222,11 @@
             display: none;
             flex-direction: column;
             align-items: center;
-            width: 350px;
-            margin: 3rem auto 0;
+            width: 400px;
+            margin: 3.5rem auto 0;
             opacity: 0;
             transition: opacity 0.8s ease;
+            position: relative;
         }
 
         #loader-container.active {
@@ -233,72 +234,54 @@
             opacity: 1;
         }
 
-        .loader-bar {
+        /* 外殼與容器：極細且精緻 */
+        #bar-shell {
             width: 100%;
-            height: 2px;
-            background: rgba(200, 169, 126, 0.1);
-            border-radius: 4px;
-            overflow: visible; /* 關鍵：確保火花不會被切斷 */
+            height: 2px; /* 極細 */
+            background: rgba(255, 255, 255, 0.03); 
+            border-radius: 2px;
             position: relative;
+            overflow: visible; 
         }
 
-        .loader-progress {
+        #bar-fill {
             width: 0%;
             height: 100%;
+            /* 漸層：透明 -> 古銅 -> 亮金 */
             background: linear-gradient(90deg, 
                 transparent 0%, 
-                rgba(200, 169, 126, 0.5) 40%, 
+                rgba(200, 169, 126, 0.4) 40%, 
                 #c8a97e 80%, 
                 #ffd700 100%);
+            border-radius: 2px;
             position: relative;
-            /* 移除原本固定的 5s transition，改由 JS 隨機步進 */
-            transition: width 0.3s ease-out; 
-            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(200, 169, 126, 0.2);
+            transition: none; 
         }
 
-        /* 仙女棒核心呼吸點 (縮小且帶有明滅感) */
-        .loader-progress::after {
-            content: "";
-            position: absolute;
-            right: -5px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 8px;   /* 縮小為更精緻的 8px */
-            height: 8px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 
-                0 0 8px #fff,
-                0 0 16px #ffd700, 
-                0 0 32px #ff8c00;
-            z-index: 10;
-            /* 加入呼吸燈動畫 */
-            animation: sparkler-breathing 0.6s infinite alternate ease-in-out;
+        /* Canvas 疊加層：全螢幕 */
+        #loader-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
         }
 
-        /* 茂密仙女棒噴射粒子 (利用 ::before) */
-        .loader-progress::before {
-            content: "";
-            position: absolute;
-            right: -5px;
-            top: 50%;
-            width: 2px;
-            height: 2px;
-            border-radius: 50%;
-            /* 增加更多坐標點，讓粒子更茂密 */
-            box-shadow: 
-                10px -10px 0 #fff,
-                -8px 12px 0 #ffd700,
-                15px 8px 0 #ff8c00,
-                -12px -10px 0 #fff,
-                8px 15px 0 #ffd700,
-                20px -5px 0 #ff8c00,
-                -15px 5px 0 #fff,
-                5px -18px 0 #ffd700,
-                12px 12px 0 #ff8c00,
-                -5px 20px 0 #fff;
-            animation: sparkler-scatter-lush 0.4s infinite linear;
-            z-index: 9;
+        .loader-info {
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+            margin-top: 25px;
+            font-family: 'Inter', monospace;
+            font-size: 0.85rem;
+            color: #c8a97e;
+            text-transform: uppercase;
+            letter-spacing: 0.5em; /* 增大字距 */
+            font-weight: 800;
+            opacity: 0.8;
         }
 
         /* 呼吸燈動畫 */
@@ -380,10 +363,11 @@
             <button class="splash-btn" id="s-btn">進入系統 <span class="arrow">→</span></button>
             <div class="splash-sub" id="s-sub">ENTER EXPERIENCE</div>
             
-            <!-- 金色煙火載入條結構 -->
+            <!-- Canvas 物理粒子載入條結構 -->
             <div id="loader-container">
-                <div class="loader-bar">
-                    <div class="loader-progress" id="l-progress"></div>
+                <canvas id="loader-canvas"></canvas>
+                <div id="bar-shell">
+                    <div id="bar-fill"></div>
                 </div>
                 <div class="loader-info">
                     <span id="l-percent">0%</span>
@@ -534,57 +518,202 @@
             });
         });
 
-        // Splash Hide Logic with Loading Bar
-        const sBtn = document.getElementById('s-btn');
-        const sSub = document.getElementById('s-sub');
-        const loader = document.getElementById('loader-container');
-        const lProgress = document.getElementById('l-progress');
-        const lPercent = document.getElementById('l-percent');
-
-        sBtn.addEventListener('click', () => {
-            // 1. 隱藏按鈕
-            sBtn.style.opacity = '0';
-            sBtn.style.pointerEvents = 'none';
-            sSub.style.opacity = '0';
+        // --- Canvas Particle System 重構 ---
+        (function() {
+            const canvas = document.getElementById('loader-canvas');
+            const ctx = canvas.getContext('2d');
+            const shell = document.getElementById('bar-shell');
+            const fill = document.getElementById('bar-fill');
+            const percentEl = document.getElementById('l-percent');
+            const sBtn = document.getElementById('s-btn');
+            const loader = document.getElementById('loader-container');
             
-            // 2. 顯示讀取條
-            setTimeout(() => {
-                sBtn.style.display = 'none';
-                sSub.style.display = 'none';
-                loader.classList.add('active');
-                
-                // 3. 啟動進度條動畫 (隨機步進載入邏輯)
-                let currentPercent = 0;
-                
-                function performLoading() {
-                    // 每次隨機增加 1~3%，更符合真實系統載入感
-                    const step = Math.floor(Math.random() * 3) + 1;
-                    currentPercent += step;
+            let particles = [];
+            let currentPercent = 0;
+            let barRect, tipX, tipY;
+            let isExploded = false;
+
+            function resizeCanvas() {
+                // 擴大畫布範圍以利粒子飛散
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                barRect = shell.getBoundingClientRect();
+            }
+            window.addEventListener('resize', resizeCanvas);
+
+            class Particle {
+                constructor(x, y, isFinal = false) {
+                    this.x = x;
+                    this.y = y;
+                    // 向右前方噴射 (仙女棒動態)
+                    const angle = isFinal ? Math.random() * Math.PI * 2 : (Math.random() - 0.4) * Math.PI * 0.5;
+                    const speed = isFinal ? Math.random() * 15 + 8 : Math.random() * 5 + 1.5;
                     
-                    if (currentPercent > 100) currentPercent = 100;
+                    this.vx = Math.cos(angle) * speed;
+                    this.vy = Math.sin(angle) * speed - (isFinal ? 0 : 0.5); 
                     
-                    // 更新 UI
-                    lProgress.style.width = `${currentPercent}%`;
-                    lPercent.innerText = `${currentPercent}%`;
+                    this.gravity = 0.12;
+                    this.friction = 0.95;
+                    this.life = 1.0;
+                    this.decay = Math.random() * 0.04 + 0.02; // 更快消失
                     
-                    if (currentPercent < 100) {
-                        // 隨機延遲 50ms ~ 250ms，產生停頓與衝刺感
-                        const delay = Math.random() * 200 + 50;
-                        setTimeout(performLoading, delay);
-                    } else {
-                        // 載入完成，進入主頁面
-                        setTimeout(() => {
-                            document.getElementById('splash-screen').classList.add('hidden');
-                            const bgm = document.getElementById('bgm');
-                            if (bgm) bgm.play().catch(e => console.log("Splash audio trigger restricted"));
-                        }, 800);
-                    }
+                    // 燃燒色調 (增加銀灰與古銅)
+                    const colors = ['#ffffff', '#ffed00', '#c8a97e', '#888888', '#ff8c00'];
+                    this.color = colors[Math.floor(Math.random() * colors.length)];
+                    this.size = Math.random() * 1.2 + 0.3; // 更細微的粒子
+                    this.shape = Math.random() > 0.8 ? 'star' : 'dot';
                 }
+
+                update() {
+                    this.vx *= this.friction;
+                    this.vy *= this.friction;
+                    this.vy += this.gravity;
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.life -= this.decay;
+                }
+
+                draw() {
+                    ctx.save();
+                    ctx.globalAlpha = this.life;
+                    ctx.translate(this.x, this.y);
+                    ctx.fillStyle = this.color;
+                    // 拖尾效果：外發光
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = this.color;
+                    
+                    if (this.shape === 'star') {
+                        this.drawStar(0, 0, 5, this.size, this.size / 2);
+                    } else {
+                        ctx.beginPath();
+                        ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    ctx.restore();
+                }
+
+                drawStar(cx, cy, spikes, outerRadius, innerRadius) {
+                    let rot = Math.PI / 2 * 3;
+                    let x = cx, y = cy;
+                    let step = Math.PI / spikes;
+                    ctx.beginPath();
+                    ctx.moveTo(cx, cy - outerRadius);
+                    for (let i = 0; i < spikes; i++) {
+                        x = cx + Math.cos(rot) * outerRadius;
+                        y = cy + Math.sin(rot) * outerRadius;
+                        ctx.lineTo(x, y);
+                        rot += step;
+                        x = cx + Math.cos(rot) * innerRadius;
+                        y = cy + Math.sin(rot) * innerRadius;
+                        ctx.lineTo(x, y);
+                        rot += step;
+                    }
+                    ctx.lineTo(cx, cy - outerRadius);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+            }
+
+            function tick() {
+                if (document.getElementById('splash-screen').classList.contains('hidden')) return;
                 
-                // 開始執行隨機載入
-                requestAnimationFrame(performLoading);
-            }, 400);
-        });
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // 1. 更新位置資訊
+                barRect = shell.getBoundingClientRect();
+                if (!barRect) return;
+                
+                const fillWidth = (currentPercent / 100) * barRect.width;
+                tipX = barRect.left + fillWidth;
+                tipY = barRect.top + barRect.height / 2;
+
+                // 2. 噴發粒子 (仙女棒頭部效果)
+                if (currentPercent > 0 && currentPercent < 100) {
+                    for(let i=0; i<4; i++) {
+                        particles.push(new Particle(tipX, tipY));
+                    }
+                    
+                    // 3. 畫出精緻核心「棒頭」
+                    ctx.save();
+                    // 外層柔和黃光
+                    const outerGlow = ctx.createRadialGradient(tipX, tipY, 0, tipX, tipY, 15);
+                    outerGlow.addColorStop(0, 'rgba(255, 215, 0, 0.4)');
+                    outerGlow.addColorStop(1, 'transparent');
+                    ctx.fillStyle = outerGlow;
+                    ctx.beginPath();
+                    ctx.arc(tipX, tipY, 20, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // 中層柔和白光
+                    const innerGlow = ctx.createRadialGradient(tipX, tipY, 0, tipX, tipY, 8);
+                    innerGlow.addColorStop(0, 'rgba(255, 255, 255, 0.6)');
+                    innerGlow.addColorStop(1, 'transparent');
+                    ctx.fillStyle = innerGlow;
+                    ctx.beginPath();
+                    ctx.arc(tipX, tipY, 10, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // 最內層實心白點 (核心)
+                    ctx.fillStyle = '#fff';
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = '#fff';
+                    ctx.beginPath();
+                    ctx.arc(tipX, tipY, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+
+                // 4. 更新與渲染粒子
+                particles = particles.filter(p => p.life > 0);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+
+                requestAnimationFrame(tick);
+            }
+
+            function explode() {
+                if(isExploded) return;
+                isExploded = true;
+                
+                // 移除原有的 150 顆噴發粒子噴發迴圈，改為平滑切換
+                setTimeout(() => {
+                    document.getElementById('splash-screen').classList.add('hidden');
+                    const bgm = document.getElementById('bgm');
+                    if (bgm) bgm.play().catch(e => {});
+                }, 400); // 縮短等待時間，直接進場
+            }
+
+            function performLoading() {
+                // 提高步進幅度 (2% ~ 6%)
+                const step = Math.floor(Math.random() * 5) + 2;
+                currentPercent += step;
+                if (currentPercent > 100) currentPercent = 100;
+
+                fill.style.width = `${currentPercent}%`;
+                percentEl.innerText = `${currentPercent}%`;
+
+                if (currentPercent < 100) {
+                    // 縮短隨機延遲 (30ms ~ 100ms)
+                    setTimeout(performLoading, Math.random() * 70 + 30);
+                } else {
+                    explode();
+                }
+            }
+
+            sBtn.addEventListener('click', () => {
+                sBtn.style.opacity = '0';
+                document.getElementById('s-sub').style.opacity = '0';
+                setTimeout(() => {
+                    sBtn.style.display = 'none';
+                    loader.classList.add('active');
+                    resizeCanvas();
+                    requestAnimationFrame(tick);
+                    performLoading();
+                }, 400);
+            });
+        })();
     </script>
     <!-- Custom Cursor -->
     <div id="cursor-ring">
