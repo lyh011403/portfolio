@@ -560,33 +560,20 @@
             });
         });
 
-        // --- Canvas Particle System 重構 ---
+        // --- 讀取系統邏輯 (純淨 HUD 版) ---
         (function() {
-            const canvas = document.getElementById('loader-canvas');
-            const ctx = canvas.getContext('2d');
             const shell = document.getElementById('bar-shell');
             const fill = document.getElementById('bar-fill');
-            const percentEl = document.getElementById('l-percent');
             const sBtn = document.getElementById('s-btn');
             const loader = document.getElementById('loader-container');
             
-            let particles = [];
             let currentPercent = 0;
-            let barRect, tipX, tipY;
             let isExploded = false;
-
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-                // 重置時直接抓取 shell 尺寸，後續計算直接用中心點
-                barRect = shell.getBoundingClientRect();
-            }
-            window.addEventListener('resize', resizeCanvas);
 
             // --- 讀取條純淨邏輯 ---
             function tick() {
                 if (document.getElementById('splash-screen').classList.contains('hidden')) return;
-                // 純淨模式：不再使用 Canvas 繪製粒子或煙霧
+                // 純淨模式：僅維持循環直到完成
                 requestAnimationFrame(tick);
             }
 
@@ -603,17 +590,15 @@
             }
 
             function performLoading() {
-                // 提高步進幅度 (2% ~ 6%)
                 const step = Math.floor(Math.random() * 5) + 2;
                 currentPercent += step;
                 if (currentPercent > 100) currentPercent = 100;
 
-                fill.style.width = `${currentPercent}%`;
+                if (fill) fill.style.width = `${currentPercent}%`;
                 const percentEl = document.getElementById('l-percent');
                 if (percentEl) percentEl.innerText = `${currentPercent}%`;
 
                 if (currentPercent < 100) {
-                    // 縮短隨機延遲 (30ms ~ 100ms)
                     setTimeout(performLoading, Math.random() * 70 + 30);
                 } else {
                     explode();
@@ -621,7 +606,7 @@
             }
 
             sBtn.addEventListener('click', () => {
-                // 1. 隱藏所有啟動文字與按鈕
+                // 1. 隱藏啟動文字
                 const splashElements = ['s-meta', 's-logo', 's-desc', 's-btn', 's-sub'];
                 splashElements.forEach(id => {
                     const el = document.getElementById(id);
@@ -633,10 +618,9 @@
                     }
                 });
 
-                // 2. 顯示讀取條 (單獨居中出現)
+                // 2. 顯示讀取條
                 setTimeout(() => {
-                    loader.classList.add('active');
-                    resizeCanvas();
+                    if (loader) loader.classList.add('active');
                     requestAnimationFrame(tick);
                     performLoading();
                 }, 400);
