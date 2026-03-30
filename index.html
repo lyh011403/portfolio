@@ -544,9 +544,9 @@
             let isExploded = false;
 
             function resizeCanvas() {
-                // 擴大畫布範圍以利粒子飛散
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
+                // 重置時直接抓取 shell 尺寸，後續計算直接用中心點
                 barRect = shell.getBoundingClientRect();
             }
             window.addEventListener('resize', resizeCanvas);
@@ -629,13 +629,14 @@
                 
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
-                // 1. 更新位置資訊
-                barRect = shell.getBoundingClientRect();
-                if (!barRect) return;
+                // 1. 基於視窗中心計算精確位置，避免 getBoundingClientRect 延遲或偏移
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                const barWidth = 400; // 前面 CSS 設定的寬度
+                const fillWidth = (currentPercent / 100) * barWidth;
                 
-                const fillWidth = (currentPercent / 100) * barRect.width;
-                tipX = barRect.left + fillWidth;
-                tipY = barRect.top + barRect.height / 2;
+                tipX = centerX - (barWidth / 2) + fillWidth;
+                tipY = centerY; // 垂直居中
 
                 // 2. 噴發粒子 (仙女棒頭部效果)
                 if (currentPercent > 0 && currentPercent < 100) {
@@ -705,7 +706,7 @@
                 if (currentPercent > 100) currentPercent = 100;
 
                 fill.style.width = `${currentPercent}%`;
-                percentEl.innerText = `${currentPercent}%`;
+                // 移除 percentEl 更新，因為 HTML 已刪除該元素
 
                 if (currentPercent < 100) {
                     // 縮短隨機延遲 (30ms ~ 100ms)
