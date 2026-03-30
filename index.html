@@ -57,12 +57,43 @@
         .splash-meta {
             font-size: 0.9rem;
             font-weight: 700;
-            letter-spacing: 0.3em;
+            letter-spacing: 0.5em;
+            /* 增加間距 */
             color: #fff;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
             text-transform: uppercase;
             opacity: 0;
             transform: translateY(20px);
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            padding: 0.2rem 0;
+        }
+
+        /* 掃描線光效 */
+        .splash-meta::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(200, 169, 126, 0.4), transparent);
+            animation: meta-scan 3s infinite;
+        }
+
+        @keyframes meta-scan {
+            0% {
+                left: -100%;
+            }
+
+            50% {
+                left: 100%;
+            }
+
+            100% {
+                left: 100%;
+            }
         }
 
         .splash-logo {
@@ -74,21 +105,80 @@
             color: #fff;
             opacity: 0;
             transform: translateY(40px);
+            position: relative;
+            /* 進階文字陰影增加立體感 */
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
+
+        /* 文字故障特效 (Glitch) */
+        .splash-logo:hover {
+            animation: logo-glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+        }
+
+        @keyframes logo-glitch {
+            0% {
+                transform: translate(0);
+                text-shadow: 0 0 0 transparent;
+            }
+
+            20% {
+                transform: translate(-2px, 2px);
+                text-shadow: 2px 0 #ff00c1, -2px 0 #00fff9;
+            }
+
+            40% {
+                transform: translate(-2px, -2px);
+                text-shadow: 2px 0 #ff00c1, -2px 0 #00fff9;
+            }
+
+            60% {
+                transform: translate(2px, 2px);
+                text-shadow: -2px 0 #ff00c1, 2px 0 #00fff9;
+            }
+
+            80% {
+                transform: translate(2px, -2px);
+                text-shadow: -2px 0 #ff00c1, 2px 0 #00fff9;
+            }
+
+            100% {
+                transform: translate(0);
+                text-shadow: 0 0 0 transparent;
+            }
         }
 
         .splash-logo .outline {
-            -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.2);
+            -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.3);
             color: transparent;
+            transition: all 0.4s ease;
+        }
+
+        .splash-logo:hover .outline {
+            -webkit-text-stroke-color: #c8a97e;
         }
 
         .splash-desc {
             font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.7);
             margin-bottom: 4rem;
-            font-weight: 400;
-            letter-spacing: 0.05em;
+            font-weight: 300;
+            letter-spacing: 0.1em;
             opacity: 0;
             transform: translateY(20px);
+            /* 漸變色質感 */
+            background: linear-gradient(to right, #fff, rgba(255, 255, 255, 0.4), #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: text-shine 5s linear infinite;
+        }
+
+        @keyframes text-shine {
+            to {
+                background-position: 200% center;
+            }
         }
 
         .splash-btn {
