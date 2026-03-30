@@ -42,65 +42,6 @@
 }
 
 /* ============================================================
-   MICRO ANIMATIONS — 進主頁後的微動畫系統
-   ============================================================ */
-
-/* 頁面整體進場：輕微故障閃入 */
-body {
-    animation: page-glitch-in 0.6s ease forwards;
-    min-height: 100vh; /* 確保最小高度 */
-}
-@keyframes page-glitch-in {
-    0%   { opacity: 0; filter: brightness(2) saturate(0); }
-    15%  { opacity: 0.8; clip-path: inset(5% 0 5% 0); filter: brightness(1.5); }
-    30%  { opacity: 1; clip-path: inset(0 0 0 0); filter: brightness(1); }
-    100% { opacity: 1; filter: brightness(1); }
-}
-
-/* 標準 fadeUp (保留原有) */
-@keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Hero 標題行 reveal */
-@keyframes heroReveal {
-    to { opacity: 1; transform: translateY(0) skewY(0); filter: blur(0); }
-}
-
-/* 掃描線微動 — 獨立層避免干擾 Layout */
-#bg-scanlines {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 3px,
-        rgba(255,255,255,0.008) 3px,
-        rgba(255,255,255,0.008) 4px
-    );
-    pointer-events: none;
-    z-index: 50000;
-    animation: scanline-move 12s linear infinite;
-}
-@keyframes scanline-move {
-    from { background-position: 0 0; }
-    to   { background-position: 0 200px; }
-}
-
-/* Nav 閃入微動 */
-#nav {
-    animation: nav-slide-in 0.8s 0.1s var(--ease) both;
-}
-@keyframes nav-slide-in {
-    from { opacity: 0; transform: translateY(-20px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-
-/* ============================================================
    RESET & BASE
    ============================================================ */
 *,
@@ -245,9 +186,8 @@ main {
 }
 
 .nav-logo-img {
-    height: 48px; /* 放大導航 LOGO */
+    height: 32px;
     width: auto;
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.15));
 }
 
 .nav-links {
@@ -805,7 +745,7 @@ main {
 }
 
 .footer-logo {
-    height: 36px; /* 放大頁尾 LOGO */
+    height: 24px;
     width: auto;
 }
 
