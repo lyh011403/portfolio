@@ -72,24 +72,24 @@
             padding: 0.2rem 0;
         }
 
-        /* 掃描線光效 */
+        /* 掃描線光效改為如星光閃爍的微弱動態 */
         .splash-meta::after {
             content: "";
             position: absolute;
             top: 0;
             left: -100%;
-            width: 50%;
+            width: 80%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(200, 169, 126, 0.4), transparent);
-            animation: meta-scan 3s infinite;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: meta-shimmer 6s infinite ease-in-out;
         }
 
-        @keyframes meta-scan {
+        @keyframes meta-shimmer {
             0% {
                 left: -100%;
             }
 
-            50% {
+            30% {
                 left: 100%;
             }
 
@@ -104,51 +104,32 @@
             letter-spacing: -0.04em;
             line-height: 0.9;
             margin-bottom: 2.5rem;
-            color: #fff;
             opacity: 0;
             transform: translateY(40px);
             position: relative;
-            /* 進階文字陰影增加立體感 */
-            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             cursor: pointer;
+
+            /* 金屬流光質感 */
+            background: linear-gradient(90deg, #fff 0%, #c8a97e 25%, #fff 50%, #c8a97e 75%, #fff 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: logo-shimmer 8s linear infinite;
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* 文字金屬故障特效 (Golden Glitch) - 與背景粒子色同步 */
+        @keyframes logo-shimmer {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        /* 懸停時如同恆星般的緩慢擴張與柔光 */
         .splash-logo:hover {
-            animation: logo-glitch-gold 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
-            color: #c8a97e;
-        }
-
-        @keyframes logo-glitch-gold {
-            0% {
-                transform: translate(0);
-                text-shadow: 0 0 0 transparent;
-            }
-
-            20% {
-                transform: translate(-1px, 1px);
-                text-shadow: 1px 0 rgba(200, 169, 126, 0.7), -1px 0 rgba(255, 255, 255, 0.3);
-            }
-
-            40% {
-                transform: translate(-1px, -1px);
-                text-shadow: 1px 0 rgba(200, 169, 126, 0.7), -1px 0 rgba(255, 255, 255, 0.3);
-            }
-
-            60% {
-                transform: translate(1.5px, 1.5px);
-                text-shadow: -1px 0 rgba(200, 169, 126, 0.7), 1px 0 rgba(255, 255, 255, 0.3);
-            }
-
-            80% {
-                transform: translate(1.5px, -1.5px);
-                text-shadow: -1.5px 0 rgba(200, 169, 126, 0.7), 1.5px 0 rgba(255, 255, 255, 0.3);
-            }
-
-            100% {
-                transform: translate(0);
-                text-shadow: 0 0 0 transparent;
-            }
+            letter-spacing: 0.05em;
+            transform: scale(1.03);
+            filter: drop-shadow(0 0 20px rgba(200, 169, 126, 0.4));
         }
 
         .splash-logo .outline {
