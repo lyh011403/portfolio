@@ -13,6 +13,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap"
         rel="stylesheet">
+    <link rel="icon" type="image/png" href="/portfolio/assets/LOGO-DwXJY4XJ.png">
 
 <script type="module" crossorigin src="/portfolio/assets/index-DIcQDnqM.js"></script>
 <link rel="stylesheet" crossorigin href="/portfolio/assets/index-EM4nt-XR.css">
@@ -217,15 +218,14 @@
             opacity: 0;
         }
 
-        /* 科技感讀取條樣式 */
         #loader-container {
             display: none;
             flex-direction: column;
             align-items: center;
-            width: 300px;
-            margin: 2rem auto 0;
+            width: 350px;
+            margin: 3rem auto 0;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.8s ease;
         }
 
         #loader-container.active {
@@ -235,60 +235,79 @@
 
         .loader-bar {
             width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
+            height: 2px;
+            background: rgba(200, 169, 126, 0.1);
+            border-radius: 4px;
+            overflow: visible; /* 允許火花溢出發光 */
             position: relative;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
         .loader-progress {
             width: 0%;
             height: 100%;
-            background: #00f3ff;
-            box-shadow: 0 0 15px #00f3ff, 0 0 30px rgba(0, 243, 255, 0.5);
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(200, 169, 126, 0.5) 40%, 
+                #c8a97e 80%, 
+                #ffd700 100%);
             position: relative;
-            transition: width 2.5s cubic-bezier(0.65, 0, 0.35, 1);
+            transition: width 2.5s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 4px;
         }
 
-        /* 讀取條掃描線效果 */
+        /* 煙火火花前端效果 */
         .loader-progress::after {
             content: "";
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            animation: loader-shimmer 1.5s infinite linear;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 
+                0 0 15px #ffd700, 
+                0 0 30px #c8a97e, 
+                0 0 50px rgba(255, 215, 0, 0.6);
+            filter: blur(1px);
+            animation: spark-pulse 0.2s infinite alternate ease-in-out;
         }
 
-        @keyframes loader-shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+        @keyframes spark-pulse {
+            from { 
+                transform: translateY(-50%) scale(0.8);
+                opacity: 0.8;
+                box-shadow: 0 0 10px #ffd700, 0 0 20px #c8a97e;
+            }
+            to { 
+                transform: translateY(-50%) scale(1.2);
+                opacity: 1;
+                box-shadow: 0 0 25px #fff, 0 0 50px #ffd700, 0 0 80px #c8a97e;
+            }
+        }
+
+        /* 進度條後方拖曳軌跡感 */
+        .loader-progress::before {
+            content: "";
+            position: absolute;
+            inset: -4px;
+            background: radial-gradient(circle at right, rgba(255, 215, 0, 0.2), transparent 70%);
+            filter: blur(10px);
+            pointer-events: none;
         }
 
         .loader-info {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             width: 100%;
-            margin-top: 10px;
+            margin-top: 15px;
             font-family: 'Inter', monospace;
-            font-size: 0.7rem;
-            color: #00f3ff;
+            font-size: 0.8rem;
+            color: #c8a97e;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
-        }
-
-        .loader-status {
-            animation: status-pulse 1.5s infinite alternate;
-        }
-
-        @keyframes status-pulse {
-            from { opacity: 0.5; }
-            to { opacity: 1; }
+            letter-spacing: 0.3em;
+            font-weight: 700;
         }
 
         /* Revealed Classes for JS */
@@ -319,13 +338,12 @@
             <button class="splash-btn" id="s-btn">進入系統 <span class="arrow">→</span></button>
             <div class="splash-sub" id="s-sub">ENTER EXPERIENCE</div>
             
-            <!-- 科技感載入條結構 -->
+            <!-- 金色煙火載入條結構 -->
             <div id="loader-container">
                 <div class="loader-bar">
                     <div class="loader-progress" id="l-progress"></div>
                 </div>
                 <div class="loader-info">
-                    <span class="loader-status">System Initializing...</span>
                     <span id="l-percent">0%</span>
                 </div>
             </div>
