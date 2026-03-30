@@ -251,7 +251,7 @@
                 #c8a97e 80%, 
                 #ffd700 100%);
             position: relative;
-            transition: width 2.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: width 5s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 4px;
         }
 
@@ -515,26 +515,33 @@
                 requestAnimationFrame(() => {
                     lProgress.style.width = '100%';
                     
-                    // 4. 數位百分比增加動畫
-                    let count = 0;
-                    const duration = 2500; // 與 CSS transition 2.5s 一致
+                    // 4. 數位百分比增加動畫 (帶有擬真跳動感)
+                    let currentPercent = 0;
+                    const duration = 5000; 
                     const startTime = performance.now();
                     
                     function updatePercent(currentTime) {
                         const elapsed = currentTime - startTime;
-                        const progress = Math.min(elapsed / duration, 1);
-                        count = Math.floor(progress * 100);
-                        lPercent.innerText = `${count}%`;
+                        let progress = Math.min(elapsed / duration, 1);
+                        
+                        // 加入非線性「跳動感」效果
+                        // 使用 sin 波增加一點隨機抖動，模擬系統讀取不均勻的感覺
+                        const jitter = Math.sin(progress * Math.PI * 8) * 0.02;
+                        const perceivedProgress = Math.min(Math.max(progress + jitter, 0), 1);
+                        
+                        currentPercent = Math.floor(perceivedProgress * 100);
+                        lPercent.innerText = `${currentPercent}%`;
                         
                         if (progress < 1) {
                             requestAnimationFrame(updatePercent);
                         } else {
+                            lPercent.innerText = "100%";
                             // 載入完成，進入主頁面
                             setTimeout(() => {
                                 document.getElementById('splash-screen').classList.add('hidden');
                                 const bgm = document.getElementById('bgm');
                                 if (bgm) bgm.play().catch(e => console.log("Splash audio trigger restricted"));
-                            }, 500);
+                            }, 600);
                         }
                     }
                     requestAnimationFrame(updatePercent);
