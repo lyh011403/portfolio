@@ -217,6 +217,80 @@
             opacity: 0;
         }
 
+        /* 科技感讀取條樣式 */
+        #loader-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 300px;
+            margin: 2rem auto 0;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        #loader-container.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .loader-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .loader-progress {
+            width: 0%;
+            height: 100%;
+            background: #00f3ff;
+            box-shadow: 0 0 15px #00f3ff, 0 0 30px rgba(0, 243, 255, 0.5);
+            position: relative;
+            transition: width 2.5s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        /* 讀取條掃描線效果 */
+        .loader-progress::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: loader-shimmer 1.5s infinite linear;
+        }
+
+        @keyframes loader-shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .loader-info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 10px;
+            font-family: 'Inter', monospace;
+            font-size: 0.7rem;
+            color: #00f3ff;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
+        }
+
+        .loader-status {
+            animation: status-pulse 1.5s infinite alternate;
+        }
+
+        @keyframes status-pulse {
+            from { opacity: 0.5; }
+            to { opacity: 1; }
+        }
+
         /* Revealed Classes for JS */
         .reveal-node {
             opacity: 1 !important;
@@ -240,11 +314,21 @@
         <div id="splash-mask"></div>
         <div class="splash-content">
             <div class="splash-meta" id="s-meta">YH. 2026</div>
-            <img src="/portfolio/assets/LOGO-DwXJY4XJ.png" alt="Logo" class="reveal-node" style="height: 60px; width: auto; margin-bottom: 2rem; opacity: 0; transform: translateY(20px); transition: all 1.2s ease;">
             <h1 class="splash-logo" id="s-logo">HAIN<span class="outline">.</span></h1>
             <p class="splash-desc" id="s-desc">遊戲美術 × 嵌入式 AI × 硬體整合 / 用技術驅動創意，用藝術表達工程。</p>
             <button class="splash-btn" id="s-btn">進入系統 <span class="arrow">→</span></button>
             <div class="splash-sub" id="s-sub">ENTER EXPERIENCE</div>
+            
+            <!-- 科技感載入條結構 -->
+            <div id="loader-container">
+                <div class="loader-bar">
+                    <div class="loader-progress" id="l-progress"></div>
+                </div>
+                <div class="loader-info">
+                    <span class="loader-status">System Initializing...</span>
+                    <span id="l-percent">0%</span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -390,11 +474,54 @@
             });
         });
 
-        // Splash Hide Logic
-        document.getElementById('s-btn').addEventListener('click', () => {
-            document.getElementById('splash-screen').classList.add('hidden');
-            const bgm = document.getElementById('bgm');
-            if (bgm) bgm.play().catch(e => console.log("Splash audio trigger restricted"));
+        // Splash Hide Logic with Loading Bar
+        const sBtn = document.getElementById('s-btn');
+        const sSub = document.getElementById('s-sub');
+        const loader = document.getElementById('loader-container');
+        const lProgress = document.getElementById('l-progress');
+        const lPercent = document.getElementById('l-percent');
+
+        sBtn.addEventListener('click', () => {
+            // 1. 隱藏按鈕
+            sBtn.style.opacity = '0';
+            sBtn.style.pointerEvents = 'none';
+            sSub.style.opacity = '0';
+            
+            // 2. 顯示讀取條
+            setTimeout(() => {
+                sBtn.style.display = 'none';
+                sSub.style.display = 'none';
+                loader.classList.add('active');
+                
+                // 3. 啟動進度條動畫
+                requestAnimationFrame(() => {
+                    lProgress.style.width = '100%';
+                    
+                    // 4. 數位百分比增加動畫
+                    let count = 0;
+                    const duration = 2500; // 與 CSS transition 2.5s 一致
+                    const startTime = performance.now();
+                    
+                    function updatePercent(currentTime) {
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        count = Math.floor(progress * 100);
+                        lPercent.innerText = `${count}%`;
+                        
+                        if (progress < 1) {
+                            requestAnimationFrame(updatePercent);
+                        } else {
+                            // 載入完成，進入主頁面
+                            setTimeout(() => {
+                                document.getElementById('splash-screen').classList.add('hidden');
+                                const bgm = document.getElementById('bgm');
+                                if (bgm) bgm.play().catch(e => console.log("Splash audio trigger restricted"));
+                            }, 500);
+                        }
+                    }
+                    requestAnimationFrame(updatePercent);
+                });
+            }, 400);
         });
     </script>
     <!-- Custom Cursor -->
