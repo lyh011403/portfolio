@@ -236,7 +236,7 @@
             height: 2px;
             background: rgba(200, 169, 126, 0.1);
             border-radius: 4px;
-            overflow: visible; /* 允許火花溢出發光 */
+            overflow: visible; /* 關鍵：確保火花不會被切斷 */
             position: relative;
         }
 
@@ -249,50 +249,92 @@
                 #c8a97e 80%, 
                 #ffd700 100%);
             position: relative;
-            transition: width 5s cubic-bezier(0.4, 0, 0.2, 1);
+            /* 移除原本固定的 5s transition，改由 JS 隨機步進 */
+            transition: width 0.3s ease-out; 
             border-radius: 4px;
         }
 
-        /* 煙火火花前端效果 */
+        /* 仙女棒核心呼吸點 (縮小且帶有明滅感) */
         .loader-progress::after {
             content: "";
             position: absolute;
-            right: -8px;
+            right: -5px;
             top: 50%;
             transform: translateY(-50%);
-            width: 16px;
-            height: 16px;
+            width: 8px;   /* 縮小為更精緻的 8px */
+            height: 8px;
             background: #fff;
             border-radius: 50%;
             box-shadow: 
-                0 0 15px #ffd700, 
-                0 0 30px #c8a97e, 
-                0 0 50px rgba(255, 215, 0, 0.6);
-            filter: blur(1px);
-            animation: spark-pulse 0.2s infinite alternate ease-in-out;
+                0 0 8px #fff,
+                0 0 16px #ffd700, 
+                0 0 32px #ff8c00;
+            z-index: 10;
+            /* 加入呼吸燈動畫 */
+            animation: sparkler-breathing 0.6s infinite alternate ease-in-out;
         }
 
-        @keyframes spark-pulse {
-            from { 
-                transform: translateY(-50%) scale(0.8);
-                opacity: 0.8;
-                box-shadow: 0 0 10px #ffd700, 0 0 20px #c8a97e;
-            }
-            to { 
-                transform: translateY(-50%) scale(1.2);
-                opacity: 1;
-                box-shadow: 0 0 25px #fff, 0 0 50px #ffd700, 0 0 80px #c8a97e;
-            }
-        }
-
-        /* 進度條後方拖曳軌跡感 */
+        /* 茂密仙女棒噴射粒子 (利用 ::before) */
         .loader-progress::before {
             content: "";
             position: absolute;
-            inset: -4px;
-            background: radial-gradient(circle at right, rgba(255, 215, 0, 0.2), transparent 70%);
-            filter: blur(10px);
-            pointer-events: none;
+            right: -5px;
+            top: 50%;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            /* 增加更多坐標點，讓粒子更茂密 */
+            box-shadow: 
+                10px -10px 0 #fff,
+                -8px 12px 0 #ffd700,
+                15px 8px 0 #ff8c00,
+                -12px -10px 0 #fff,
+                8px 15px 0 #ffd700,
+                20px -5px 0 #ff8c00,
+                -15px 5px 0 #fff,
+                5px -18px 0 #ffd700,
+                12px 12px 0 #ff8c00,
+                -5px 20px 0 #fff;
+            animation: sparkler-scatter-lush 0.4s infinite linear;
+            z-index: 9;
+        }
+
+        /* 呼吸燈動畫 */
+        @keyframes sparkler-breathing {
+            from { 
+                transform: translateY(-50%) scale(0.8);
+                filter: brightness(1);
+                box-shadow: 0 0 10px #ffd700;
+            }
+            to { 
+                transform: translateY(-50%) scale(1.2);
+                filter: brightness(1.8);
+                box-shadow: 0 0 20px #fff, 0 0 40px #ffd700, 0 0 60px #ff8c00;
+            }
+        }
+
+        /* 茂密噴散動畫 */
+        @keyframes sparkler-scatter-lush {
+            0% {
+                transform: translate(0, -50%) scale(1);
+                opacity: 1;
+            }
+            100% {
+                /* 粒子向外噴射路徑更分散與變小 */
+                transform: translate(35px, -80%) scale(0);
+                opacity: 0;
+                box-shadow: 
+                    30px -30px 0 #fff,
+                    -25px 35px 0 #ffd700,
+                    40px 20px 0 #ff8c00,
+                    -35px -25px 0 #fff,
+                    20px 45px 0 #ffd700,
+                    50px -15px 0 #ff8c00,
+                    -40px 15px 0 #fff,
+                    15px -50px 0 #ffd700,
+                    35px 35px 0 #ff8c00,
+                    -15px 55px 0 #fff;
+            }
         }
 
         .loader-info {
@@ -509,41 +551,36 @@
                 sSub.style.display = 'none';
                 loader.classList.add('active');
                 
-                // 3. 啟動進度條動畫
-                requestAnimationFrame(() => {
-                    lProgress.style.width = '100%';
+                // 3. 啟動進度條動畫 (隨機步進載入邏輯)
+                let currentPercent = 0;
+                
+                function performLoading() {
+                    // 每次隨機增加 1~3%，更符合真實系統載入感
+                    const step = Math.floor(Math.random() * 3) + 1;
+                    currentPercent += step;
                     
-                    // 4. 數位百分比增加動畫 (帶有擬真跳動感)
-                    let currentPercent = 0;
-                    const duration = 5000; 
-                    const startTime = performance.now();
+                    if (currentPercent > 100) currentPercent = 100;
                     
-                    function updatePercent(currentTime) {
-                        const elapsed = currentTime - startTime;
-                        let progress = Math.min(elapsed / duration, 1);
-                        
-                        // 加入非線性「跳動感」效果
-                        // 使用 sin 波增加一點隨機抖動，模擬系統讀取不均勻的感覺
-                        const jitter = Math.sin(progress * Math.PI * 8) * 0.02;
-                        const perceivedProgress = Math.min(Math.max(progress + jitter, 0), 1);
-                        
-                        currentPercent = Math.floor(perceivedProgress * 100);
-                        lPercent.innerText = `${currentPercent}%`;
-                        
-                        if (progress < 1) {
-                            requestAnimationFrame(updatePercent);
-                        } else {
-                            lPercent.innerText = "100%";
-                            // 載入完成，進入主頁面
-                            setTimeout(() => {
-                                document.getElementById('splash-screen').classList.add('hidden');
-                                const bgm = document.getElementById('bgm');
-                                if (bgm) bgm.play().catch(e => console.log("Splash audio trigger restricted"));
-                            }, 600);
-                        }
+                    // 更新 UI
+                    lProgress.style.width = `${currentPercent}%`;
+                    lPercent.innerText = `${currentPercent}%`;
+                    
+                    if (currentPercent < 100) {
+                        // 隨機延遲 50ms ~ 250ms，產生停頓與衝刺感
+                        const delay = Math.random() * 200 + 50;
+                        setTimeout(performLoading, delay);
+                    } else {
+                        // 載入完成，進入主頁面
+                        setTimeout(() => {
+                            document.getElementById('splash-screen').classList.add('hidden');
+                            const bgm = document.getElementById('bgm');
+                            if (bgm) bgm.play().catch(e => console.log("Splash audio trigger restricted"));
+                        }, 800);
                     }
-                    requestAnimationFrame(updatePercent);
-                });
+                }
+                
+                // 開始執行隨機載入
+                requestAnimationFrame(performLoading);
             }, 400);
         });
     </script>
