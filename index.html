@@ -691,7 +691,8 @@
             }
 
             function performLoading() {
-                const step = Math.floor(Math.random() * 2) + 1;
+                // 加快步進與隨機感 (每次增加 2~5%)
+                const step = Math.floor(Math.random() * 4) + 2;
                 currentPercent += step;
                 if (currentPercent > 100) currentPercent = 100;
 
@@ -699,7 +700,8 @@
                 percentEl.innerText = `${currentPercent}%`;
 
                 if (currentPercent < 100) {
-                    setTimeout(performLoading, Math.random() * 150 + 50);
+                    // 縮短等待間隔 (30ms ~ 80ms)，讓整體條感更流暢
+                    setTimeout(performLoading, Math.random() * 50 + 30);
                 } else {
                     explode();
                 }
