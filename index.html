@@ -111,35 +111,36 @@
             cursor: pointer;
         }
 
-        /* 文字故障特效 (Glitch) */
+        /* 文字金屬故障特效 (Golden Glitch) - 與背景粒子色同步 */
         .splash-logo:hover {
-            animation: logo-glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+            animation: logo-glitch-gold 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+            color: #c8a97e;
         }
 
-        @keyframes logo-glitch {
+        @keyframes logo-glitch-gold {
             0% {
                 transform: translate(0);
                 text-shadow: 0 0 0 transparent;
             }
 
             20% {
-                transform: translate(-2px, 2px);
-                text-shadow: 2px 0 #ff00c1, -2px 0 #00fff9;
+                transform: translate(-1px, 1px);
+                text-shadow: 1px 0 rgba(200, 169, 126, 0.7), -1px 0 rgba(255, 255, 255, 0.3);
             }
 
             40% {
-                transform: translate(-2px, -2px);
-                text-shadow: 2px 0 #ff00c1, -2px 0 #00fff9;
+                transform: translate(-1px, -1px);
+                text-shadow: 1px 0 rgba(200, 169, 126, 0.7), -1px 0 rgba(255, 255, 255, 0.3);
             }
 
             60% {
-                transform: translate(2px, 2px);
-                text-shadow: -2px 0 #ff00c1, 2px 0 #00fff9;
+                transform: translate(1.5px, 1.5px);
+                text-shadow: -1px 0 rgba(200, 169, 126, 0.7), 1px 0 rgba(255, 255, 255, 0.3);
             }
 
             80% {
-                transform: translate(2px, -2px);
-                text-shadow: -2px 0 #ff00c1, 2px 0 #00fff9;
+                transform: translate(1.5px, -1.5px);
+                text-shadow: -1.5px 0 rgba(200, 169, 126, 0.7), 1.5px 0 rgba(255, 255, 255, 0.3);
             }
 
             100% {
@@ -178,6 +179,22 @@
         @keyframes text-shine {
             to {
                 background-position: 200% center;
+            }
+        }
+
+        /* 讓文字隨背景粒子「呼吸」的微光 */
+        .splash-meta,
+        .splash-desc {
+            animation: text-breathing 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes text-breathing {
+            from {
+                text-shadow: 0 0 5px rgba(200, 169, 126, 0);
+            }
+
+            to {
+                text-shadow: 0 0 15px rgba(200, 169, 126, 0.4);
             }
         }
 
