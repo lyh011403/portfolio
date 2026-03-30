@@ -40,15 +40,17 @@
             user-select: none;
         }
 
-        /* 進主頁的退出動畫：平滑縮放淡出 */
+        /* 進主頁的退出動畫 */
 
         #splash-screen.exit-glitch {
-            animation: screen-exit 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: screen-exit 0.8s ease forwards;
         }
 
         @keyframes screen-exit {
-            0%   { opacity: 1; transform: scale(1); filter: blur(0); }
-            100% { opacity: 0; transform: scale(1.1); filter: blur(10px); pointer-events: none; }
+            0%   { opacity: 1; transform: scale(1); clip-path: inset(0 0 0 0); }
+            30%  { clip-path: inset(30% 0 30% 0); transform: scale(1.03); }
+            60%  { clip-path: inset(0 0 0 0); opacity: 0.5; }
+            100% { opacity: 0; transform: scale(0.96); pointer-events: none; }
         }
 
         #splash-screen.hidden {
@@ -226,19 +228,9 @@
         }
 
         @keyframes btn-collapse {
-            0%   { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(0.9); }
-        }
-
-        /* ── 內容轉場動畫 ── */
-
-        .splash-intro-exit {
-            animation: content-jump 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
-        }
-
-        @keyframes content-jump {
-            0% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(0.85); filter: blur(5px); }
+            0%   { opacity: 1; transform: scaleY(1); }
+            40%  { opacity: 0.5; transform: scaleY(0.1) scaleX(1.1); }
+            100% { opacity: 0; transform: scaleY(0) scaleX(0.8); }
         }
 
         .splash-sub {
@@ -287,7 +279,7 @@
             position: relative;
         }
 
-        /* 加載文字與百分比 (移除故障效果) */
+        /* 故障閃爍文字 */
 
         #loader-label .glitch-percent {
             color: #fff;
@@ -295,6 +287,18 @@
             display: inline-block;
             min-width: 5ch;
             text-align: left;
+        }
+
+        #loader-label .glitch-percent.glitching {
+            animation: text-glitch 0.1s steps(1) forwards;
+        }
+
+        @keyframes text-glitch {
+            0%   { transform: translate(0); }
+            25%  { transform: translate(-2px, 1px); color: #ff003c; }
+            50%  { transform: translate(2px, -1px); color: #00d4ff; }
+            75%  { transform: translate(0); color: #fff; }
+            100% { transform: translate(0); }
         }
 
         /* ── 進度條外框 ── */
@@ -323,7 +327,7 @@
 
         #cp-bar-outer::after  { bottom: -4px; right: -4px; border-left: none; border-top: none; }
 
-        /* 進度條填充 (移除故障跳動) */
+        /* ── 進度條填充 ── */
 
         #cp-bar-fill {
             height: 100%;
@@ -334,6 +338,35 @@
             box-shadow:
                 0 0 12px rgba(255,255,255,0.8),
                 0 0 30px rgba(255,255,255,0.4);
+        }
+
+        /* 填充右端的紅色熱點 */
+
+        #cp-bar-fill::after {
+            content: '';
+            position: absolute;
+            right: -4px; top: -2px; bottom: -2px;
+            width: 8px;
+            background: #ff1a3e;
+            box-shadow: 0 0 15px #ff1a3e, 0 0 30px rgba(255,26,62,0.5);
+            animation: tip-pulse 0.3s ease-in-out infinite alternate;
+        }
+
+        @keyframes tip-pulse {
+            from { opacity: 0.7; box-shadow: 0 0 10px #ff1a3e; }
+            to   { opacity: 1;   box-shadow: 0 0 25px #ff1a3e, 0 0 50px rgba(255,26,62,0.4); }
+        }
+
+        /* 故障跳動效果 */
+
+        #cp-bar-fill.glitch-jump {
+            animation: bar-jump 0.08s steps(1) 2;
+        }
+
+        @keyframes bar-jump {
+            0%   { transform: translateY(0); opacity: 1; }
+            50%  { transform: translateY(-2px); opacity: 0.6; }
+            100% { transform: translateY(0); opacity: 1; }
         }
 
         /* ── 進度條下方狀態文字 ── */
@@ -498,9 +531,15 @@
                 'SYSTEM READY'
             ];
 
-            // 移除原本的視覺故障函數
+            // 觸發文字故障閃爍
             function triggerGlitch() {
-                // 不再執行視覺抖動
+                percentEl.classList.add('glitching');
+                setTimeout(() => percentEl.classList.remove('glitching'), 120);
+
+                if (Math.random() < 0.3) {
+                    barFill.classList.add('glitch-jump');
+                    setTimeout(() => barFill.classList.remove('glitch-jump'), 200);
+                }
             }
 
             // 隨機更新狀態文字
@@ -553,18 +592,20 @@
                 }, 800);
             }
 
-            // 按鈕點擊事件：先跳轉（內容縮小）再載入
+            // 按鈕點擊事件
             sBtn.addEventListener('click', () => {
+                // 按鈕故障收縮動畫
+                sBtn.classList.add('clicked');
                 sBtn.disabled = true;
-                // 加入跳轉微動畫
-                splashIntro.classList.add('splash-intro-exit');
 
                 setTimeout(() => {
-                    // 內容完全消失後，顯示加載畫面
-                    splashIntro.style.display = 'none';
+                    // 隱藏介紹、顯示加載
+                    splashIntro.style.opacity = '0';
+                    splashIntro.style.transition = 'opacity 0.4s ease';
                     loaderScr.classList.add('active');
-                    setTimeout(doLoad, 300);
-                }, 800);
+
+                    setTimeout(doLoad, 200);
+                }, 500);
             });
         })();
     </script>
