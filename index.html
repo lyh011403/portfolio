@@ -223,10 +223,13 @@
             flex-direction: column;
             align-items: center;
             width: 400px;
-            margin: 3.5rem auto 0;
+            position: fixed; /* 改為與屏幕居中 */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             opacity: 0;
-            transition: opacity 0.8s ease;
-            position: relative;
+            transition: opacity 1.2s ease;
+            z-index: 99999;
         }
 
         #loader-container.active {
@@ -363,20 +366,27 @@
             <button class="splash-btn" id="s-btn">進入系統 <span class="arrow">→</span></button>
             <div class="splash-sub" id="s-sub">ENTER EXPERIENCE</div>
             
-            <!-- Canvas 物理粒子載入條結構 -->
+            <!-- Canvas 物理粒子載入條結構 (純淨版：無文字) -->
             <div id="loader-container">
                 <canvas id="loader-canvas"></canvas>
                 <div id="bar-shell">
                     <div id="bar-fill"></div>
-                </div>
-                <div class="loader-info">
-                    <span id="l-percent">0%</span>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // --- 網頁登錄微動畫邏輯 ---
+        function revealMain() {
+            const main = document.querySelector('main');
+            if (main) {
+                main.style.opacity = '1';
+                main.style.transform = 'translateY(0)';
+                main.style.filter = 'blur(0)';
+            }
+        }
+
         // --- Splash Particle Logic (Node Connectivity) ---
         (function () {
             const sc = document.getElementById('splash-canvas');
@@ -680,6 +690,9 @@
                 // 移除原有的 150 顆噴發粒子噴發迴圈，改為平滑切換
                 setTimeout(() => {
                     document.getElementById('splash-screen').classList.add('hidden');
+                    // 觸發網頁登錄動畫
+                    revealMain();
+                    
                     const bgm = document.getElementById('bgm');
                     if (bgm) bgm.play().catch(e => {});
                 }, 400); // 縮短等待時間，直接進場
@@ -703,10 +716,20 @@
             }
 
             sBtn.addEventListener('click', () => {
-                sBtn.style.opacity = '0';
-                document.getElementById('s-sub').style.opacity = '0';
+                // 1. 隱藏所有啟動文字與按鈕
+                const splashElements = ['s-meta', 's-logo', 's-desc', 's-btn', 's-sub'];
+                splashElements.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.style.opacity = '0';
+                        el.style.transform = 'translateY(-20px)';
+                        el.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+                        setTimeout(() => (el.style.display = 'none'), 800);
+                    }
+                });
+
+                // 2. 顯示讀取條 (單獨居中出現)
                 setTimeout(() => {
-                    sBtn.style.display = 'none';
                     loader.classList.add('active');
                     resizeCanvas();
                     requestAnimationFrame(tick);
@@ -715,6 +738,16 @@
             });
         })();
     </script>
+
+    <style>
+        /* 網頁主體初始隱藏狀態 (微動畫準備) */
+        main {
+            opacity: 0;
+            transform: translateY(30px);
+            filter: blur(10px);
+            transition: all 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
     <!-- Custom Cursor -->
     <div id="cursor-ring">
         <div class="ring-track"></div>
