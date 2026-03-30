@@ -41,50 +41,10 @@
             overflow-x: hidden;
         }
 
-        /* Navigation Bar */
-        .nav-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1.5rem 3rem;
-            z-index: 1000;
-            background: rgba(245, 245, 247, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .nav-logo-img {
-            height: 32px;
-            width: auto;
-            cursor: pointer;
-            transition: transform 0.3s var(--ease);
-        }
-
-        .nav-logo-img:hover {
-            transform: scale(1.1);
-        }
-
-        .back-link {
-            text-decoration: none;
-            color: var(--text-sub);
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: color 0.3s;
-        }
-
-        .back-link:hover {
-            color: var(--accent-blue);
-        }
-
         .container {
             max-width: 900px;
             margin: 0 auto;
-            padding: 7rem 1.5rem 3rem 1.5rem; /* Increased top padding for fixed nav */
+            padding: 3rem 1.5rem;
         }
 
         header {
@@ -499,10 +459,6 @@
 </head>
 
 <body>
-    <nav class="nav-bar">
-        <img src="./assets/LOGO.png" alt="Logo" class="nav-logo-img" onclick="window.history.back()">
-        <a href="javascript:void(0)" onclick="window.history.back()" class="back-link">← 返回</a>
-    </nav>
     <div id="cursor-dot"></div>
     <div id="cursor-ring"></div>
 
