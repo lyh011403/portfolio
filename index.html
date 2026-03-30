@@ -1,8 +1,5 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-<script type="module" crossorigin src="/portfolio/assets/index-DIcQDnqM.js"></script>
-<link rel="stylesheet" crossorigin href="/portfolio/assets/index-EM4nt-XR.css">
-
 
 <head>
     <meta charset="UTF-8">
@@ -18,71 +15,331 @@
         rel="stylesheet">
     <link rel="icon" type="image/png" href="/portfolio/assets/LOGO-DwXJY4XJ.png">
 
-        /* --- 視圖管理基礎 --- */
-        #cover-view, #loading-view, #main-view {
+<script type="module" crossorigin src="/portfolio/assets/index-DIcQDnqM.js"></script>
+<link rel="stylesheet" crossorigin href="/portfolio/assets/index-EM4nt-XR.css">
+
+<body>
+    <!-- Splash Entrance Screen -->
+    <style>
+        #splash-screen {
             position: fixed;
             inset: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        #cover-view {
-            z-index: 1000;
             background: #030303;
+            z-index: 100000;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            overflow: hidden;
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            user-select: none;
         }
 
-        #loading-view {
-            z-index: 1100;
-            background: #000; /* 徹底純黑隔離 */
-            display: none; /* 初始隱藏 */
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        #splash-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.1);
         }
 
-        #main-view {
-            z-index: 100;
-            background: #000;
-            display: none; /* 初始隱藏 */
-            overflow-y: auto;
-            position: relative;
-        }
-
-        /* --- Glitch 特效 (賽博龐克感) --- */
-        .glitch-active {
-            animation: glitch-shake 0.2s infinite;
-        }
-
-        @keyframes glitch-shake {
-            0% { transform: translate(0); }
-            20% { transform: translate(-5px, 5px); filter: hue-rotate(90deg); }
-            40% { transform: translate(-5px, -5px); filter: contrast(150%); }
-            60% { transform: translate(5px, 5px); }
-            80% { transform: translate(5px, -5px); filter: hue-rotate(-90deg); }
-            100% { transform: translate(0); }
-        }
-
-        .glitch-flash {
+        #splash-mask {
             position: absolute;
             inset: 0;
-            background: rgba(255, 255, 255, 0.1);
-            z-index: 99999;
-            pointer-events: none;
-            display: none;
+            background: radial-gradient(circle at center, transparent, rgba(0, 0, 0, 0.8));
+            z-index: 1;
+        }
+
+        .splash-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            padding: 2rem;
+            max-width: 1000px;
+        }
+
+        .splash-meta {
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.5em;
+            /* 增加間距 */
+            color: #fff;
+            margin-bottom: 2.5rem;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(20px);
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            padding: 0.2rem 0;
+        }
+
+        /* 掃描線光效改為如星光閃爍的微弱動態 */
+        .splash-meta::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 80%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: meta-shimmer 6s infinite ease-in-out;
+        }
+
+        @keyframes meta-shimmer {
+            0% {
+                left: -100%;
+            }
+
+            30% {
+                left: 100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        .splash-logo {
+            font-size: clamp(3rem, 15vw, 9rem);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 0.9;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            transform: translateY(40px);
+            position: relative;
+            cursor: pointer;
+
+            /* 探照燈效果基礎設定 */
+            color: rgba(255, 255, 255, 0.15);
+            background: radial-gradient(circle 120px at var(--x, 50%) var(--y, 50%),
+                    #c8a97e 0%,
+                    rgba(200, 169, 126, 0.4) 50%,
+                    transparent 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .splash-logo .outline {
+            -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.1);
+            color: transparent;
+            transition: all 0.4s ease;
+        }
+
+        /* 懸停時僅增加光感，不變大 */
+        .splash-logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .splash-desc {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 4rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            opacity: 0;
+            transform: translateY(20px);
+            /* 漸變色質感 */
+            background: linear-gradient(to right, #fff, rgba(255, 255, 255, 0.4), #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: text-shine 5s linear infinite;
+        }
+
+        @keyframes text-shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        /* 讓文字隨背景粒子「呼吸」的微光 */
+        .splash-meta,
+        .splash-desc {
+            animation: text-breathing 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes text-breathing {
+            from {
+                text-shadow: 0 0 5px rgba(200, 169, 126, 0);
+            }
+
+            to {
+                text-shadow: 0 0 15px rgba(200, 169, 126, 0.4);
+            }
+        }
+
+        .splash-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            padding: 1.2rem 3.5rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .splash-btn:hover {
+            border-color: #c8a97e;
+            color: #c8a97e;
+            padding-right: 4.5rem;
+            box-shadow: 0 0 30px rgba(200, 169, 126, 0.15);
+        }
+
+        .splash-btn .arrow {
+            transition: transform 0.5s ease;
+        }
+
+        .splash-btn:hover .arrow {
+            transform: translateX(10px);
+        }
+
+        .splash-sub {
+            display: block;
+            margin-top: 1.5rem;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            opacity: 0;
         }
 
         #loader-container {
-            display: flex; /* 改由容器控制 */
+            display: none;
             flex-direction: column;
             align-items: center;
             width: 400px;
+            margin: 3.5rem auto 0;
+            opacity: 0;
+            transition: opacity 0.8s ease;
             position: relative;
-            opacity: 1; /* 內部預設顯示 */
+        }
+
+        #loader-container.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* 外殼與容器：極細且精緻 */
+        #bar-shell {
+            width: 100%;
+            height: 2px; /* 極細 */
+            background: rgba(255, 255, 255, 0.03); 
+            border-radius: 2px;
+            position: relative;
+            overflow: visible; 
+        }
+
+        #bar-fill {
+            width: 0%;
+            height: 100%;
+            /* 漸層：透明 -> 古銅 -> 亮金 */
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(200, 169, 126, 0.4) 40%, 
+                #c8a97e 80%, 
+                #ffd700 100%);
+            border-radius: 2px;
+            position: relative;
+            box-shadow: 0 0 10px rgba(200, 169, 126, 0.2);
+            transition: none; 
+        }
+
+        /* Canvas 疊加層：全螢幕 */
+        #loader-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .loader-info {
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+            margin-top: 25px;
+            font-family: 'Inter', monospace;
+            font-size: 0.85rem;
+            color: #c8a97e;
+            text-transform: uppercase;
+            letter-spacing: 0.5em; /* 增大字距 */
+            font-weight: 800;
+            opacity: 0.8;
+        }
+
+        /* 呼吸燈動畫 */
+        @keyframes sparkler-breathing {
+            from { 
+                transform: translateY(-50%) scale(0.8);
+                filter: brightness(1);
+                box-shadow: 0 0 10px #ffd700;
+            }
+            to { 
+                transform: translateY(-50%) scale(1.2);
+                filter: brightness(1.8);
+                box-shadow: 0 0 20px #fff, 0 0 40px #ffd700, 0 0 60px #ff8c00;
+            }
+        }
+
+        /* 茂密噴散動畫 */
+        @keyframes sparkler-scatter-lush {
+            0% {
+                transform: translate(0, -50%) scale(1);
+                opacity: 1;
+            }
+            100% {
+                /* 粒子向外噴射路徑更分散與變小 */
+                transform: translate(35px, -80%) scale(0);
+                opacity: 0;
+                box-shadow: 
+                    30px -30px 0 #fff,
+                    -25px 35px 0 #ffd700,
+                    40px 20px 0 #ff8c00,
+                    -35px -25px 0 #fff,
+                    20px 45px 0 #ffd700,
+                    50px -15px 0 #ff8c00,
+                    -40px 15px 0 #fff,
+                    15px -50px 0 #ffd700,
+                    35px 35px 0 #ff8c00,
+                    -15px 55px 0 #fff;
+            }
+        }
+
+        .loader-info {
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+            margin-top: 15px;
+            font-family: 'Inter', monospace;
+            font-size: 0.8rem;
+            color: #c8a97e;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            font-weight: 700;
+        }
+
+        /* Revealed Classes for JS */
+        .reveal-node {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
     </style>
 
@@ -96,8 +353,7 @@
         }
     </style>
 
-    <!-- 三階段視圖容器 -->
-    <div id="cover-view">
+    <div id="splash-screen">
         <canvas id="splash-canvas"></canvas>
         <div id="splash-mask"></div>
         <div class="splash-content">
@@ -106,34 +362,19 @@
             <p class="splash-desc" id="s-desc">遊戲美術 × 嵌入式 AI × 硬體整合 / 用技術驅動創意，用藝術表達工程。</p>
             <button class="splash-btn" id="s-btn">進入系統 <span class="arrow">→</span></button>
             <div class="splash-sub" id="s-sub">ENTER EXPERIENCE</div>
-        </div>
-    </div>
-
-    <!-- 加載層 (隔離背景) -->
-    <div id="loading-view">
-        <div class="glitch-flash" id="glitch-flash"></div>
-        <div id="loader-container">
-            <canvas id="loader-canvas"></canvas>
-            <div id="bar-shell">
-                <div id="bar-fill"></div>
-            </div>
-            <div class="loader-info">
-                <span id="l-percent">0%</span>
+            
+            <!-- Canvas 物理粒子載入條結構 -->
+            <div id="loader-container">
+                <canvas id="loader-canvas"></canvas>
+                <div id="bar-shell">
+                    <div id="bar-fill"></div>
+                </div>
+                <div class="loader-info">
+                    <span id="l-percent">0%</span>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- 主頁層 -->
-    <div id="main-view">
-        <div id="cursor-ring">
-            <div class="ring-track"></div>
-            <div class="ring-arc"></div>
-        </div>
-        <div id="cursor-dot"></div>
-        
-        <!-- 原有的背景效果與 NAV -->
-        <canvas id="ink-canvas"></canvas>
-        <div id="canvas-mask"></div>
 
     <script>
         // --- Splash Particle Logic (Node Connectivity) ---
@@ -277,30 +518,23 @@
             });
         });
 
-        // --- 核心系統管理 (View States) ---
+        // --- Canvas Particle System 重構 ---
         (function() {
-            const State = { COVER: 'COVER', LOADING: 'LOADING', MAIN: 'MAIN' };
-            let currentState = State.COVER;
-            
-            const coverView = document.getElementById('cover-view');
-            const loadingView = document.getElementById('loading-view');
-            const mainView = document.getElementById('main-view');
-            const sBtn = document.getElementById('s-btn');
-            const fill = document.getElementById('bar-fill');
-            const percentEl = document.getElementById('l-percent');
-            const glitchFlash = document.getElementById('glitch-flash');
-            
             const canvas = document.getElementById('loader-canvas');
             const ctx = canvas.getContext('2d');
             const shell = document.getElementById('bar-shell');
+            const fill = document.getElementById('bar-fill');
+            const percentEl = document.getElementById('l-percent');
+            const sBtn = document.getElementById('s-btn');
+            const loader = document.getElementById('loader-container');
             
             let particles = [];
             let currentPercent = 0;
             let barRect, tipX, tipY;
             let isExploded = false;
 
-            // 粒子類別與 Canvas 邏輯 (同前)
             function resizeCanvas() {
+                // 擴大畫布範圍以利粒子飛散
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
                 barRect = shell.getBoundingClientRect();
@@ -311,126 +545,176 @@
                 constructor(x, y, isFinal = false) {
                     this.x = x;
                     this.y = y;
+                    // 向右前方噴射 (仙女棒動態)
                     const angle = isFinal ? Math.random() * Math.PI * 2 : (Math.random() - 0.4) * Math.PI * 0.5;
                     const speed = isFinal ? Math.random() * 15 + 8 : Math.random() * 5 + 1.5;
+                    
                     this.vx = Math.cos(angle) * speed;
                     this.vy = Math.sin(angle) * speed - (isFinal ? 0 : 0.5); 
+                    
                     this.gravity = 0.12;
                     this.friction = 0.95;
                     this.life = 1.0;
-                    this.decay = Math.random() * 0.04 + 0.02;
+                    this.decay = Math.random() * 0.04 + 0.02; // 更快消失
+                    
+                    // 燃燒色調 (增加銀灰與古銅)
                     const colors = ['#ffffff', '#ffed00', '#c8a97e', '#888888', '#ff8c00'];
                     this.color = colors[Math.floor(Math.random() * colors.length)];
-                    this.size = Math.random() * 1.2 + 0.3;
+                    this.size = Math.random() * 1.2 + 0.3; // 更細微的粒子
                     this.shape = Math.random() > 0.8 ? 'star' : 'dot';
                 }
+
                 update() {
-                    this.vx *= this.friction; this.vy *= this.friction; this.vy += this.gravity;
-                    this.x += this.vx; this.y += this.vy; this.life -= this.decay;
+                    this.vx *= this.friction;
+                    this.vy *= this.friction;
+                    this.vy += this.gravity;
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.life -= this.decay;
                 }
+
                 draw() {
-                    ctx.save(); ctx.globalAlpha = this.life; ctx.translate(this.x, this.y);
-                    ctx.fillStyle = this.color; ctx.shadowBlur = 15; ctx.shadowColor = this.color;
-                    if (this.shape === 'star') this.drawStar(0, 0, 5, this.size, this.size / 2);
-                    else { ctx.beginPath(); ctx.arc(0, 0, this.size, 0, Math.PI * 2); ctx.fill(); }
+                    ctx.save();
+                    ctx.globalAlpha = this.life;
+                    ctx.translate(this.x, this.y);
+                    ctx.fillStyle = this.color;
+                    // 拖尾效果：外發光
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = this.color;
+                    
+                    if (this.shape === 'star') {
+                        this.drawStar(0, 0, 5, this.size, this.size / 2);
+                    } else {
+                        ctx.beginPath();
+                        ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
                     ctx.restore();
                 }
+
                 drawStar(cx, cy, spikes, outerRadius, innerRadius) {
-                    let rot = Math.PI / 2 * 3, step = Math.PI / spikes;
-                    ctx.beginPath(); ctx.moveTo(cx, cy - outerRadius);
+                    let rot = Math.PI / 2 * 3;
+                    let x = cx, y = cy;
+                    let step = Math.PI / spikes;
+                    ctx.beginPath();
+                    ctx.moveTo(cx, cy - outerRadius);
                     for (let i = 0; i < spikes; i++) {
-                        ctx.lineTo(cx + Math.cos(rot) * outerRadius, cy + Math.sin(rot) * outerRadius);
+                        x = cx + Math.cos(rot) * outerRadius;
+                        y = cy + Math.sin(rot) * outerRadius;
+                        ctx.lineTo(x, y);
                         rot += step;
-                        ctx.lineTo(cx + Math.cos(rot) * innerRadius, cy + Math.sin(rot) * innerRadius);
+                        x = cx + Math.cos(rot) * innerRadius;
+                        y = cy + Math.sin(rot) * innerRadius;
+                        ctx.lineTo(x, y);
                         rot += step;
                     }
-                    ctx.closePath(); ctx.fill();
+                    ctx.lineTo(cx, cy - outerRadius);
+                    ctx.closePath();
+                    ctx.fill();
                 }
             }
 
             function tick() {
-                if (currentState !== State.LOADING) return;
+                if (document.getElementById('splash-screen').classList.contains('hidden')) return;
+                
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // 1. 更新位置資訊
                 barRect = shell.getBoundingClientRect();
                 if (!barRect) return;
+                
                 const fillWidth = (currentPercent / 100) * barRect.width;
                 tipX = barRect.left + fillWidth;
                 tipY = barRect.top + barRect.height / 2;
+
+                // 2. 噴發粒子 (仙女棒頭部效果)
                 if (currentPercent > 0 && currentPercent < 100) {
-                    for(let i=0; i<4; i++) particles.push(new Particle(tipX, tipY));
+                    for(let i=0; i<4; i++) {
+                        particles.push(new Particle(tipX, tipY));
+                    }
+                    
+                    // 3. 畫出精緻核心「棒頭」
                     ctx.save();
-                    const glowRadius = 15 + Math.random() * 8;
-                    const glow = ctx.createRadialGradient(tipX, tipY, 0, tipX, tipY, glowRadius);
-                    glow.addColorStop(0, '#fff'); glow.addColorStop(0.3, 'rgba(255, 255, 255, 0.8)'); glow.addColorStop(1, 'transparent');
-                    ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(tipX, tipY, glowRadius * 1.5, 0, Math.PI * 2); ctx.fill();
-                    ctx.fillStyle = '#fff'; ctx.shadowBlur = 10; ctx.shadowColor = '#fff'; ctx.beginPath(); ctx.arc(tipX, tipY, 3, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+                    // 外層柔和黃光
+                    const outerGlow = ctx.createRadialGradient(tipX, tipY, 0, tipX, tipY, 15);
+                    outerGlow.addColorStop(0, 'rgba(255, 215, 0, 0.4)');
+                    outerGlow.addColorStop(1, 'transparent');
+                    ctx.fillStyle = outerGlow;
+                    ctx.beginPath();
+                    ctx.arc(tipX, tipY, 20, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // 中層柔和白光
+                    const innerGlow = ctx.createRadialGradient(tipX, tipY, 0, tipX, tipY, 8);
+                    innerGlow.addColorStop(0, 'rgba(255, 255, 255, 0.6)');
+                    innerGlow.addColorStop(1, 'transparent');
+                    ctx.fillStyle = innerGlow;
+                    ctx.beginPath();
+                    ctx.arc(tipX, tipY, 10, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // 最內層實心白點 (核心)
+                    ctx.fillStyle = '#fff';
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = '#fff';
+                    ctx.beginPath();
+                    ctx.arc(tipX, tipY, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
                 }
+
+                // 4. 更新與渲染粒子
                 particles = particles.filter(p => p.life > 0);
-                particles.forEach(p => { p.update(); p.draw(); });
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+
                 requestAnimationFrame(tick);
             }
 
-            function triggerGlitch() {
-                loadingView.classList.add('glitch-active');
-                glitchFlash.style.display = 'block';
+            function explode() {
+                if(isExploded) return;
+                isExploded = true;
+                // 100% 時觸發最後的全螢幕煙火爆炸
+                const explodeX = window.innerWidth / 2;
+                const explodeY = window.innerHeight / 2;
+                for(let i=0; i<150; i++) {
+                    particles.push(new Particle(explodeX, explodeY, true));
+                }
+                
                 setTimeout(() => {
-                    loadingView.classList.remove('glitch-active');
-                    glitchFlash.style.display = 'none';
-                }, 150);
+                    document.getElementById('splash-screen').classList.add('hidden');
+                    const bgm = document.getElementById('bgm');
+                    if (bgm) bgm.play().catch(e => {});
+                }, 1200);
             }
 
             function performLoading() {
-                const step = Math.floor(Math.random() * 3) + 1;
+                const step = Math.floor(Math.random() * 2) + 1;
                 currentPercent += step;
                 if (currentPercent > 100) currentPercent = 100;
-                
+
                 fill.style.width = `${currentPercent}%`;
                 percentEl.innerText = `${currentPercent}%`;
 
-                // 賽博龐克隨機故障
-                if (Math.random() < 0.1) triggerGlitch();
-
                 if (currentPercent < 100) {
-                    setTimeout(performLoading, Math.random() * 100 + 40);
+                    setTimeout(performLoading, Math.random() * 150 + 50);
                 } else {
-                    onLoadingComplete();
+                    explode();
                 }
             }
 
-            function onLoadingComplete() {
-                if (isExploded) return;
-                isExploded = true;
-                const explodeX = window.innerWidth / 2, explodeY = window.innerHeight / 2;
-                for(let i=0; i<150; i++) particles.push(new Particle(explodeX, explodeY, true));
-                
-                triggerGlitch(); // 結尾閃爍
-                setTimeout(() => {
-                    loadingView.style.opacity = '0';
-                    setTimeout(() => {
-                        loadingView.style.display = 'none';
-                        mainView.style.display = 'block';
-                        currentState = State.MAIN;
-                        const bgm = document.getElementById('bgm');
-                        if (bgm) bgm.play().catch(e => {});
-                    }, 600);
-                }, 1000);
-            }
-
             sBtn.addEventListener('click', () => {
-                if (currentState !== State.COVER) return;
-                
-                // 封面退場動畫
-                coverView.style.opacity = '0';
-                coverView.style.transform = 'scale(0.95)';
-                
+                sBtn.style.opacity = '0';
+                document.getElementById('s-sub').style.opacity = '0';
                 setTimeout(() => {
-                    coverView.style.display = 'none';
-                    loadingView.style.display = 'flex';
-                    currentState = State.LOADING;
+                    sBtn.style.display = 'none';
+                    loader.classList.add('active');
                     resizeCanvas();
                     requestAnimationFrame(tick);
                     performLoading();
-                }, 600);
+                }, 400);
             });
         })();
     </script>
