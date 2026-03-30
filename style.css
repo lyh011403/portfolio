@@ -186,8 +186,9 @@ main {
 }
 
 .nav-logo-img {
-    height: 32px;
+    height: 48px; /* 放大導航 LOGO */
     width: auto;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.15));
 }
 
 .nav-links {
@@ -745,7 +746,7 @@ main {
 }
 
 .footer-logo {
-    height: 24px;
+    height: 36px; /* 放大頁尾 LOGO */
     width: auto;
 }
 
