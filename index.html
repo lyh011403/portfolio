@@ -220,13 +220,14 @@
             display: none;
             flex-direction: column;
             align-items: center;
-            width: 400px;
-            position: fixed; /* 改為與屏幕居中 */
+            width: 460px; /* 稍微加寬以符合圖中比例 */
+            position: fixed; 
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            margin-top: -20px;
+            margin-left: -230px;
             opacity: 0;
-            transition: opacity 1.2s ease;
+            transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
             z-index: 99999;
         }
 
@@ -235,12 +236,39 @@
             opacity: 1;
         }
 
-        /* 外殼與容器：極細且精緻 */
+        /* HUD 標題與百分比容器 */
+        .loader-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 20px;
+            font-family: 'Inter', monospace;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .loader-tag {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+        }
+
+        .loader-val {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* HUD 外殼與容器：如參考圖的質感 */
         #bar-shell {
             width: 100%;
-            height: 2px; /* 極細 */
-            background: rgba(255, 255, 255, 0.03); 
-            border-radius: 2px;
+            height: 14px; /* 加粗以符合圖中方塊感 */
+            background: rgba(255, 255, 255, 0.08); 
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2px;
             position: relative;
             overflow: visible; 
         }
@@ -248,16 +276,19 @@
         #bar-fill {
             width: 0%;
             height: 100%;
-            /* 漸層：透明 -> 古銅 -> 亮金 */
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(200, 169, 126, 0.4) 40%, 
-                #c8a97e 80%, 
-                #ffd700 100%);
-            border-radius: 2px;
+            background: #fff; /* 高亮純白填充 */
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.2);
             position: relative;
-            box-shadow: 0 0 10px rgba(200, 169, 126, 0.2);
             transition: none; 
+        }
+
+        /* 裝飾線：條下方的小線段 */
+        .loader-deco {
+            width: 100%;
+            height: 3px;
+            background: #fff;
+            margin-top: 10px;
+            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);
         }
 
         /* Canvas 疊加層：全螢幕 */
@@ -363,14 +394,21 @@
             <p class="splash-desc" id="s-desc">遊戲美術 × 嵌入式 AI × 硬體整合 / 用技術驅動創意，用藝術表達工程。</p>
             <button class="splash-btn" id="s-btn">進入系統 <span class="arrow">→</span></button>
             <div class="splash-sub" id="s-sub">ENTER EXPERIENCE</div>
-            
-            <!-- Canvas 物理粒子載入條結構 (純淨版：無文字) -->
-            <div id="loader-container">
-                <canvas id="loader-canvas"></canvas>
-                <div id="bar-shell">
-                    <div id="bar-fill"></div>
-                </div>
+        </div>
+
+        <!-- HUD 載入條結構 -->
+        <div id="loader-container">
+            <canvas id="loader-canvas"></canvas>
+            <!-- 煙霧特效畫布 -->
+            <canvas id="smoke-canvas" style="position:fixed; inset:0; z-index:100001; pointer-events:none;"></canvas>
+            <div class="loader-header">
+                <div class="loader-tag">LOADING</div>
+                <div class="loader-val" id="l-percent">0%</div>
             </div>
+            <div id="bar-shell">
+                <div id="bar-fill"></div>
+            </div>
+            <div class="loader-deco"></div>
         </div>
     </div>
 
@@ -549,6 +587,65 @@
             }
             window.addEventListener('resize', resizeCanvas);
 
+            // --- 煙霧特效系統 ---
+            const smokeCanvas = document.getElementById('smoke-canvas');
+            const smCtx = smokeCanvas.getContext('2d');
+            let smokeParticles = [];
+
+            class SmokeParticle {
+                constructor(side) {
+                    this.side = side; // 'left' or 'right'
+                    this.x = window.innerWidth / 2;
+                    this.y = window.innerHeight / 2;
+                    const angle = side === 'left' ? Math.PI + (Math.random()-0.5) : (Math.random()-0.5);
+                    const speed = Math.random() * 8 + 4;
+                    this.vx = Math.cos(angle) * speed;
+                    this.vy = (Math.random() - 0.5) * 4;
+                    this.size = Math.random() * 100 + 50;
+                    this.life = 1.0;
+                    this.decay = 0.005 + Math.random() * 0.01;
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.size += 2;
+                    this.life -= this.decay;
+                }
+                draw() {
+                    smCtx.save();
+                    smCtx.globalAlpha = this.life * 0.3;
+                    const grad = smCtx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+                    grad.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+                    grad.addColorStop(1, 'transparent');
+                    smCtx.fillStyle = grad;
+                    smCtx.beginPath();
+                    smCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    smCtx.fill();
+                    smCtx.restore();
+                }
+            }
+
+            function startSmokeEffect() {
+                smokeCanvas.width = window.innerWidth;
+                smokeCanvas.height = window.innerHeight;
+                for(let i=0; i<60; i++) {
+                    smokeParticles.push(new SmokeParticle('left'));
+                    smokeParticles.push(new SmokeParticle('right'));
+                }
+                animateSmoke();
+            }
+
+            function animateSmoke() {
+                if (smokeParticles.length === 0) return;
+                smCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
+                smokeParticles = smokeParticles.filter(p => p.life > 0);
+                smokeParticles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                requestAnimationFrame(animateSmoke);
+            }
+
             class Particle {
                 constructor(x, y, isFinal = false) {
                     this.x = x;
@@ -565,8 +662,8 @@
                     this.life = 1.0;
                     this.decay = Math.random() * 0.04 + 0.02; // 更快消失
                     
-                    // 燃燒色調 (增加銀灰與古銅)
-                    const colors = ['#ffffff', '#ffed00', '#c8a97e', '#888888', '#ff8c00'];
+                    // 現代白光冷調配色
+                    const colors = ['#ffffff', '#ffffff', '#e0e0e0', '#aaaaaa'];
                     this.color = colors[Math.floor(Math.random() * colors.length)];
                     this.size = Math.random() * 1.2 + 0.3; // 更細微的粒子
                     this.shape = Math.random() > 0.8 ? 'star' : 'dot';
@@ -686,15 +783,15 @@
                 if(isExploded) return;
                 isExploded = true;
                 
-                // 移除原有的 150 顆噴發粒子噴發迴圈，改為平滑切換
+                // 啟動煙霧撥開特效
+                startSmokeEffect();
+                
                 setTimeout(() => {
                     document.getElementById('splash-screen').classList.add('hidden');
-                    // 觸發網頁登錄動畫
                     revealMain();
-                    
                     const bgm = document.getElementById('bgm');
                     if (bgm) bgm.play().catch(e => {});
-                }, 400); // 縮短等待時間，直接進場
+                }, 600);
             }
 
             function performLoading() {
@@ -704,7 +801,8 @@
                 if (currentPercent > 100) currentPercent = 100;
 
                 fill.style.width = `${currentPercent}%`;
-                // 移除 percentEl 更新，因為 HTML 已刪除該元素
+                const percentEl = document.getElementById('l-percent');
+                if (percentEl) percentEl.innerText = `${currentPercent}%`;
 
                 if (currentPercent < 100) {
                     // 縮短隨機延遲 (30ms ~ 100ms)
