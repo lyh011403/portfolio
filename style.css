@@ -1314,17 +1314,17 @@ main {
 
 .loader-content {
     text-align: center;
-    width: 280px;
+    width: min(280px, 80vw); /* 手機端自動縮小 */
     position: relative;
 }
 
 .loading-logo {
-    font-size: 3rem;
+    font-size: clamp(2.5rem, 8vw, 3rem); /* 隨螢幕大小縮放 */
     font-weight: 900;
     color: var(--accent);
     margin-bottom: 2rem;
     letter-spacing: 0.2em;
-    text-shadow: 0 0 20px var(--accent-glow);
+    text-shadow: 0 0 15px var(--accent-glow);
     animation: loader-pulse 2s infinite ease-in-out;
 }
 
@@ -1335,41 +1335,43 @@ main {
 
 .loading-bar-container {
     width: 100%;
-    height: 1px; /* 極細高感 */
+    height: 2px; /* 針對手機端加粗至 2px */
     background: rgba(255, 255, 255, 0.05);
     position: relative;
-    overflow: visible; /* 為了讓發光點溢出 */
+    overflow: visible;
 }
 
 .loading-bar {
     height: 100%;
     width: 0%;
     background: linear-gradient(90deg, transparent, var(--accent), #fff);
-    box-shadow: 0 0 15px var(--accent), 0 0 5px #fff;
+    box-shadow: 0 0 10px var(--accent), 0 0 4px #fff;
     transition: width 0.4s cubic-bezier(0.1, 0.5, 0.5, 1);
     position: relative;
 }
 
-/* 進度條頭部的發光點 */
-.loading-bar::after {
-    content: '';
-    position: absolute;
-    right: -2px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 6px;
-    height: 6px;
-    background: #fff;
-    border-radius: 50%;
-    box-shadow: 0 0 15px #fff, 0 0 30px var(--accent);
+/* 僅在大於手機尺寸時顯示更精細的頭部光點 */
+@media (min-width: 600px) {
+    .loading-bar::after {
+        content: '';
+        position: absolute;
+        right: -2px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 6px;
+        height: 6px;
+        background: #fff;
+        border-radius: 50%;
+        box-shadow: 0 0 15px #fff, 0 0 30px var(--accent);
+    }
 }
 
 .loading-text {
     margin-top: 1.5rem;
-    font-size: 0.7rem;
-    letter-spacing: 0.4em;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
     color: var(--text-2);
-    font-weight: 300;
+    font-weight: 400;
     text-transform: uppercase;
 }
 
