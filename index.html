@@ -15,8 +15,8 @@
         rel="stylesheet">
     <link rel="icon" type="image/png" href="/portfolio/assets/LOGO-DwXJY4XJ.png">
 
-<script type="module" crossorigin src="/portfolio/assets/index-DIcQDnqM.js"></script>
-<link rel="stylesheet" crossorigin href="/portfolio/assets/index-EM4nt-XR.css">
+<script type="module" crossorigin src="/portfolio/assets/index-CBozhJpC.js"></script>
+<link rel="stylesheet" crossorigin href="/portfolio/assets/index-CfoSpr09.css">
 
 <body>
     <!-- Splash Entrance Screen -->
@@ -676,18 +676,14 @@
             function explode() {
                 if(isExploded) return;
                 isExploded = true;
-                // 100% 時觸發最後的全螢幕煙火爆炸
-                const explodeX = window.innerWidth / 2;
-                const explodeY = window.innerHeight / 2;
-                for(let i=0; i<150; i++) {
-                    particles.push(new Particle(explodeX, explodeY, true));
-                }
                 
+                // 直接進入系統，不再觸發煙火爆炸
                 setTimeout(() => {
                     document.getElementById('splash-screen').classList.add('hidden');
+                    document.body.classList.add('entrance-active');
                     const bgm = document.getElementById('bgm');
                     if (bgm) bgm.play().catch(e => {});
-                }, 1200);
+                }, 400); // 縮短等待時間
             }
 
             function performLoading() {
@@ -773,7 +769,7 @@
 
         <!-- FEATURED PROJECTS -->
         <section id="featured" class="section">
-            <div class="container">
+            <div class="container scroll-reveal">
                 <div class="section-label">01 — FEATURED PROJECTS</div>
                 <h2 class="section-title"><!-- [可修改] 區塊標題 -->精選作品</h2>
                 <p class="section-sub"><!-- [可修改] 區塊副標題 -->最能代表我核心實力的代表性專案。</p>
@@ -785,13 +781,13 @@
 
         <!-- FULL PORTFOLIO: Six categories -->
         <section id="portfolio" class="section">
-            <div class="container">
+            <div class="container scroll-reveal">
                 <div class="section-label">02 — FULL PORTFOLIO</div>
                 <h2 class="section-title">完整作品集</h2>
             </div>
 
             <!-- Category Tabs -->
-            <div class="tabs-bar container">
+            <div class="tabs-bar container scroll-reveal">
                 <button class="tab-btn active" data-cat="huangyi">黃易群俠傳m</button>
                 <button class="tab-btn" data-cat="tianzi">天子傳奇S</button>
                 <button class="tab-btn" data-cat="wlwl">飄流幻境RE</button>
@@ -808,7 +804,7 @@
 
         <!-- PROFESSIONAL BREADTH (Skills) -->
         <section id="skills" class="section">
-            <div class="container">
+            <div class="container scroll-reveal">
                 <div class="section-label">03 — PROFESSIONAL BREADTH</div>
                 <h2 class="section-title">跨領域實力</h2>
                 <div class="skills-grid">
@@ -907,6 +903,8 @@
     <!-- LIGHTBOX -->
     <div id="lightbox" role="dialog" aria-modal="true" aria-label="作品預覽">
         <div id="lightbox-backdrop"></div>
+        <button id="lb-prev" class="lb-nav-btn" aria-label="上一個">&#10094;</button>
+        <button id="lb-next" class="lb-nav-btn" aria-label="下一個">&#10095;</button>
         <div id="lightbox-inner">
             <button id="lightbox-close" aria-label="關閉">✕</button>
             <img id="lightbox-img" src="" alt="">
