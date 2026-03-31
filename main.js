@@ -784,7 +784,7 @@ function initTextEffects() {
             });
         });
     }
-    applyParallax();    // 4. Tab Spotlight Effect
+    // 4. Tab Spotlight Effect
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('mousemove', (e) => {
             const rect = btn.getBoundingClientRect();
@@ -795,36 +795,40 @@ function initTextEffects() {
         });
     });
 }
-    // 13. PRELOADER LOGIC (Optimized)
-    const loadingScreen = document.getElementById('loading-screen');
-    const loadingBar = document.getElementById('loading-bar');
-    const loadingText = document.getElementById('loading-text');
-    let progress = 0;
 
-    function updateLoading() {
-        // 使用物理感的增加方式
-        const increment = Math.random() * 8 + 1; 
-        progress += increment;
+// ============================================================
+// 13. PRELOADER LOGIC (Optimized)
+// ============================================================
+const loadingScreen = document.getElementById('loading-screen');
+const loadingBar = document.getElementById('loading-bar');
+const loadingText = document.getElementById('loading-text');
+let progress = 0;
 
-        if (progress >= 100) {
-            progress = 100;
-            if (loadingBar) loadingBar.style.width = '100%';
-            if (loadingText) loadingText.innerText = 'COMPLETE';
+function updateLoading() {
+    // 使用物理感的增加方式
+    const increment = Math.random() * 8 + 2; 
+    progress += increment;
 
-            setTimeout(() => {
-                if (loadingScreen) {
-                    loadingScreen.style.opacity = '0';
-                    loadingScreen.style.visibility = 'hidden';
-                }
-                // 發場動畫
-                document.body.classList.add('entrance-active');
-            }, 600);
-        } else {
-            if (loadingBar) loadingBar.style.width = `${progress}%`;
-            if (loadingText) loadingText.innerText = `INITIALIZING... ${Math.floor(progress)}%`;
-            setTimeout(updateLoading, Math.random() * 120 + 30);
-        }
+    if (progress >= 100) {
+        progress = 100;
+        if (loadingBar) loadingBar.style.width = '100%';
+        if (loadingText) loadingText.innerText = 'COMPLETE';
+
+        setTimeout(() => {
+            if (loadingScreen) {
+                loadingScreen.style.opacity = '0';
+                loadingScreen.style.visibility = 'hidden';
+            }
+            // 發場動畫
+            document.body.classList.add('entrance-active');
+        }, 600);
+    } else {
+        if (loadingBar) loadingBar.style.width = `${progress}%`;
+        if (loadingText) loadingText.innerText = `INITIALIZING... ${Math.floor(progress)}%`;
+        setTimeout(updateLoading, Math.random() * 120 + 30);
     }
+}
 
-    initTextEffects();
-    updateLoading();
+// --- Execution Start ---
+initTextEffects();
+updateLoading();
