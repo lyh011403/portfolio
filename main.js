@@ -31,6 +31,7 @@ const FEATURED = [
         src: './god/05.jpg',
         title: 'AI 居家安全監控系統',
         desc: '運用 YOLOv8 + 遷移學習實現即時危險物品辨識，並整合 React 前端介面。',
+        link: 'https://lyh011403.github.io/Smart-Safety-Care_APK/'
     },
     {
         src: './god/06.jpg',
@@ -150,9 +151,16 @@ function buildFeatured() {
                 <p>${p.desc}</p>
             </div>
         `;
-        el.querySelector('.featured-media').addEventListener('click', () =>
-            openLightbox({ type: 'image', src: p.src, title: p.title })
-        );
+        const mediaPart = el.querySelector('.featured-media');
+        mediaPart.addEventListener('click', () => {
+            if (p.link) {
+                window.open(p.link, '_blank');
+            } else {
+                openLightbox({ type: 'image', src: p.src, title: p.title });
+            }
+        });
+        if (p.link) el.classList.add('has-external-link');
+
         container.appendChild(el);
     });
 }
@@ -200,10 +208,22 @@ function buildPortfolio(cat) {
 
         if (item.type === 'video') {
             const v = el.querySelector('video');
-            el.addEventListener('mouseenter', () => v.play());
+            el.addEventListener('mousemove', () => v.play());
             el.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0; });
         }
-        el.addEventListener('click', () => openLightbox(item));
+
+        // 如果作品有外部連結，點擊圖片就直接跳轉，不再開啟 Lightbox
+        el.addEventListener('click', () => {
+            if (item.link) {
+                window.open(item.link, '_blank');
+            } else {
+                openLightbox(item);
+            }
+        });
+
+        // 為具有連結的項目加上 hover 指標樣式
+        if (item.link) el.classList.add('has-external-link');
+
         grid.appendChild(el);
     });
 
@@ -229,15 +249,39 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 
 
 // ============================================================
-// 5. LIGHTBOX
+// 5. LIGHTBOX & NAVIGATION
 // ============================================================
 const lightbox = document.getElementById('lightbox');
 const lbImg = document.getElementById('lightbox-img');
 const lbVideo = document.getElementById('lightbox-video');
 const lbCaption = document.getElementById('lightbox-caption');
 
+let currentItems = [];
+let currentIndex = 0;
+
 function openLightbox(item) {
+    if (currentCat && CATEGORIES[currentCat]) {
+        currentItems = CATEGORIES[currentCat].items;
+        currentIndex = currentItems.indexOf(item);
+        if (currentIndex === -1) {
+             // Fallback for featured items
+             currentItems = [item];
+             currentIndex = 0;
+        }
+    } else {
+        currentItems = [item];
+        currentIndex = 0;
+    }
+
+    renderLightboxItem();
     lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function renderLightboxItem() {
+    const item = currentItems[currentIndex];
+    if (!item) return;
+
     lbCaption.textContent = item.title;
 
     // 清除舊狀態
@@ -264,7 +308,33 @@ function openLightbox(item) {
         lbImg.style.display = 'block';
         lbImg.src = item.src;
     }
-    document.body.style.overflow = 'hidden';
+    
+    // Update Nav Buttons visibility
+    updateLightboxNav();
+}
+
+function updateLightboxNav() {
+    const nextBtn = document.getElementById('lb-next');
+    const prevBtn = document.getElementById('lb-prev');
+    const item = currentItems[currentIndex];
+
+    // 如果是簡報/分頁模式 (iframe)，隱藏外層導覽按鈕以免衝突
+    const shouldHide = !item || item.type === 'iframe' || currentItems.length <= 1;
+
+    if (nextBtn && prevBtn) {
+        nextBtn.style.display = shouldHide ? 'none' : 'flex';
+        prevBtn.style.display = shouldHide ? 'none' : 'flex';
+    }
+}
+
+function nextLightbox() {
+    currentIndex = (currentIndex + 1) % currentItems.length;
+    renderLightboxItem();
+}
+
+function prevLightbox() {
+    currentIndex = (currentIndex - 1 + currentItems.length) % currentItems.length;
+    renderLightboxItem();
 }
 
 function closeLightbox() {
@@ -279,7 +349,19 @@ function closeLightbox() {
 
 document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
 document.getElementById('lightbox-backdrop').addEventListener('click', closeLightbox);
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+document.getElementById('lb-next')?.addEventListener('click', (e) => { e.stopPropagation(); nextLightbox(); });
+document.getElementById('lb-prev')?.addEventListener('click', (e) => { e.stopPropagation(); prevLightbox(); });
+
+document.addEventListener('keydown', e => { 
+    if (e.key === 'Escape') closeLightbox(); 
+    
+    // 如果是簡報/分頁模式 (iframe)，不處理左右鍵切換，以免跟簡報內的操作衝突
+    const currentItem = currentItems[currentIndex];
+    if (currentItem && currentItem.type === 'iframe') return;
+
+    if (e.key === 'ArrowRight' && lightbox.classList.contains('open')) nextLightbox();
+    if (e.key === 'ArrowLeft' && lightbox.classList.contains('open')) prevLightbox();
+});
 
 
 // ============================================================
@@ -668,5 +750,49 @@ function initTextEffects() {
             });
         });
     }
+
+    // 3. Smooth Card Parallax (Optimized)
+    function applyParallax() {
+        const cards = document.querySelectorAll('.portfolio-item, .skill-card, .featured-item');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const xc = rect.width / 2;
+                const yc = rect.height / 2;
+                const dx = (x - xc) / (rect.width / 2);
+                const dy = (y - yc) / (rect.height / 2);
+                
+                // 更柔順的傾斜計算，縮小角度並增加透視感
+                const rotateY = dx * 10; // Max tilt 10deg
+                const rotateX = -dy * 10;
+                
+                card.style.transform = `perspective(1200px) rotateY(${rotateY}deg) rotateX(${rotateX}deg) translateY(-10px) scale(1.02)`;
+                card.style.transition = 'transform 0.1s linear'; // 移動時使用極短的 linear 對齊手指
+            });
+
+            // 離開時平滑回正 (這是消除抖動的關鍵)
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg) translateY(0) scale(1)';
+                card.style.transition = 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)'; 
+            });
+
+            // 進入時也給予一點過渡
+            card.addEventListener('mouseenter', () => {
+                card.style.transition = 'transform 0.4s cubic-bezier(0.23, 1, 0.32, 1)';
+            });
+        });
+    }
+    applyParallax();    // 4. Tab Spotlight Effect
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            btn.style.setProperty('--x', `${x}px`);
+            btn.style.setProperty('--y', `${y}px`);
+        });
+    });
 }
 initTextEffects();
