@@ -796,3 +796,36 @@ function initTextEffects() {
     });
 }
 initTextEffects();
+
+// ============================================================
+// 13. CONTENT PROTECTION (Right-click & shortcuts)
+// ============================================================
+function initProtection() {
+    // 1. 禁止右鍵選單 (Context Menu)
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
+    // 2. 禁止鍵盤快捷鍵 (防開發者工具與存擋)
+    document.addEventListener('keydown', e => {
+        // F12
+        if (e.key === 'F12') e.preventDefault();
+        
+        // Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C (DevTools)
+        if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) {
+            e.preventDefault();
+        }
+        
+        // Ctrl+U (View Source)
+        if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) e.preventDefault();
+        
+        // Ctrl+S (Save Page)
+        if (e.ctrlKey && (e.key === 's' || e.key === 'S')) e.preventDefault();
+    });
+
+    // 3. 禁止拖拽圖片 (加強 CSS 部分)
+    document.addEventListener('dragstart', e => {
+        if (e.target.nodeName === 'IMG' || e.target.nodeName === 'VIDEO') {
+            e.preventDefault();
+        }
+    }, false);
+}
+initProtection();
