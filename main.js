@@ -34,6 +34,12 @@ const FEATURED = [
         link: 'https://lyh011403.github.io/Smart-Safety-Care_APK/'
     },
     {
+        type: 'video',
+        src: './assets/懺悔的鐘徒.mp4',
+        title: 'AI 2D 動畫 — 懺悔的鐘徒',
+        desc: '運用 AI 2D 技術進行角色、特效與動態設計，展現流暢的動畫效果與藝術張力。',
+    },
+    {
         src: './god/06.jpg',
         title: '自製3D — 個人渲染',
         desc: '個人自主學習 Blender 建模與渲染，帶入到遊戲引擎(unreal)，並加入動作效果。',
@@ -143,12 +149,18 @@ function buildFeatured() {
     FEATURED.forEach((p, i) => {
         const el = document.createElement('div');
         el.className = 'featured-item scroll-reveal';
+        
+        const isVideo = p.type === 'video';
+        const mediaHTML = isVideo
+            ? `<video src="${p.src}" ${p.thumb ? `poster="${p.thumb}"` : ''} muted loop playsinline></video>`
+            : `<img src="${p.src}" alt="${p.title}" loading="${i === 0 ? 'eager' : 'lazy'}">`;
+
         el.innerHTML = `
             <div class="featured-media">
-                <img src="${p.src}" alt="${p.title}" loading="${i === 0 ? 'eager' : 'lazy'}">
+                ${mediaHTML}
             </div>
             <div class="featured-info">
-                <div class="featured-index">0${i + 1}</div>
+                <div class="featured-index">${i + 1 < 10 ? '0' : ''}${i + 1}</div>
                 <h3>${p.title}</h3>
                 <p>${p.desc}</p>
             </div>
@@ -158,10 +170,16 @@ function buildFeatured() {
             if (p.link) {
                 window.open(p.link, '_blank');
             } else {
-                openLightbox({ type: 'image', src: p.src, title: p.title });
+                openLightbox({ type: p.type || 'image', src: p.src, title: p.title });
             }
         });
         if (p.link) el.classList.add('has-external-link');
+
+        if (isVideo) {
+            const v = el.querySelector('video');
+            el.addEventListener('mousemove', () => v.play());
+            el.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0; });
+        }
 
         container.appendChild(el);
     });
