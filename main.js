@@ -116,7 +116,9 @@ CATEGORIES['ai-2d'].items.push(
     { type: 'video', src: './assets/embedded_1.mp4', title: 'AI 2D使用(角色，特效，動作)' },
     { type: 'video', src: './assets/embedded_2.mp4', title: 'AI 2D使用(角色，特效，動作)' },
     { type: 'video', src: './assets/懺悔的鐘徒.mp4', title: 'AI 2D — 懺悔的鐘徒' },
-    { type: 'video', src: './assets/聚合主母·「厄兆結」.mp4', title: 'AI 2D — 聚合主母·「厄兆結」' }
+    { type: 'video', src: './assets/聚合主母·「厄兆結」.mp4', title: 'AI 2D — 聚合主母·「厄兆結」' },
+    { type: 'image', src: './assets/Grass.png', title: 'AI 2D — Grass' },
+    { type: 'image', src: './assets/house01.png', title: 'AI 2D — house01' }
 );
 
 // 7. 自製3D — my3d_1~7 + 影片
