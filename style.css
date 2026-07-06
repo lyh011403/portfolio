@@ -1022,7 +1022,7 @@ main {
     .hero-content { margin-top: 2rem; }
     
     /* 作品集標籤改為水平捲動 */
-    .portfolio-tabs {
+    .tabs-bar {
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
@@ -1033,7 +1033,7 @@ main {
         margin-bottom: 2rem;
         scrollbar-width: none; /* Firefox 隱藏捲動條 */
     }
-    .portfolio-tabs::-webkit-scrollbar {
+    .tabs-bar::-webkit-scrollbar {
         display: none; /* Chrome/Safari 隱藏捲動條但保留功能 */
     }
     
