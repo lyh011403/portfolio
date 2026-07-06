@@ -534,8 +534,10 @@ function runMobileFluid(canvas, ctx) {
             this.vx = 0;
             this.vy = 0;
             this.r = r;
-            // 墨水顏色：高飽和金色，確保能在手機端高對比濾鏡下清晰顯現
-            this.color = 'hsl(35, 75%, 45%)';
+            // 金色液體：黃金色與暖金色微調，呈現液體金屬層次感
+            const hue = 40 + Math.floor(Math.random() * 5); // 40 ~ 45 之間
+            const light = 50 + Math.floor(Math.random() * 10); // 50% ~ 60% 之間
+            this.color = `hsl(${hue}, 98%, ${light}%)`;
         }
         update(gx, gy) {
             // 受重力加速度影響
@@ -597,8 +599,10 @@ function runMobileFluid(canvas, ctx) {
             this.r = r;
             this.life = 1.0;
             this.decay = 0.015 + Math.random() * 0.02;
-            // 噴濺墨滴顏色
-            this.color = 'hsl(35, 60%, 40%)';
+            // 噴濺金色液體顏色
+            const hue = 40 + Math.floor(Math.random() * 5);
+            const light = 46 + Math.floor(Math.random() * 10);
+            this.color = `hsl(${hue}, 92%, ${light}%)`;
         }
         update(gx, gy) {
             this.vx += gx * 0.5;

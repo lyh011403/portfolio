@@ -1051,7 +1051,7 @@ main {
         display: block !important;
         filter: blur(10px) contrast(15) brightness(1.0);
         mix-blend-mode: screen;
-        opacity: 0.52; /* 金色水墨油滴，不搶前台內容焦點 */
+        opacity: 0.65; /* 亮眼的金屬金色液體背景 */
         pointer-events: none; /* 讓事件穿透，真正的觸碰點擊交互由 JS 偵聽 window 處理，防堵任何按鈕失效問題 */
     }
 
