@@ -1046,6 +1046,15 @@ main {
         }
     }
 
+    /* 手機版 Canvas 水墨油滴融合濾鏡 (Metaballs 物理黏滯融合效果) */
+    #ink-canvas {
+        display: block !important;
+        filter: blur(14px) contrast(20) brightness(1.2);
+        mix-blend-mode: screen;
+        opacity: 0.42; /* 淡淡的金色水墨油滴，不搶前台內容焦點 */
+        pointer-events: none; /* 讓事件穿透，真正的觸碰點擊交互由 JS 偵聽 window 處理，防堵任何按鈕失效問題 */
+    }
+
     .nav-logo { font-size: 1.1rem; }
     
     .hero-content { margin-top: 2rem; }

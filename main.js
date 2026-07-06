@@ -471,17 +471,254 @@ function observeReveal() {
 
 
 // ============================================================
-// 8. PARTICLE INK CANVAS (Canvas 2D — no third-party lib)
+// 8. MOBILE GYROSCOPE FLUID CANVAS (手機陀螺儀水墨液體搖晃)
+// ============================================================
+function runMobileFluid(canvas, ctx) {
+    let W = window.innerWidth, H = window.innerHeight;
+    canvas.width = W; canvas.height = H;
+
+    // 陀螺儀傾斜變數
+    let tiltX = 0; // 左右搖晃 (-90 到 90)
+    let tiltY = 0; // 前後搖晃 (-180 到 180)，直立時通常為 60
+    
+    // 平滑後的傾斜角度
+    let currentTiltX = 0;
+    let currentTiltY = 60; // 預設直立角度
+
+    // 偵測搖晃（加速度變化）
+    let lastTiltX = 0;
+    let lastTiltY = 60;
+
+    // 監聽陀螺儀事件
+    window.addEventListener('deviceorientation', (e) => {
+        if (e.gamma !== null) tiltX = e.gamma;
+        if (e.beta !== null) tiltY = e.beta;
+    }, { passive: true });
+
+    // 觸控互動支援 (讓使用者除了搖晃手機，也能在全螢幕任何區域用手指去攪動水墨)
+    const touch = { active: false, x: 0, y: 0, vx: 0, vy: 0 };
+    window.addEventListener('touchstart', (e) => {
+        touch.active = true;
+        const t = e.touches[0];
+        touch.x = t.clientX;
+        touch.y = t.clientY;
+        touch.vx = 0;
+        touch.vy = 0;
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+        if (!touch.active) return;
+        const t = e.touches[0];
+        const dx = t.clientX - touch.x;
+        const dy = t.clientY - touch.y;
+        touch.vx = dx;
+        touch.vy = dy;
+        touch.x = t.clientX;
+        touch.y = t.clientY;
+
+        // 觸碰滑動時產生小飛濺墨滴
+        if (Math.abs(touch.vx) + Math.abs(touch.vy) > 2) {
+            spawnSplash(touch.x, touch.y, touch.vx * 0.4, touch.vy * 0.4, 2);
+        }
+    }, { passive: true });
+
+    window.addEventListener('touchend', () => {
+        touch.active = false;
+    }, { passive: true });
+
+    // 大水墨油滴
+    class FluidBlob {
+        constructor(x, y, r) {
+            this.x = x;
+            this.y = y;
+            this.vx = 0;
+            this.vy = 0;
+            this.r = r;
+            // 墨水顏色：金色調，帶點微幅亂數明暗，使融合時色彩有漸層層次
+            const l = 15 + Math.floor(Math.random() * 20);
+            this.color = `hsl(28, 12%, ${l}%)`;
+        }
+        update(gx, gy) {
+            // 受重力加速度影響
+            this.vx += gx;
+            this.vy += gy;
+
+            // 觸控排斥/吸引效果
+            if (touch.active) {
+                const dx = this.x - touch.x;
+                const dy = this.y - touch.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 160 && dist > 1) {
+                    const force = (160 - dist) / 160;
+                    // 被手指攪動推開，並隨手指速度移動
+                    this.vx += (dx / dist) * force * 1.8 + touch.vx * 0.15;
+                    this.vy += (dy / dist) * force * 1.8 + touch.vy * 0.15;
+                }
+            }
+
+            // 阻尼 (水分子黏滯感)
+            this.vx *= 0.94;
+            this.vy *= 0.94;
+
+            // 更新位置
+            this.x += this.vx;
+            this.y += this.vy;
+
+            // 邊界碰撞限制 (像在水瓶內部反彈)
+            if (this.x < this.r) {
+                this.x = this.r;
+                this.vx *= -0.55;
+            } else if (this.x > W - this.r) {
+                this.x = W - this.r;
+                this.vx *= -0.55;
+            }
+            if (this.y < this.r) {
+                this.y = this.r;
+                this.vy *= -0.55;
+            } else if (this.y > H - this.r) {
+                this.y = H - this.r;
+                this.vy *= -0.55;
+            }
+        }
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    // 噴濺的小墨滴 / 氣泡
+    class SplashBubble {
+        constructor(x, y, vx, vy, r) {
+            this.x = x;
+            this.y = y;
+            this.vx = vx + (Math.random() - 0.5) * 3;
+            this.vy = vy + (Math.random() - 0.5) * 3;
+            this.r = r;
+            this.life = 1.0;
+            this.decay = 0.015 + Math.random() * 0.02;
+            const l = 20 + Math.floor(Math.random() * 15);
+            this.color = `hsl(28, 10%, ${l}%)`;
+        }
+        update(gx, gy) {
+            this.vx += gx * 0.5;
+            this.vy += gy * 0.5;
+            this.vx *= 0.96;
+            this.vy *= 0.96;
+            this.x += this.vx;
+            this.y += this.vy;
+            this.life -= this.decay;
+
+            // 邊界限制
+            if (this.x < this.r) { this.x = this.r; this.vx *= -0.4; }
+            else if (this.x > W - this.r) { this.x = W - this.r; this.vx *= -0.4; }
+            if (this.y < this.r) { this.y = this.r; this.vy *= -0.4; }
+            else if (this.y > H - this.r) { this.y = H - this.r; this.vy *= -0.4; }
+        }
+        draw() {
+            ctx.save();
+            ctx.globalAlpha = this.life;
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r * this.life, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    // 初始化大墨團 (6個大小不同的油水墨球)
+    const blobs = [];
+    const numBlobs = 6;
+    for (let i = 0; i < numBlobs; i++) {
+        const r = 40 + Math.random() * 35; // 半徑 40 ~ 75
+        blobs.push(new FluidBlob(
+            W / 2 + (Math.random() - 0.5) * 120,
+            H / 2 + (Math.random() - 0.5) * 250,
+            r
+        ));
+    }
+
+    let splashes = [];
+
+    function spawnSplash(x, y, vx, vy, count) {
+        for (let i = 0; i < count; i++) {
+            if (splashes.length > 80) break; // 限制最大數量防止手機卡頓
+            const r = 7 + Math.random() * 12;
+            splashes.push(new SplashBubble(x, y, vx, vy, r));
+        }
+    }
+
+    function loop() {
+        // 清除背景 (使用極低透明度，使油滴有淡淡的拖尾水墨擴散效果)
+        ctx.fillStyle = 'rgba(10, 10, 12, 0.085)';
+        ctx.fillRect(0, 0, W, H);
+
+        // 平滑傾斜角度 (EMA 濾波，防止抖動)
+        currentTiltX += (tiltX - currentTiltX) * 0.1;
+        currentTiltY += (tiltY - currentTiltY) * 0.1;
+
+        // 計算重力加速度方向
+        // 左右晃動 tiltX 對應到 x 重力 (gamma)
+        // 上下傾斜 (我們把手機直立 beta = 60 當作平衡點，向上傾斜或向下傾斜都會改變垂直重力)
+        const gx = currentTiltX * 0.14;
+        const gy = (currentTiltY - 60) * 0.14 + 0.35; // 預設帶有 0.35 的向下重力
+
+        // 偵測快速晃動手機 (重力突然變化大於閾值，噴濺墨水)
+        const deltaX = tiltX - lastTiltX;
+        const deltaY = tiltY - lastTiltY;
+        const shakeForce = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        if (shakeForce > 20) {
+            // 在每個大墨團的中心隨機產生小飛濺墨滴
+            blobs.forEach(b => {
+                spawnSplash(b.x, b.y, (Math.random() - 0.5) * 12, (Math.random() - 0.5) * 12, 2);
+            });
+        }
+        lastTiltX = tiltX;
+        lastTiltY = tiltY;
+
+        // 更新與繪製大墨滴
+        blobs.forEach(b => {
+            b.update(gx, gy);
+            b.draw();
+        });
+
+        // 更新與繪製小噴濺
+        splashes = splashes.filter(s => s.life > 0);
+        splashes.forEach(s => {
+            s.update(gx, gy);
+            s.draw();
+        });
+
+        requestAnimationFrame(loop);
+    }
+
+    window.addEventListener('resize', () => {
+        W = window.innerWidth; H = window.innerHeight;
+        canvas.width = W; canvas.height = H;
+    });
+
+    loop();
+}
+
+// ============================================================
+// 8.5 PARTICLE INK CANVAS (桌面版滑鼠粒子水墨)
 // ============================================================
 function initInk() {
     const canvas = document.getElementById('ink-canvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
-    // Disable on low-end or small screens
+    // 在低耗能模式或減慢動畫偏好下停用
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isMobile = window.innerWidth < 640;
-    if (prefersReduced || isMobile) { canvas.style.display = 'none'; return; }
+    if (prefersReduced) { canvas.style.display = 'none'; return; }
+
+    // 手機版 (小於 768px) 啟動陀螺儀水瓶油水墨模式
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) {
+        runMobileFluid(canvas, ctx);
+        return;
+    }
 
     let W = window.innerWidth, H = window.innerHeight;
     canvas.width = W; canvas.height = H;
