@@ -36,7 +36,7 @@ const FEATURED = [
     {
         type: 'video',
         src: './assets/Labeler_V1.mp4',
-        thumb: './assets/Labeler01.png',
+        thumb: './assets/Labeler00.png',
         title: 'AI工具製作 — AI自動標註系統',
         desc: '自主開發的 AI 影像自動標註與批次處理工具，支援智慧標註，顯著縮短人工標註時間並提升資料集效率。',
     },
@@ -150,7 +150,8 @@ CATEGORIES['my-3d'].items.push(
 
 // 8. AI自動標註 — ai-labeler
 CATEGORIES['ai-labeler'].items.push(
-    { type: 'video', src: './assets/Labeler_V1.mp4', thumb: './assets/Labeler01.png', title: 'AI自動標註 — 智慧標註展示 V1' },
+    { type: 'image', src: './assets/Labeler00.png', title: 'AI自動標註 — 系統封面' },
+    { type: 'video', src: './assets/Labeler_V1.mp4', thumb: './assets/Labeler00.png', title: 'AI自動標註 — 智慧標註展示 V1' },
     { type: 'video', src: './assets/Labeler_V2.mp4', thumb: './assets/Labeler02.png', title: 'AI自動標註 — 智慧標註展示 V2' },
     { type: 'video', src: './assets/Labeler_V3.mp4', thumb: './assets/Labeler03.png', title: 'AI自動標註 — 智慧標註展示 V3' },
     { type: 'image', src: './assets/Labeler01.png', title: 'AI自動標註 — 介面截圖 1' },
