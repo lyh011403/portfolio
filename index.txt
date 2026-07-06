@@ -29,14 +29,12 @@
             justify-content: center;
             font-family: 'Inter', 'Noto Sans TC', sans-serif;
             overflow: hidden;
-            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: none;
             user-select: none;
         }
 
         #splash-screen.hidden {
-            opacity: 0;
-            pointer-events: none;
-            transform: scale(1.1);
+            display: none !important;
         }
 
         #splash-mask {
@@ -59,7 +57,7 @@
             font-size: 0.9rem;
             font-weight: 700;
             letter-spacing: 0.5em;
-            /* 增加間距 */
+            /* 增�??��? */
             color: #fff;
             margin-bottom: 2.5rem;
             text-transform: uppercase;
@@ -71,7 +69,7 @@
             padding: 0.2rem 0;
         }
 
-        /* 掃描線光效改為如星光閃爍的微弱動態 */
+        /* ?��?線�??�改?��??��??��??�微弱�???*/
         .splash-meta::after {
             content: "";
             position: absolute;
@@ -108,7 +106,7 @@
             position: relative;
             cursor: pointer;
 
-            /* 探照燈效果基礎設定 */
+            /* ?�照?��??�基礎設�?*/
             color: rgba(255, 255, 255, 0.15);
             background: radial-gradient(circle 120px at var(--x, 50%) var(--y, 50%),
                     #c8a97e 0%,
@@ -125,7 +123,7 @@
             transition: all 0.4s ease;
         }
 
-        /* 懸停時僅增加光感，不變大 */
+        /* ?��??��?增�??��?，�?變大 */
         .splash-logo:hover {
             transform: translateY(-2px);
         }
@@ -138,7 +136,7 @@
             letter-spacing: 0.1em;
             opacity: 0;
             transform: translateY(20px);
-            /* 漸變色質感 */
+            /* 漸�??�質??*/
             background: linear-gradient(to right, #fff, rgba(255, 255, 255, 0.4), #fff);
             background-size: 200% auto;
             -webkit-background-clip: text;
@@ -153,7 +151,7 @@
             }
         }
 
-        /* 讓文字隨背景粒子「呼吸」的微光 */
+        /* 讓�?字隨?�景粒�??�呼?�」�?微�? */
         .splash-meta,
         .splash-desc {
             animation: text-breathing 4s ease-in-out infinite alternate;
@@ -216,128 +214,11 @@
             opacity: 0;
         }
 
-        #loader-container {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            width: 400px;
-            margin: 3.5rem auto 0;
-            opacity: 0;
-            transition: opacity 0.8s ease;
-            position: relative;
-        }
-
-        #loader-container.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        /* 外殼與容器：極細且精緻 */
-        #bar-shell {
-            width: 100%;
-            height: 2px; /* 極細 */
-            background: rgba(255, 255, 255, 0.03); 
-            border-radius: 2px;
-            position: relative;
-            overflow: visible; 
-        }
-
-        #bar-fill {
-            width: 0%;
-            height: 100%;
-            /* 漸層：透明 -> 古銅 -> 亮金 */
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(200, 169, 126, 0.4) 40%, 
-                #c8a97e 80%, 
-                #ffd700 100%);
-            border-radius: 2px;
-            position: relative;
-            box-shadow: 0 0 10px rgba(200, 169, 126, 0.2);
-            transition: none; 
-        }
-
-        /* Canvas 疊加層：全螢幕 */
-        #loader-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 9999;
-        }
-
-        .loader-info {
-            display: flex;
-            justify-content: flex-end;
-            width: 100%;
-            margin-top: 25px;
-            font-family: 'Inter', monospace;
-            font-size: 0.85rem;
-            color: #c8a97e;
-            text-transform: uppercase;
-            letter-spacing: 0.5em; /* 增大字距 */
-            font-weight: 800;
-            opacity: 0.8;
-        }
-
-        /* 呼吸燈動畫 */
-        @keyframes sparkler-breathing {
-            from { 
-                transform: translateY(-50%) scale(0.8);
-                filter: brightness(1);
-                box-shadow: 0 0 10px #ffd700;
-            }
-            to { 
-                transform: translateY(-50%) scale(1.2);
-                filter: brightness(1.8);
-                box-shadow: 0 0 20px #fff, 0 0 40px #ffd700, 0 0 60px #ff8c00;
-            }
-        }
-
-        /* 茂密噴散動畫 */
-        @keyframes sparkler-scatter-lush {
-            0% {
-                transform: translate(0, -50%) scale(1);
-                opacity: 1;
-            }
-            100% {
-                /* 粒子向外噴射路徑更分散與變小 */
-                transform: translate(35px, -80%) scale(0);
-                opacity: 0;
-                box-shadow: 
-                    30px -30px 0 #fff,
-                    -25px 35px 0 #ffd700,
-                    40px 20px 0 #ff8c00,
-                    -35px -25px 0 #fff,
-                    20px 45px 0 #ffd700,
-                    50px -15px 0 #ff8c00,
-                    -40px 15px 0 #fff,
-                    15px -50px 0 #ffd700,
-                    35px 35px 0 #ff8c00,
-                    -15px 55px 0 #fff;
-            }
-        }
-
-        .loader-info {
-            display: flex;
-            justify-content: flex-end;
-            width: 100%;
-            margin-top: 15px;
-            font-family: 'Inter', monospace;
-            font-size: 0.8rem;
-            color: #c8a97e;
-            text-transform: uppercase;
-            letter-spacing: 0.3em;
-            font-weight: 700;
-        }
-
         /* Revealed Classes for JS */
         .reveal-node {
             opacity: 1 !important;
             transform: translateY(0) !important;
-            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: none !important;
         }
     </style>
 
@@ -357,11 +238,9 @@
         <div class="splash-content">
             <div class="splash-meta" id="s-meta">YH. 2026</div>
             <h1 class="splash-logo" id="s-logo">HAIN<span class="outline">.</span></h1>
-            <p class="splash-desc" id="s-desc">遊戲美術 × 嵌入式 AI × 硬體整合 / 用技術驅動創意，用藝術表達工程。</p>
-            <button class="splash-btn" id="s-btn">Access <span class="arrow">→</span></button>
-            <div class="splash-sub" id="s-sub">ENTER EXPERIENCE</div>
-            
-            <!-- 載入條已移除，點擊後直接進入 -->
+            <p class="splash-desc" id="s-desc">?�戲美�? ? 嵌入�?AI ? 硬�??��? / ?��?術�??�創?��??��?術表?�工程�?/p>
+            <button class="splash-btn" id="s-btn">?�入系統 <span class="arrow">??/span></button>
+            <div id="s-sub" style="opacity: 0; margin-top: 1.5rem; font-size: 0.7rem; color: rgba(255, 255, 255, 0.3); text-transform: uppercase; letter-spacing: 0.2em;">ENTER EXPERIENCE</div>
         </div>
     </div>
 
@@ -402,7 +281,7 @@
                     this.y = Math.random() * sh;
                     this.vx = (Math.random() - 0.5) * 0.4;
                     this.vy = (Math.random() - 0.5) * 0.4;
-                    // 星空隨機大小與呼吸頻率
+                    // ?�空?��?大�??�呼?�頻??
                     this.radius = Math.random() * 1.5 + 0.5;
                     this.phase = Math.random() * Math.PI * 2;
                     this.phaseSpeed = 0.01 + Math.random() * 0.03;
@@ -432,7 +311,7 @@
                     const opacity = this.baseOpacity + (breathing * 0.3);
 
                     sctx.fillStyle = `rgba(200, 169, 126, ${opacity})`;
-                    // 特大亮度會有閃爍光暈感
+                    // ?�大亮度?��??��??��???
                     if (this.baseOpacity > 0.4) {
                         sctx.shadowBlur = breathing * 8;
                         sctx.shadowColor = 'rgba(200, 169, 126, 0.5)';
@@ -443,13 +322,13 @@
                     sctx.beginPath();
                     sctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
                     sctx.fill();
-                    sctx.shadowBlur = 0; // 重置
+                    sctx.shadowBlur = 0; // ?�置
                 }
             }
 
             function init() {
                 particles = [];
-                // 數量增加為原先約 1.5 ~ 2 倍
+                // ?��?增�??��??��? 1.5 ~ 2 ??
                 const count = Math.min(150, (sw * sh) / 8000);
                 for (let i = 0; i < count; i++) {
                     particles.push(new SParticle());
@@ -492,180 +371,20 @@
 
         // Splash Reveal Sequence
         window.addEventListener('load', () => {
-            const nodes = [
-                { id: 's-meta', delay: 300 },
-                { id: 's-logo', delay: 600 },
-                { id: 's-desc', delay: 900 },
-                { id: 's-btn', delay: 1200 },
-                { id: 's-sub', delay: 1400 }
-            ];
-            nodes.forEach(n => {
-                setTimeout(() => {
-                    const el = document.getElementById(n.id);
-                    if (el) el.classList.add('reveal-node');
-                }, n.delay);
+            const ids = ['s-meta', 's-logo', 's-desc', 's-btn', 's-sub'];
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('reveal-node');
             });
         });
 
         (function() {
             const sBtn = document.getElementById('s-btn');
-            let isExploded = false;
-
-            class Particle {
-                constructor(x, y, isFinal = false) {
-                    this.x = x;
-                    this.y = y;
-                    // 向右前方噴射 (仙女棒動態)
-                    const angle = isFinal ? Math.random() * Math.PI * 2 : (Math.random() - 0.4) * Math.PI * 0.5;
-                    const speed = isFinal ? Math.random() * 15 + 8 : Math.random() * 5 + 1.5;
-                    
-                    this.vx = Math.cos(angle) * speed;
-                    this.vy = Math.sin(angle) * speed - (isFinal ? 0 : 0.5); 
-                    
-                    this.gravity = 0.12;
-                    this.friction = 0.95;
-                    this.life = 1.0;
-                    this.decay = Math.random() * 0.04 + 0.02; // 更快消失
-                    
-                    // 燃燒色調 (增加銀灰與古銅)
-                    const colors = ['#ffffff', '#ffed00', '#c8a97e', '#888888', '#ff8c00'];
-                    this.color = colors[Math.floor(Math.random() * colors.length)];
-                    this.size = Math.random() * 1.2 + 0.3; // 更細微的粒子
-                    this.shape = Math.random() > 0.8 ? 'star' : 'dot';
-                }
-
-                update() {
-                    this.vx *= this.friction;
-                    this.vy *= this.friction;
-                    this.vy += this.gravity;
-                    this.x += this.vx;
-                    this.y += this.vy;
-                    this.life -= this.decay;
-                }
-
-                draw() {
-                    ctx.save();
-                    ctx.globalAlpha = this.life;
-                    ctx.translate(this.x, this.y);
-                    ctx.fillStyle = this.color;
-                    // 拖尾效果：外發光
-                    ctx.shadowBlur = 15;
-                    ctx.shadowColor = this.color;
-                    
-                    if (this.shape === 'star') {
-                        this.drawStar(0, 0, 5, this.size, this.size / 2);
-                    } else {
-                        ctx.beginPath();
-                        ctx.arc(0, 0, this.size, 0, Math.PI * 2);
-                        ctx.fill();
-                    }
-                    ctx.restore();
-                }
-
-                drawStar(cx, cy, spikes, outerRadius, innerRadius) {
-                    let rot = Math.PI / 2 * 3;
-                    let x = cx, y = cy;
-                    let step = Math.PI / spikes;
-                    ctx.beginPath();
-                    ctx.moveTo(cx, cy - outerRadius);
-                    for (let i = 0; i < spikes; i++) {
-                        x = cx + Math.cos(rot) * outerRadius;
-                        y = cy + Math.sin(rot) * outerRadius;
-                        ctx.lineTo(x, y);
-                        rot += step;
-                        x = cx + Math.cos(rot) * innerRadius;
-                        y = cy + Math.sin(rot) * innerRadius;
-                        ctx.lineTo(x, y);
-                        rot += step;
-                    }
-                    ctx.lineTo(cx, cy - outerRadius);
-                    ctx.closePath();
-                    ctx.fill();
-                }
-            }
-
-            function tick() {
-                if (document.getElementById('splash-screen').classList.contains('hidden')) return;
-                
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                // 1. 更新位置資訊
-                barRect = shell.getBoundingClientRect();
-                if (!barRect) return;
-                
-                const fillWidth = (currentPercent / 100) * barRect.width;
-                tipX = barRect.left + fillWidth;
-                tipY = barRect.top + barRect.height / 2;
-
-                // 2. 噴發粒子 (仙女棒頭部效果)
-                if (currentPercent > 0 && currentPercent < 100) {
-                    for(let i=0; i<4; i++) {
-                        particles.push(new Particle(tipX, tipY));
-                    }
-                    
-                    // 3. 畫出精緻核心「棒頭」
-                    ctx.save();
-                    // 外層柔和黃光
-                    const outerGlow = ctx.createRadialGradient(tipX, tipY, 0, tipX, tipY, 15);
-                    outerGlow.addColorStop(0, 'rgba(255, 215, 0, 0.4)');
-                    outerGlow.addColorStop(1, 'transparent');
-                    ctx.fillStyle = outerGlow;
-                    ctx.beginPath();
-                    ctx.arc(tipX, tipY, 20, 0, Math.PI * 2);
-                    ctx.fill();
-
-                    // 中層柔和白光
-                    const innerGlow = ctx.createRadialGradient(tipX, tipY, 0, tipX, tipY, 8);
-                    innerGlow.addColorStop(0, 'rgba(255, 255, 255, 0.6)');
-                    innerGlow.addColorStop(1, 'transparent');
-                    ctx.fillStyle = innerGlow;
-                    ctx.beginPath();
-                    ctx.arc(tipX, tipY, 10, 0, Math.PI * 2);
-                    ctx.fill();
-
-                    // 最內層實心白點 (核心)
-                    ctx.fillStyle = '#fff';
-                    ctx.shadowBlur = 10;
-                    ctx.shadowColor = '#fff';
-                    ctx.beginPath();
-                    ctx.arc(tipX, tipY, 3, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.restore();
-                }
-
-                // 4. 更新與渲染粒子
-                particles = particles.filter(p => p.life > 0);
-                particles.forEach(p => {
-                    p.update();
-                    p.draw();
-                });
-
-                requestAnimationFrame(tick);
-            }
-
-            function explode() {
-                if(isExploded) return;
-                isExploded = true;
-                
-                // 直接進入系統，不再觸發煙火爆炸
-                setTimeout(() => {
-                    document.getElementById('splash-screen').classList.add('hidden');
-                    document.body.classList.add('entrance-active');
-                    const bgm = document.getElementById('bgm');
-                    if (bgm) bgm.play().catch(e => {});
-                }, 400); // 縮短等待時間
-            }
-
-            // 移除原本的 Loading 動畫主循環
-
-
             sBtn.addEventListener('click', () => {
-                sBtn.style.opacity = '0';
-                document.getElementById('s-sub').style.opacity = '0';
-                // 點擊後直接執行進入動畫，不顯示進度條
-                setTimeout(() => {
-                    explode();
-                }, 300);
+                document.getElementById('splash-screen').classList.add('hidden');
+                // ?�放?�景?��?
+                const bgm = document.getElementById('bgm');
+                if (bgm) bgm.play().catch(e => {});
             });
         })();
     </script>
@@ -688,44 +407,44 @@
         </div>
         <ul class="nav-links" id="nav-links">
             <li><a href="#featured">精選</a></li>
-            <li><a href="#portfolio">作品集</a></li>
-            <li><a href="#skills">能力</a></li>
-            <li><a href="#about">關於</a></li>
-            <li><a href="#contact">聯絡我</a></li>
+            <li><a href="#portfolio">作�???/a></li>
+            <li><a href="#skills">?��?</a></li>
+            <li><a href="#about">?�於</a></li>
+            <li><a href="#contact">?�絡??/a></li>
         </ul>
-        <button class="nav-hamburger" id="nav-hamburger" aria-label="選單">
+        <button class="nav-hamburger" id="nav-hamburger" aria-label="?�單">
             <span></span><span></span><span></span>
         </button>
     </nav>
-    <!-- 行動版選單 -->
+    <!-- 行�??�選??-->
     <div class="mobile-menu" id="mobile-menu">
         <a href="#featured" class="mobile-link">精選</a>
-        <a href="#portfolio" class="mobile-link">作品集</a>
-        <a href="#skills" class="mobile-link">能力</a>
-        <a href="#about" class="mobile-link">關於</a>
-        <a href="#contact" class="mobile-link">聯絡我</a>
+        <a href="#portfolio" class="mobile-link">作�???/a>
+        <a href="#skills" class="mobile-link">?��?</a>
+        <a href="#about" class="mobile-link">?�於</a>
+        <a href="#contact" class="mobile-link">?�絡??/a>
     </div>
 
     <main>
         <!-- HERO -->
         <section id="hero">
             <div class="hero-inner">
-                <p class="hero-eyebrow"><!-- [可修改] 標頭小字 -->3D Artist & AI Developer</p>
+                <p class="hero-eyebrow"><!-- [?�修?�] 標頭小�? -->3D Artist & AI Developer</p>
                 <h1 class="hero-title">
-                    <span class="line"><!-- [可修改] 主標題第一行 -->CREATING</span>
-                    <span class="line accent-line"><!-- [可修改] 主標題第二行 -->BEYOND</span>
-                    <span class="line"><!-- [可修改] 主標題第三行 -->BOUNDARIES.</span>
+                    <span class="line"><!-- [?�修?�] 主�?題第一�?-->CREATING</span>
+                    <span class="line accent-line"><!-- [?�修?�] 主�?題第二�? -->BEYOND</span>
+                    <span class="line"><!-- [?�修?�] 主�?題第三�? -->BOUNDARIES.</span>
                 </h1>
-                <p class="hero-sub"><!-- [可修改] 簡介文字 -->遊戲美術 × 嵌入式 AI × 硬體整合。<br>用技術驅動創意，用藝術表達工程。</p>
+                <p class="hero-sub"><!-- [?�修?�] 簡�??��? -->?�戲美�? ? 嵌入�?AI ? 硬�??��???br>?��?術�??�創?��??��?術表?�工程�?/p>
             </div>
         </section>
 
         <!-- FEATURED PROJECTS -->
         <section id="featured" class="section">
-            <div class="container scroll-reveal">
-                <div class="section-label">01 — FEATURED PROJECTS</div>
-                <h2 class="section-title"><!-- [可修改] 區塊標題 -->精選作品</h2>
-                <p class="section-sub"><!-- [可修改] 區塊副標題 -->最能代表我核心實力的代表性專案。</p>
+            <div class="container">
+                <div class="section-label">01 ??FEATURED PROJECTS</div>
+                <h2 class="section-title"><!-- [?�修?�] ?�塊�?�?-->精選作�?</h2>
+                <p class="section-sub"><!-- [?�修?�] ?�塊副標�? -->?�?�代表�??��?實�??�代表性�?案�?/p>
             </div>
             <div class="featured-list container" id="featured-container">
                 <!-- Injected by JS -->
@@ -734,22 +453,20 @@
 
         <!-- FULL PORTFOLIO: Six categories -->
         <section id="portfolio" class="section">
-            <div class="container scroll-reveal">
-                <div class="section-label">02 — FULL PORTFOLIO</div>
-                <h2 class="section-title">完整作品集</h2>
+            <div class="container">
+                <div class="section-label">02 ??FULL PORTFOLIO</div>
+                <h2 class="section-title">完整作�???/h2>
             </div>
 
             <!-- Category Tabs -->
-            <div class="tabs-bar container scroll-reveal">
-                <button class="tab-btn active" data-cat="huangyi">黃易群俠傳m</button>
-                <button class="tab-btn" data-cat="tianzi">天子傳奇S</button>
-                <button class="tab-btn" data-cat="wlwl">飄流幻境RE</button>
-                <button class="tab-btn" data-cat="embedded">嵌入式AI影像</button>
+            <div class="tabs-bar container">
+                <button class="tab-btn active" data-cat="huangyi">黃�?群�??�m</button>
+                <button class="tab-btn" data-cat="tianzi">天�??��?S</button>
+                <button class="tab-btn" data-cat="wlwl">飄�?幻�?RE</button>
+                <button class="tab-btn" data-cat="embedded">嵌入式AI影�?</button>
                 <button class="tab-btn" data-cat="ai-3d">AI 3D</button>
                 <button class="tab-btn" data-cat="ai-2d">AI 2D</button>
-                <button class="tab-btn" data-cat="my-3d">自製3D</button>
-                <button class="tab-btn" data-cat="ai-labeler">AI自動標註</button>
-                <button class="tab-btn" data-cat="ai-pixel">PIXEL轉換</button>
+                <button class="tab-btn" data-cat="my-3d">?�製3D</button>
             </div>
 
             <div class="portfolio-grid container" id="portfolio-grid">
@@ -759,16 +476,16 @@
 
         <!-- PROFESSIONAL BREADTH (Skills) -->
         <section id="skills" class="section">
-            <div class="container scroll-reveal">
-                <div class="section-label">03 — PROFESSIONAL BREADTH</div>
-                <h2 class="section-title">跨領域實力</h2>
+            <div class="container">
+                <div class="section-label">03 ??PROFESSIONAL BREADTH</div>
+                <h2 class="section-title">跨�??�實??/h2>
                 <div class="skills-grid">
                     <div class="skill-card scroll-reveal">
                         <div class="skill-top">
                             <span class="skill-num">01</span>
                             <h3>3D & Rendering</h3>
                         </div>
-                        <p>高品質角色與場景建模，從 PBR 材質製作到即時渲染的完整流程。</p>
+                        <p>高�?質�??��??�景建模，�? PBR ?�質製�??�即?�渲?��?完整流�???/p>
                         <div class="skill-tags">
                             <span>Blender</span><span>Unity</span><span>Unreal Engine</span>
                         </div>
@@ -778,7 +495,7 @@
                             <span class="skill-num">02</span>
                             <h3>AI & Programming</h3>
                         </div>
-                        <p>深度學習模型訓練與電腦視覺系統開發，精通主流 AI 框架與即時推論。</p>
+                        <p>深度學�?模�?訓練?�電?��?覺系統�??��?精通主�?AI 框架?�即?�推論�?/p>
                         <div class="skill-tags">
                             <span>Python</span><span>PyTorch</span><span>MediaPipe</span><span>OpenCV</span><span>YOLOv8</span>
                         </div>
@@ -788,9 +505,9 @@
                             <span class="skill-num">03</span>
                             <h3>AI Image Recognition</h3>
                         </div>
-                        <p>從資料標註到模型部署的完整 AI 影像辨識工作流：自建資料集、遷移學習提升初期準確率，知識蒸餾優化至邊緣端。</p>
+                        <p>從�??��?註到模�??�署?��???AI 影�?辨�?工�?流�??�建資�??�、遷移學習�??��??��?確�?，知識蒸餾優?�至?�緣端�?/p>
                         <div class="skill-tags">
-                            <span>遷移學習</span><span>知識蒸餾</span><span>LabelImg</span><span>Roboflow</span>
+                            <span>?�移學�?</span><span>?��??�餾</span><span>LabelImg</span><span>Roboflow</span>
                         </div>
                     </div>
                 </div>
@@ -802,13 +519,13 @@
             <div class="container about-grid">
                 <div class="about-flex">
                     <div class="about-left scroll-reveal">
-                        <div class="section-label">04 — ABOUT ME</div>
-                        <h2 class="section-title"><!-- [可修改] 關於我標題 -->關於我</h2>
-                        <p class="about-p"><!-- [可修改] 關於我主文 -->我是一位兼具<strong>遊戲美術設計背景</strong>與<strong>AI
-                                技術開發能力</strong>的跨領域創作者。</p>
-                        <p class="about-p-sub"><!-- [可修改] 關於我子文 1 -->從遊戲公司的 3D 場景建模，到獨立研發嵌入式 AI
-                            影像辨識系統，目標是讓视覺藝術感知與工程邏輯在同一個作品中共存。</p>
-                        <p class="about-p-sub"><!-- [可修改] 關於我子文 2 -->現正積極尋找能同時發揮視覺創意與技術深度的機會。</p>
+                        <div class="section-label">04 ??ABOUT ME</div>
+                        <h2 class="section-title"><!-- [?�修?�] ?�於?��?�?-->?�於??/h2>
+                        <p class="about-p"><!-- [?�修?�] ?�於?�主??-->?�是一位兼??strong>?�戲美�?設�??�景</strong>??strong>AI
+                                ?�術�??�能??/strong>?�跨?��??��??��?/p>
+                        <p class="about-p-sub"><!-- [?�修?�] ?�於?��???1 -->從�??�公?��? 3D ?�景建模，到?��??�發嵌入�?AI
+                            影�?辨�?系統，目標是讓�?覺�?術�??��?工�??�輯?��?一?��??�中?��???/p>
+                        <p class="about-p-sub"><!-- [?�修?�] ?�於?��???2 -->?�正積極尋找?��??�發?��?覺創?��??�術深度�?機�???/p>
                     </div>
                     <div class="about-right scroll-reveal">
                         <div class="stat-block">
@@ -821,7 +538,7 @@
                                 <span class="stat-label">Technical Portfolio</span>
                             </div>
                             <div class="stat">
-                                <span class="stat-num">3D×AI</span>
+                                <span class="stat-num">3D?AI</span>
                                 <span class="stat-label">Cross-tech Integration</span>
                             </div>
                         </div>
@@ -833,12 +550,12 @@
         <!-- CONTACT -->
         <section id="contact" class="section">
             <div class="container contact-center scroll-reveal">
-                <div class="section-label">05 — CONTACT</div>
-                <h2 class="contact-title"><!-- [可修改] 聯絡我標題 -->聯絡我</h2>
-                <p class="contact-sub"><!-- [可修改] 聯絡我副標題 -->歡迎任何合作邀約或職缺洽談。</p>
+                <div class="section-label">05 ??CONTACT</div>
+                <h2 class="contact-title"><!-- [?�修?�] ?�絡?��?�?-->?�絡??/h2>
+                <p class="contact-sub"><!-- [?�修?�] ?�絡?�副標�? -->歡�?任�??��??�約�??�缺洽�???/p>
                 <a href="https://mail.google.com/mail/?view=cm&fs=1&to=lyh0972717368@gmail.com" target="_blank"
                     class="btn-primary large">
-                    <span><!-- [可修改] E-mail 地址 -->lyh0972717368@gmail.com</span>
+                    <span><!-- [?�修?�] E-mail ?��? -->lyh0972717368@gmail.com</span>
                     <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
                         <path d="M3 8H13M13 8L8 3M13 8L8 13" stroke="currentColor" stroke-width="1.5"
                             stroke-linecap="round" stroke-linejoin="round" />
@@ -856,14 +573,12 @@
     </footer>
 
     <!-- LIGHTBOX -->
-    <div id="lightbox" role="dialog" aria-modal="true" aria-label="作品預覽">
+    <div id="lightbox" role="dialog" aria-modal="true" aria-label="作�??�覽">
         <div id="lightbox-backdrop"></div>
-        <button id="lb-prev" class="lb-nav-btn" aria-label="上一個">&#10094;</button>
-        <button id="lb-next" class="lb-nav-btn" aria-label="下一個">&#10095;</button>
         <div id="lightbox-inner">
-            <button id="lightbox-close" aria-label="關閉">✕</button>
+            <button id="lightbox-close" aria-label="?��?">??/button>
             <img id="lightbox-img" src="" alt="">
-            <video id="lightbox-video" controls loop playsinline></video>
+            <video id="lightbox-video" controls playsinline></video>
             <p id="lightbox-caption"></p>
         </div>
     </div>

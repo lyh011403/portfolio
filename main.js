@@ -35,6 +35,13 @@ const FEATURED = [
     },
     {
         type: 'video',
+        src: './assets/Labeler_V1.mp4',
+        thumb: './assets/Labeler01.png',
+        title: 'AI工具製作 — AI自動標註系統',
+        desc: '自主開發的 AI 影像自動標註與批次處理工具，支援智慧標註，顯著縮短人工標註時間並提升資料集效率。',
+    },
+    {
+        type: 'video',
         src: './assets/懺悔的鐘徒.mp4',
         title: 'AI 2D 動畫 — 懺悔的鐘徒',
         desc: '運用 AI 2D 技術進行角色、特效與動態設計，展現流暢的動畫效果與藝術張力。',
@@ -58,6 +65,8 @@ const CATEGORIES = {
     'ai-3d': { label: 'AI 3D', items: [] },
     'ai-2d': { label: 'AI 2D', items: [] },
     'my-3d': { label: '自製3D', items: [] },
+    'ai-labeler': { label: 'AI自動標註', items: [] },
+    'ai-pixel': { label: 'PIXEL轉換', items: [] },
 };
 
 // 作品集資料載入邏輯 — 統一使用 category_index.ext 格式
@@ -137,6 +146,23 @@ CATEGORIES['my-3d'].items.push(
     { type: 'image', src: './assets/my3d_8.jpg', title: '自製3D 建築渲染 1' },
     { type: 'image', src: './assets/my3d_9.jpg', title: '自製3D 建築渲染 2' },
     { type: 'image', src: './assets/my3d_10.jpg', title: '自製3D 建築渲染 3' }
+);
+
+// 8. AI自動標註 — ai-labeler
+CATEGORIES['ai-labeler'].items.push(
+    { type: 'video', src: './assets/Labeler_V1.mp4', thumb: './assets/Labeler01.png', title: 'AI自動標註 — 智慧標註展示 V1' },
+    { type: 'video', src: './assets/Labeler_V2.mp4', thumb: './assets/Labeler02.png', title: 'AI自動標註 — 智慧標註展示 V2' },
+    { type: 'video', src: './assets/Labeler_V3.mp4', thumb: './assets/Labeler03.png', title: 'AI自動標註 — 智慧標註展示 V3' },
+    { type: 'image', src: './assets/Labeler01.png', title: 'AI自動標註 — 介面截圖 1' },
+    { type: 'image', src: './assets/Labeler02.png', title: 'AI自動標註 — 介面截圖 2' },
+    { type: 'image', src: './assets/Labeler03.png', title: 'AI自動標註 — 介面截圖 3' },
+    { type: 'image', src: './assets/Labeler04.png', title: 'AI自動標註 — 介面截圖 4' }
+);
+
+// 9. PIXEL轉換 — ai-pixel
+CATEGORIES['ai-pixel'].items.push(
+    { type: 'video', src: './assets/PIXEL02.mp4', thumb: './assets/PIXEL01.png', title: 'PIXEL轉換 — 像素畫生成展示' },
+    { type: 'image', src: './assets/PIXEL01.png', title: 'PIXEL轉換 — 介面截圖' }
 );
 
 // [修正] 為影片項目增加封面邏輯
