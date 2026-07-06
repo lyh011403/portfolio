@@ -534,9 +534,8 @@ function runMobileFluid(canvas, ctx) {
             this.vx = 0;
             this.vy = 0;
             this.r = r;
-            // 墨水顏色：金色調，帶點微幅亂數明暗，使融合時色彩有漸層層次
-            const l = 15 + Math.floor(Math.random() * 20);
-            this.color = `hsl(28, 12%, ${l}%)`;
+            // 墨水顏色：高飽和金色，確保能在手機端高對比濾鏡下清晰顯現
+            this.color = 'hsl(35, 75%, 45%)';
         }
         update(gx, gy) {
             // 受重力加速度影響
@@ -598,8 +597,8 @@ function runMobileFluid(canvas, ctx) {
             this.r = r;
             this.life = 1.0;
             this.decay = 0.015 + Math.random() * 0.02;
-            const l = 20 + Math.floor(Math.random() * 15);
-            this.color = `hsl(28, 10%, ${l}%)`;
+            // 噴濺墨滴顏色
+            this.color = 'hsl(35, 60%, 40%)';
         }
         update(gx, gy) {
             this.vx += gx * 0.5;
@@ -650,9 +649,8 @@ function runMobileFluid(canvas, ctx) {
     }
 
     function loop() {
-        // 清除背景 (使用極低透明度，使油滴有淡淡的拖尾水墨擴散效果)
-        ctx.fillStyle = 'rgba(10, 10, 12, 0.085)';
-        ctx.fillRect(0, 0, W, H);
+        // 使用純透明清空背景，避免在手機高對比濾鏡下累積色塊造成黑屏
+        ctx.clearRect(0, 0, W, H);
 
         // 平滑傾斜角度 (EMA 濾波，防止抖動)
         currentTiltX += (tiltX - currentTiltX) * 0.1;
