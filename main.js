@@ -842,10 +842,10 @@ function initInk() {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced) { canvas.style.display = 'none'; return; }
 
-    // 手機版 (小於 768px) 啟動陀螺儀水瓶油水墨模式
+    // 手機版 (小於 768px) 乾淨移除，不啟動此物理流體背景，節省電力與效能
     const isMobile = window.innerWidth < 768;
     if (isMobile) {
-        runMobileFluid(canvas, ctx);
+        canvas.style.display = 'none';
         return;
     }
 
