@@ -534,10 +534,6 @@ function runMobileFluid(canvas, ctx) {
             this.vx = 0;
             this.vy = 0;
             this.r = r;
-            // 金色液體：黃金色與暖金色微調，呈現液體金屬層次感
-            const hue = 40 + Math.floor(Math.random() * 5); // 40 ~ 45 之間
-            const light = 50 + Math.floor(Math.random() * 10); // 50% ~ 60% 之間
-            this.color = `hsl(${hue}, 98%, ${light}%)`;
         }
         update(gx, gy) {
             // 受重力加速度影響
@@ -582,7 +578,18 @@ function runMobileFluid(canvas, ctx) {
             }
         }
         draw() {
-            ctx.fillStyle = this.color;
+            // 創建黃金立體質感漸層，模擬偏左上方的光源反射
+            const grad = ctx.createRadialGradient(
+                this.x - this.r * 0.22, this.y - this.r * 0.22, this.r * 0.04,
+                this.x, this.y, this.r
+            );
+            grad.addColorStop(0, '#fffbf2');      // 亮面反射 (白金色高光)
+            grad.addColorStop(0.25, '#ffe57f');   // 亮黃金
+            grad.addColorStop(0.65, '#ffd54f');   // 黃金本色
+            grad.addColorStop(0.9, '#ffb300');    // 暖深金色
+            grad.addColorStop(1, '#b57c00');      // 邊緣陰影金 (防止純色扁平化)
+
+            ctx.fillStyle = grad;
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
             ctx.fill();
@@ -599,10 +606,6 @@ function runMobileFluid(canvas, ctx) {
             this.r = r;
             this.life = 1.0;
             this.decay = 0.015 + Math.random() * 0.02;
-            // 噴濺金色液體顏色
-            const hue = 40 + Math.floor(Math.random() * 5);
-            const light = 46 + Math.floor(Math.random() * 10);
-            this.color = `hsl(${hue}, 92%, ${light}%)`;
         }
         update(gx, gy) {
             this.vx += gx * 0.5;
@@ -622,9 +625,24 @@ function runMobileFluid(canvas, ctx) {
         draw() {
             ctx.save();
             ctx.globalAlpha = this.life;
-            ctx.fillStyle = this.color;
+            
+            // 飛濺小球亦使用金屬漸層，展現流光感
+            const currentR = this.r * this.life;
+            if (currentR > 0.1) {
+                const grad = ctx.createRadialGradient(
+                    this.x - currentR * 0.2, this.y - currentR * 0.2, currentR * 0.04,
+                    this.x, this.y, currentR
+                );
+                grad.addColorStop(0, '#fffdf5');
+                grad.addColorStop(0.3, '#ffd700');
+                grad.addColorStop(1, '#b57c00');
+                ctx.fillStyle = grad;
+            } else {
+                ctx.fillStyle = '#ffd700';
+            }
+
             ctx.beginPath();
-            ctx.arc(this.x, this.y, this.r * this.life, 0, Math.PI * 2);
+            ctx.arc(this.x, this.y, currentR, 0, Math.PI * 2);
             ctx.fill();
             ctx.restore();
         }

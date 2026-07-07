@@ -1052,9 +1052,9 @@ main {
         position: fixed;
         inset: 0;
         z-index: 1 !important; /* 確保高於 z-index: 0 的 #canvas-mask 遮罩，但低於內容層 */
-        filter: blur(10px) contrast(15) brightness(1.0);
+        filter: blur(5px) contrast(3.5) brightness(1.05);
         mix-blend-mode: screen;
-        opacity: 0.65; /* 亮眼的金屬金色液體背景 */
+        opacity: 0.8; /* 耀眼的金屬金色液體背景 */
         pointer-events: none; /* 讓事件穿透，真正的觸碰點擊交互由 JS 偵聽 window 處理，防堵任何按鈕失效問題 */
     }
 
