@@ -1049,10 +1049,18 @@ main {
     /* 手機版 Canvas 水墨油滴融合濾鏡 (Metaballs 物理黏滯融合效果) */
     #ink-canvas {
         display: block !important;
+        position: fixed;
+        inset: 0;
+        z-index: 1 !important; /* 確保高於 z-index: 0 的 #canvas-mask 遮罩，但低於內容層 */
         filter: blur(10px) contrast(15) brightness(1.0);
         mix-blend-mode: screen;
         opacity: 0.65; /* 亮眼的金屬金色液體背景 */
         pointer-events: none; /* 讓事件穿透，真正的觸碰點擊交互由 JS 偵聽 window 處理，防堵任何按鈕失效問題 */
+    }
+
+    main {
+        position: relative;
+        z-index: 2 !important; /* 確保內容文字與按鈕在金色液體之上，供正常點擊且不被遮擋 */
     }
 
     .nav-logo { font-size: 1.1rem; }
