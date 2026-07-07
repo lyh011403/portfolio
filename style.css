@@ -569,6 +569,43 @@ main {
     opacity: 1;
 }
 
+/* 二級子分類頁籤樣式 */
+.sub-tabs-bar {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin: 1.2rem auto 2.2rem;
+    justify-content: center;
+    max-width: 90%;
+}
+
+.sub-tab-btn {
+    padding: 0.38rem 1.1rem;
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-2);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.01);
+    transition: all 0.25s ease;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.sub-tab-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(200, 169, 126, 0.1);
+}
+
+.sub-tab-btn.active {
+    background: rgba(200, 169, 126, 0.12);
+    color: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 12px rgba(200, 169, 126, 0.12);
+}
+
 .portfolio-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));

@@ -217,14 +217,115 @@ function buildFeatured() {
 // ============================================================
 // 4. RENDER PORTFOLIO GRID
 // ============================================================
-let currentCat = 'huangyi';
+// 大分類與子分類對應關係
+const MAIN_CATEGORIES = {
+    'game-art': {
+        label: '遊戲美術專案',
+        subCats: ['huangyi', 'tianzi', 'wlwl', 'my-3d']
+    },
+    'ai-tech': {
+        label: 'AI 與技術開發',
+        subCats: ['embedded', 'ai-labeler', 'ai-pixel']
+    },
+    'ai-creation': {
+        label: 'AI 創作',
+        subCats: ['ai-3d', 'ai-2d']
+    }
+};
 
-function buildPortfolio(cat) {
-    currentCat = cat;
+let currentMainCat = 'game-art';
+let currentSubCat = 'all';
+let displayLimit = 12;
+
+// 動態建置二級分類標籤
+function buildSubTabs() {
+    const bar = document.getElementById('sub-tabs-bar');
+    if (!bar) return;
+    bar.innerHTML = '';
+
+    // 第一個是「全部」
+    const allBtn = document.createElement('button');
+    allBtn.className = `sub-tab-btn ${currentSubCat === 'all' ? 'active' : ''}`;
+    allBtn.textContent = '全部';
+    allBtn.addEventListener('click', () => {
+        if (currentSubCat === 'all') return;
+        currentSubCat = 'all';
+        displayLimit = 12;
+        updateSubTabsActive(allBtn);
+        triggerPortfolioReload();
+    });
+    bar.appendChild(allBtn);
+
+    // 依據大分類載入子分類按鈕
+    MAIN_CATEGORIES[currentMainCat].subCats.forEach(subKey => {
+        const subInfo = CATEGORIES[subKey];
+        if (!subInfo) return;
+        const btn = document.createElement('button');
+        btn.className = `sub-tab-btn ${currentSubCat === subKey ? 'active' : ''}`;
+        btn.textContent = subInfo.label;
+        btn.addEventListener('click', () => {
+            if (currentSubCat === subKey) return;
+            currentSubCat = subKey;
+            displayLimit = 12;
+            updateSubTabsActive(btn);
+            triggerPortfolioReload();
+        });
+        bar.appendChild(btn);
+    });
+}
+
+function updateSubTabsActive(activeBtn) {
+    document.querySelectorAll('.sub-tab-btn').forEach(btn => btn.classList.remove('active'));
+    activeBtn.classList.add('active');
+}
+
+function triggerPortfolioReload() {
     const grid = document.getElementById('portfolio-grid');
+    grid.style.opacity = '0';
+    grid.style.transform = 'translateY(12px)';
+    setTimeout(() => {
+        buildPortfolio();
+        grid.style.transition = 'opacity 0.35s, transform 0.35s';
+        grid.style.opacity = '1';
+        grid.style.transform = 'translateY(0)';
+    }, 200);
+}
+
+function buildPortfolio() {
+    const grid = document.getElementById('portfolio-grid');
+    if (!grid) return;
     grid.innerHTML = '';
 
-    CATEGORIES[cat].items.forEach((item, i) => {
+    // 收集該大分類或二級分類下的所有作品項目
+    let itemsToDraw = [];
+    if (currentSubCat === 'all') {
+        MAIN_CATEGORIES[currentMainCat].subCats.forEach(subKey => {
+            const subInfo = CATEGORIES[subKey];
+            if (subInfo && subInfo.items) {
+                itemsToDraw = itemsToDraw.concat(subInfo.items);
+            }
+        });
+    } else {
+        const subInfo = CATEGORIES[currentSubCat];
+        if (subInfo && subInfo.items) {
+            itemsToDraw = subInfo.items;
+        }
+    }
+
+    // 判斷是否顯示「展開更多作品」按鈕
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    if (loadMoreBtn) {
+        if (itemsToDraw.length > displayLimit) {
+            loadMoreBtn.style.display = 'block';
+        } else {
+            loadMoreBtn.style.display = 'none';
+        }
+    }
+
+    // 依據限制顯示特定數量的卡片
+    const slicedItems = itemsToDraw.slice(0, displayLimit);
+
+    slicedItems.forEach((item, i) => {
         const el = document.createElement('div');
         el.className = 'portfolio-item scroll-reveal';
         // 增加 staggered 動畫延遲
@@ -252,7 +353,8 @@ function buildPortfolio(cat) {
             <div class="portfolio-item-overlay">
                 <span>${item.title}</span>
                 ${iframeHint}
-                ${linkButton} </div>
+                ${linkButton}
+            </div>
         `;
 
         if (item.type === 'video') {
@@ -279,22 +381,29 @@ function buildPortfolio(cat) {
     observeReveal();
 }
 
-// Tabs
-document.querySelectorAll('.tab-btn').forEach(btn => {
+// 一級 Tabs 切換事件
+document.querySelectorAll('.tabs-bar .tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tabs-bar .tab-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        const grid = document.getElementById('portfolio-grid');
-        grid.style.opacity = '0';
-        grid.style.transform = 'translateY(12px)';
-        setTimeout(() => {
-            buildPortfolio(btn.dataset.cat);
-            grid.style.transition = 'opacity 0.35s, transform 0.35s';
-            grid.style.opacity = '1';
-            grid.style.transform = 'translateY(0)';
-        }, 200);
+        
+        currentMainCat = btn.dataset.cat;
+        currentSubCat = 'all';
+        displayLimit = 12;
+        
+        buildSubTabs();
+        triggerPortfolioReload();
     });
 });
+
+// 初始化載入更多按鈕點擊事件
+const loadMoreBtn = document.getElementById('load-more-btn');
+if (loadMoreBtn) {
+    loadMoreBtn.addEventListener('click', () => {
+        displayLimit += 12; // 每次多加載 12 個項目
+        buildPortfolio();
+    });
+}
 
 
 // ============================================================
@@ -895,7 +1004,8 @@ function initInk() {
 // 9. INIT
 // ============================================================
 buildFeatured();
-buildPortfolio('huangyi');
+buildSubTabs();
+buildPortfolio();
 observeReveal();
 initInk();
 initCursor();
